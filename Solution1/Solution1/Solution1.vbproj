@@ -120,14 +120,8 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
-    <Content Include="scripts\Camera.js" />
-    <Content Include="scripts\code01.js" />
-    <Content Include="scripts\glMatrix-0.9.5.min.js" />
-    <Content Include="scripts\shaders_setup.js" />
-    <Content Include="scripts\webgl-utils.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

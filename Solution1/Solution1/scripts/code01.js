@@ -93,71 +93,8 @@ var upVector = vec3.create();
    gl.drawArrays(gl.TRIANGLE_STRIP, 0, objectVertexPositionBuffer.numItems);
    }
 
-var currentlyPressedKeys = {};
-
-function handleKeyDown( event ) 
-   {
-   currentlyPressedKeys[ event.keyCode ] = true;
-   }
-
-function handleKeyUp( event ) 
-   {
-   currentlyPressedKeys[ event.keyCode ] = false;
-   }
-
-function handleKeys() 
-   {
-   if ( currentlyPressedKeys[33] ) 
-      {
-      // Page Up
-      cameraPosition[2] -= 0.05;
-      alert( "page up" );
-      }
-   if ( currentlyPressedKeys[34] ) 
-      {
-      // Page Down
-      cameraPosition[2]  += 0.05;
-      alert( "page down" );
-      }
-
-   //if (currentlyPressedKeys[37]) 
-   //   {
-   //   // Left cursor key
-   //   ySpeed -= 1;
-   //   }
-
-   // if (currentlyPressedKeys[39]) 
-   //   {
-   //   // Right cursor key
-   //   ySpeed += 1;
-   //   }
-
-   //if (currentlyPressedKeys[38]) 
-   //   {
-   //   // Up cursor key
-   //   xSpeed -= 1;
-   //   }
-
-   //if (currentlyPressedKeys[40]) 
-   //   {
-   //   // Down cursor key
-   //   xSpeed += 1;
-   //   }
-   }
-
-function tick() 
-   {
-   requestAnimFrame( tick );
-   handleKeys();
-   drawScene();
-   //animate();
-   }
-
 function webGLStart() 
    {
-   document.onkeydown = handleKeyDown;
-   document.onkeyup = handleKeyUp;
-   
    var canvas = document.getElementById("code00-canvas");
    initGL(canvas);
    initShaders();
@@ -174,7 +111,7 @@ function webGLStart()
    upVector = vec3.create( [0.0, 1.0, 0.0] );
    mat4.perspective( 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix );
 
-   tick();
+   drawScene();
    }
 
 
