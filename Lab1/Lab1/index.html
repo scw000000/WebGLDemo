@@ -10,9 +10,9 @@
 <!--  ************** Fragment Shader ************* --> 
 <script id="shader-fs" type="x-shader/x-fragment">
 precision mediump float;
-
+    varying vec4 vColor; 
 void main(void) {
-        gl_FragColor = vec4(1,0,0,1); 
+        gl_FragColor = vColor; 
     }
 </script>
 
@@ -20,43 +20,80 @@ void main(void) {
 <script id="shader-vs" type="x-shader/x-vertex">
 
     attribute vec3 aVertexPosition;
-
+    attribute vec4 aVertexColor;
+    varying vec4 vColor; 
 
     void main(void) {
-
-      gl_Position = vec4(aVertexPosition, 1.0);
-
+        gl_Position = vec4(aVertexPosition, 1.0);
+        vColor = vec4(1,0,0,1); 
     }
 </script>
 
 
 <script type="text/javascript" src="scripts/shaders_setup.js"></script>
-<script type="text/javascript" src="scripts/code05.js"></script>
-<script type="text/javascript" src="scripts/code05-csv.js"></script>
-<script type="text/javascript" src="scripts/CheckBoxGeneration.js"></script>
+<script type="text/javascript" src="scripts/Lab1.js"></script>
+<script type="text/javascript" src="scripts/Lab1-csv.js"></script>
+<script type="text/javascript" src="scripts/HTMLhelper.js"></script>
+
+<style type="text/css">
+  .container 
+    {
+    position: relative;
+    overflow: none;
+    }
+
+  #divcontainer 
+    {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 700px;
+    height: 700px;
+    z-index: 10;
+    overflow: hidden;
+    }
+
+  .floating-div 
+    {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    }
+  </style>
 
 </head>
 
 
 <body onload="webGLStart();">
 
-    <canvas id="WebGL-canvas" style="border:none;"width="700"height="700"></canvas>
+    <div class="container">
+      <canvas id="WebGL-canvas" style="border:none;"width="700"height="700"></canvas>
+      <div id="divContainer"></div>
+    </div>
 
+    <h3> -----------------------Global Options------------------------  
+        <h4> Background Color:  </h4>
+        <input type="color" id="bgColor" value="#FFFFFF" onchange="var color = convertColor( event ); BG( color.r, color.g, color.b )">
 
-    <h4> Background:  </h4>
-    <button  onclick="BG(1,0,0)"> Red</button>
-    <button  onclick="BG(0,1,0)"> Green</button>
-    <button  onclick="BG(0,0,1)"> Blue</button>
-    <button  onclick="BG(0.5,0.5,0.5)"> Grey</button>
-    <button  onclick="BG(0,0,0)"> Black</button>
-    <button  onclick="BG(1,1,1)"> White</button>
+        <h4 id="horLineOption">- Choose how many horizontal lines you would like show in this graph</h4>
+         <select name="horLineNum" id="horLineNumSelect">
+                <option selected value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+    </h3>
 
-    <h4 id="drawOption">
-      - Choose which data of the species you whould like to show in this graph, you can choose more than one of them </br>
+    <h3> --------------------Single Group Options--------------------  
+        <h4 id="avgOption">- Choose which data of the species you would like to show in this graph, you can choose more than one of them </br></h4>
         <button  onclick="csv_draw_bars()"> Draw Bars </button>
-    </h4>
+    </h3>
 
-    <button  onclick="csv_draw_all_bars()"> Draw All Bars </button>
+    <h3> --------------------Multi Group Options--------------------
+        <h4 id="groupColorOption">- Choose which data of the species you would like to show in this graph, you can choose more than one of them </br></h4>
+        <button  onclick="csv_draw_all_bars()"> Draw All Bars </button>
+    </h3>
 
  <!-- courtesy:
  http://mounirmesselmeni.github.io/2012/11/20/reading-csv-file-with-javascript-and-html5-file-api/  -->

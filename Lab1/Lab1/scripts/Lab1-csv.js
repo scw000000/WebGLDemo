@@ -7,12 +7,14 @@ var has_avgs = false;
 var avgs = [];
 var avgCalculate = [];
 var speciesSearchIdx = [];
+var drawSingleGroup = true;
 
 function set_data( lines )
    {
    data = lines;
    has_data = true;
-   GenerateSpeciesCheckBoxes( species );
+   generateSpeciesCheckBoxes( species );
+   generateSpeciesColorInput( species );
    }
 
 function getCheckBoxOptions()
@@ -39,6 +41,7 @@ function csv_draw_bars()
    getCheckBoxOptions();
    var dataLength = 0;
    var currSpeciesSearchIdx = 0;
+   drawSingleGroup = true;
    for ( var i = 0; i < data.length; i++ )
       {
       if( currSpeciesSearchIdx < speciesSearchIdx.length - 1 && i == speciesSearchIdx[ currSpeciesSearchIdx + 1 ] )
@@ -88,7 +91,7 @@ function csv_draw_bars()
 
    has_avgs = true;
    // link to code05.js
-   createBarVertices( avgs );
+   createBarVertices();
 
    }
 
@@ -97,6 +100,8 @@ function csv_draw_all_bars()
    avgs = [];
    var dataLength = 0;
    var currSpeciesIdx = -1;
+   drawSingleGroup = false;
+
    for ( var i = 1; i < data.length; i++ )
       {
       // a new kind of species
@@ -140,5 +145,5 @@ function csv_draw_all_bars()
 
    has_avgs = true;
    // link to code05.js
-   createBarVertices( avgs );
+   createBarVertices();
    }

@@ -1,8 +1,8 @@
 
 var gl;
 var shaderProgram;
-var draw_type = 2;
 var readyToDraw = false;
+var canvas;
 
 //////////// Init OpenGL Context etc. ///////////////
 
@@ -26,7 +26,9 @@ var squareVertexPositionBuffer;
 var squareVertexColorBuffer;
 var squareVertexIndexBuffer;
 
+var barColors = [];
 var barVertices = [];
+var barVerticesColors = [];
 var targetVertices = [];
 var indices = [];
 var num_vertices;
@@ -87,19 +89,58 @@ function createBarVertices( avgs )
 
       indices.push( 0 + 4 * i ); indices.push( 1 + 4 * i ); indices.push( 2 + 4 * i );
       indices.push( 0 + 4 * i ); indices.push( 2 + 4 * i ); indices.push( 3 + 4 * i );
+
+      if( drawSingleGroup )
+         {
+         }
       }
+
+   var horLineNum = getSelectedLineNumber();
+   createTextNodes( horLineNum, min, max );
+   createLineVertices( horLineNum );
 
    initBuffers();
 
    readyToDraw = true;
    }
 
+function createTextNodes( horLineNum, min, max )
+   {
+   remoreAllTextNodes();
+   for( var i = 0; i < horLineNum + 1; ++i )
+      {
+      var factor = i / horLineNum;
+      generateTextNode( -1, -1 + v_margin + ( 2 - 2 * v_margin ) * factor, ( min + ( max - min ) * factor ).toFixed( 2 ) );
+      }
+   }
+
+var edgeLineVertices = [];
+
+function createLineVertices( horLineNum )
+   {
+   var leftShift = 0.05;
+   var leftXCoord = leftShift + -1 + h_margin;
+   var rightXCoord = 1;
+   edgeLineVertices = [ leftXCoord, -1 + v_margin, 0.0, 
+                          1, -1 + v_margin, 0.0, 
+                         leftXCoord, -1 + v_margin, 0.0,
+                         leftXCoord, 1 - v_margin, 0.0 ];
+
+   for( var i = 1; i < horLineNum + 1; ++i )
+      {
+      var factor = i / horLineNum;
+      var yCoordinate = -1 + v_margin + ( 2 - 2 * v_margin ) * factor;
+      edgeLineVertices.push( leftXCoord );
+      edgeLineVertices.push( yCoordinate );
+      edgeLineVertices.push( 0.0 );
+
+      edgeLineVertices.push( rightXCoord );
+      edgeLineVertices.push( yCoordinate );
+      edgeLineVertices.push( 0.0 );
+      }
+   }
+
 ////////////////    Initialize VBO  ////////////////////////
-var leftShift = 0.05;
-var edgeLineVertices = [ leftShift + -1 + h_margin, -1 + v_margin, 0.0, 
-                          1 - h_margin, -1 + v_margin, 0.0, 
-                         leftShift + -1 + h_margin, -1 + v_margin, 0.0,
-                         leftShift + -1 + h_margin, 1 - v_margin, 0.0 ];
 
 function initBuffers()
    {
@@ -119,7 +160,7 @@ function initBuffers()
    gl.bindBuffer( gl.ARRAY_BUFFER, lineVertexBuffer );
    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( edgeLineVertices ), gl.STATIC_DRAW );
    lineVertexBuffer.itemSize = 3;
-   lineVertexBuffer.numItems = 4;
+   lineVertexBuffer.numItems = edgeLineVertices.length / 3;
    }
 
 window.requestAnimFrame = (function() {
@@ -183,16 +224,22 @@ function drawScene()
 
 ///////////////////////////////////////////////////////////////
 
+
+
 function webGLStart()
    {
-   var canvas = document.getElementById( "WebGL-canvas" );
+   canvas = document.getElementById( "WebGL-canvas" );
+   
    initGL( canvas );
    initShaders();
 
    shaderProgram.vertexPositionAttribute = gl.getAttribLocation( shaderProgram, "aVertexPosition" );
    gl.enableVertexAttribArray( shaderProgram.vertexPositionAttribute );
 
-   gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
+   shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+   gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+
+   gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
    onUpdate();
    }
 
