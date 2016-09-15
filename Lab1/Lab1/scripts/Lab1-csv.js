@@ -3,18 +3,18 @@ var has_data = false;
 var data;
 var species = [];
 var speciesStartIdx = [];
-var has_avgs = false;
 var avgs = [];
 var avgCalculate = [];
 var speciesSearchIdx = [];
-var drawSingleGroup = true;
+//var drawSingleGroup = true;
+var barColors = [];
 
 function set_data( lines )
    {
    data = lines;
    has_data = true;
    generateSpeciesCheckBoxes( species );
-   generateSpeciesColorInput( species );
+   generateSpeciesColorInput( data[ 0 ] );
    }
 
 function getCheckBoxOptions()
@@ -38,6 +38,7 @@ function getCheckBoxOptions()
 function csv_draw_bars()
    {
    avgs = [];
+   barColors = [];
    getCheckBoxOptions();
    var dataLength = 0;
    var currSpeciesSearchIdx = 0;
@@ -59,10 +60,9 @@ function csv_draw_bars()
          // scv format declare, the first line of the data
          // so we need to deccide how long the array avgs will be
          if ( i == 0 ) 
-            { 
-            tmp = 0; 
+            {
             // expand this array
-            avgs.push( tmp ); 
+            avgs.push( 0 ); 
             }
          else 
             {
@@ -86,10 +86,10 @@ function csv_draw_bars()
    for ( var j = 0; j < data[0].length; j++ )
       {
       avgs[j] = avgs[j] / ( dataLength );
+      barColors.push( getInputColor( data[ 0 ][ j ] ) );
       console.log( " column " + j + " Avg = " + avgs[j] );
       }
 
-   has_avgs = true;
    // link to code05.js
    createBarVertices();
 
@@ -98,6 +98,7 @@ function csv_draw_bars()
 function csv_draw_all_bars()
    {
    avgs = [];
+   barColors = [];
    var dataLength = 0;
    var currSpeciesIdx = -1;
    drawSingleGroup = false;
@@ -119,9 +120,10 @@ function csv_draw_all_bars()
             }
          ++currSpeciesIdx;
          dataLength = 0;
-         for ( var j = 0; j < data[i].length; j++ )
+         for ( var j = 0; j < data[ i ].length; j++ )
             {
             avgs.push( 0 );
+            barColors.push( getInputColor( data[ 0 ][ j ] ) );
             }
          }
       if( data[ i ][ 0 ] == "" )
@@ -143,7 +145,6 @@ function csv_draw_all_bars()
       console.log( " column " + j + " Avg = " + avgs[ currSpeciesIdx * data[ 0 ].length + j ] );
       }
 
-   has_avgs = true;
    // link to code05.js
    createBarVertices();
    }

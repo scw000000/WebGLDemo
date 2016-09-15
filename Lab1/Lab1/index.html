@@ -25,7 +25,7 @@ void main(void) {
 
     void main(void) {
         gl_Position = vec4(aVertexPosition, 1.0);
-        vColor = vec4(1,0,0,1); 
+        vColor = aVertexColor; 
     }
 </script>
 
@@ -71,28 +71,36 @@ void main(void) {
       <div id="divContainer"></div>
     </div>
 
-    <h3> -----------------------Global Options------------------------  
-        <h4> Background Color:  </h4>
-        <input type="color" id="bgColor" value="#FFFFFF" onchange="var color = convertColor( event ); BG( color.r, color.g, color.b )">
+    <h3> ---------------------------Global Options-----------------------------  
+        <h4>- Choose Background Color  </h4>
+        <input type="color" id="bgColor" value="#FFFFFF" onchange="var color = convertColor( event ); BG( color.r, color.g, color.b )" />
 
-        <h4 id="horLineOption">- Choose how many horizontal lines you would like show in this graph</h4>
-         <select name="horLineNum" id="horLineNumSelect">
-                <option selected value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
+        <h4 id="horLineOption">- Choose how many horizontal lines you would like show</h4>
+        <select name="horLineNum" id="horLineNumSelect">
+            <option selected value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+
+        <h4 id="lineColorOption">- Choose line color of the graph</h4>
+        <input type="color" id="colorInput_lineColor" value="#FF0000" />
+
+        <h4 id="barColorOption">- Choose what color of the bar you would like show (options will show up once you've selected csv file)</br> </br> </h4> 
+
     </h3>
 
-    <h3> --------------------Single Group Options--------------------  
-        <h4 id="avgOption">- Choose which data of the species you would like to show in this graph, you can choose more than one of them </br></h4>
-        <button  onclick="csv_draw_bars()"> Draw Bars </button>
+    <h3> ----For Drawing Selected Species and Get Their Averages----  
+        <h4 id="avgOption">- Choose which data of the species you would like to show, you can choose more than one of them (options will show up once you've selected csv file)</br></h4>
+        <button  onclick="csv_draw_bars()"> Draw a Group </button>
     </h3>
 
-    <h3> --------------------Multi Group Options--------------------
-        <h4 id="groupColorOption">- Choose which data of the species you would like to show in this graph, you can choose more than one of them </br></h4>
-        <button  onclick="csv_draw_all_bars()"> Draw All Bars </button>
+    <h3> ----------------------For Drawing Each Species----------------------</br>
+        <button  onclick="csv_draw_all_bars()"> Draw All Species </button>
     </h3>
 
  <!-- courtesy:

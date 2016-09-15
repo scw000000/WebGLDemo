@@ -68,7 +68,7 @@ function convertColor( event )
 
 function generateSpeciesColorInput( specices )
    {
-   var container = document.getElementById( 'groupColorOption' );
+   var container = document.getElementById( 'barColorOption' );
    for( var i = 0; i < specices.length; ++i )
       {
       generateColorInput( container, "colorInput_" + specices[ i ], specices[ i ] );
@@ -89,9 +89,9 @@ function generateColorInput( container, colorInputId, labelText )
    container.appendChild( label );
    }
 
-function getSpeciesBarColor( speciesName )
+function getInputColor( inputName )
    {
-   var speciesBarColorElement = document.getElementById( "colorInput_" + speciesName );
+   var speciesBarColorElement = document.getElementById( "colorInput_" + inputName );
    if( speciesBarColorElement == null )
       {
       return { r:1.0, g:1.0, b:1.0 };
@@ -99,7 +99,7 @@ function getSpeciesBarColor( speciesName )
    return hexStrToColor( speciesBarColorElement.value );
    }
 
-function remoreAllTextNodes()
+function removeAllTextNodes()
    {
    var divContainer = document.getElementById( "divContainer" );
    while ( divContainer.firstChild ) 

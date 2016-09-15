@@ -26,7 +26,9 @@ var squareVertexPositionBuffer;
 var squareVertexColorBuffer;
 var squareVertexIndexBuffer;
 
-var barColors = [];
+var lineVertexBuffer;
+var lineVertexColorBuffer;
+
 var barVertices = [];
 var barVerticesColors = [];
 var targetVertices = [];
@@ -38,13 +40,14 @@ var v_margin = 0.25;
 var h_margin = 0.1;
 var num_bars = 0;
 
-function createBarVertices( avgs )
+function createBarVertices()
    {
    readyToDraw = false;
 
    barVertices = [];
    indices = [];
    targetVertices = [];
+   barVerticesColors = [];
 
    num_bars = avgs.length;
    num_vertices = num_bars * 4;
@@ -90,14 +93,18 @@ function createBarVertices( avgs )
       indices.push( 0 + 4 * i ); indices.push( 1 + 4 * i ); indices.push( 2 + 4 * i );
       indices.push( 0 + 4 * i ); indices.push( 2 + 4 * i ); indices.push( 3 + 4 * i );
 
-      if( drawSingleGroup )
-         {
-         }
+      for( var j = 0; j < 4; ++j )
+            {
+            barVerticesColors.push( barColors[ i ].r );
+            barVerticesColors.push( barColors[ i ].g );
+            barVerticesColors.push( barColors[ i ].b );
+            barVerticesColors.push( 1.0 );
+            }
       }
 
    var horLineNum = getSelectedLineNumber();
    createTextNodes( horLineNum, min, max );
-   createLineVertices( horLineNum );
+   createLineVerticesAndColors( horLineNum );
 
    initBuffers();
 
@@ -106,7 +113,7 @@ function createBarVertices( avgs )
 
 function createTextNodes( horLineNum, min, max )
    {
-   remoreAllTextNodes();
+   removeAllTextNodes();
    for( var i = 0; i < horLineNum + 1; ++i )
       {
       var factor = i / horLineNum;
@@ -114,29 +121,40 @@ function createTextNodes( horLineNum, min, max )
       }
    }
 
-var edgeLineVertices = [];
+var lineVertices = [];
+var lineVerticesColors = [];
 
-function createLineVertices( horLineNum )
+function createLineVerticesAndColors( horLineNum )
    {
    var leftShift = 0.05;
    var leftXCoord = leftShift + -1 + h_margin;
    var rightXCoord = 1;
-   edgeLineVertices = [ leftXCoord, -1 + v_margin, 0.0, 
+   lineVertices = [ leftXCoord, -1 + v_margin, 0.0, 
                           1, -1 + v_margin, 0.0, 
                          leftXCoord, -1 + v_margin, 0.0,
                          leftXCoord, 1 - v_margin, 0.0 ];
+   lineVerticesColors = [];
 
    for( var i = 1; i < horLineNum + 1; ++i )
       {
       var factor = i / horLineNum;
       var yCoordinate = -1 + v_margin + ( 2 - 2 * v_margin ) * factor;
-      edgeLineVertices.push( leftXCoord );
-      edgeLineVertices.push( yCoordinate );
-      edgeLineVertices.push( 0.0 );
+      lineVertices.push( leftXCoord );
+      lineVertices.push( yCoordinate );
+      lineVertices.push( 0.0 );
 
-      edgeLineVertices.push( rightXCoord );
-      edgeLineVertices.push( yCoordinate );
-      edgeLineVertices.push( 0.0 );
+      lineVertices.push( rightXCoord );
+      lineVertices.push( yCoordinate );
+      lineVertices.push( 0.0 );
+      }
+
+   for( var i = 0; i < lineVertices.length; ++i )
+      {
+      var lineColor = getInputColor( "lineColor" );
+      lineVerticesColors.push( lineColor.r );
+      lineVerticesColors.push( lineColor.g );
+      lineVerticesColors.push( lineColor.b );
+      lineVerticesColors.push( 1.0 );
       }
    }
 
@@ -149,6 +167,12 @@ function initBuffers()
    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( barVertices ), gl.STATIC_DRAW );
    squareVertexPositionBuffer.itemSize = 3;
    squareVertexPositionBuffer.numItems = num_vertices;
+   
+   squareVertexColorBuffer = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, squareVertexColorBuffer );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( barVerticesColors ), gl.STATIC_DRAW );
+   squareVertexColorBuffer.itemSize = 4;
+   squareVertexColorBuffer.numItems = barVerticesColors.length / 4;
 
    squareVertexIndexBuffer = gl.createBuffer();
    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer );
@@ -158,9 +182,15 @@ function initBuffers()
 
    lineVertexBuffer = gl.createBuffer();
    gl.bindBuffer( gl.ARRAY_BUFFER, lineVertexBuffer );
-   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( edgeLineVertices ), gl.STATIC_DRAW );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( lineVertices ), gl.STATIC_DRAW );
    lineVertexBuffer.itemSize = 3;
-   lineVertexBuffer.numItems = edgeLineVertices.length / 3;
+   lineVertexBuffer.numItems = lineVertices.length / 3;
+
+   lineVertexColorBuffer = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, lineVertexColorBuffer );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( lineVerticesColors ), gl.STATIC_DRAW );
+   lineVertexColorBuffer.itemSize = 4;
+   lineVertexColorBuffer.numItems = lineVerticesColors.length / 4;
    }
 
 window.requestAnimFrame = (function() {
@@ -211,6 +241,9 @@ function drawScene()
    gl.bindBuffer( gl.ARRAY_BUFFER, squareVertexPositionBuffer );
    gl.vertexAttribPointer( shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0 );
 
+   gl.bindBuffer( gl.ARRAY_BUFFER, squareVertexColorBuffer );
+   gl.vertexAttribPointer( shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0 );
+
    // draw elementary arrays - triangle indices 
    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, squareVertexIndexBuffer );
 
@@ -218,6 +251,10 @@ function drawScene()
 
    gl.bindBuffer( gl.ARRAY_BUFFER, lineVertexBuffer );
    gl.vertexAttribPointer( shaderProgram.vertexPositionAttribute, lineVertexBuffer.itemSize, gl.FLOAT, false, 0, 0 );
+
+   gl.bindBuffer( gl.ARRAY_BUFFER, lineVertexColorBuffer );
+   gl.vertexAttribPointer( shaderProgram.vertexColorAttribute, lineVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0 );
+
    gl.drawArrays( gl.LINES, 0, lineVertexBuffer.numItems ); 
    }
 
@@ -236,8 +273,8 @@ function webGLStart()
    shaderProgram.vertexPositionAttribute = gl.getAttribLocation( shaderProgram, "aVertexPosition" );
    gl.enableVertexAttribArray( shaderProgram.vertexPositionAttribute );
 
-   shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-   gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+   shaderProgram.vertexColorAttribute = gl.getAttribLocation( shaderProgram, "aVertexColor" );
+   gl.enableVertexAttribArray( shaderProgram.vertexColorAttribute );
 
    gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
    onUpdate();
