@@ -80,6 +80,7 @@ var upVector = vec3.create();
 
  function drawScene() 
    {
+   // you can declare multiple panel by call it many times
    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -107,7 +108,7 @@ function handleKeyUp( event )
 
 function handleKeys() 
    {
-   if ( currentlyPressedKeys[33] ) 
+   if ( currentlyPressedKeys[33] && cameraPosition[2] >= 0.05 ) 
       {
       // Page Up
       cameraPosition[2] -= 0.05;
