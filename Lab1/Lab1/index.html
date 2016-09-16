@@ -72,10 +72,10 @@ void main(void) {
     </div>
 
     <h3> ---------------------------Global Options-----------------------------  
-        <h4>- Choose Background Color  </h4>
+        <h4>- Background Color  </h4>
         <input type="color" id="bgColor" value="#FFFFFF" onchange="var color = convertColor( event ); BG( color.r, color.g, color.b )" />
 
-        <h4 id="horLineOption">- Choose how many horizontal lines you would like show</h4>
+        <h4 id="horLineOption">- Horizontal line number</h4>
         <select name="horLineNum" id="horLineNumSelect">
             <option selected value="1">1</option>
             <option value="2">2</option>
@@ -87,10 +87,10 @@ void main(void) {
             <option value="8">8</option>
         </select>
 
-        <h4 id="lineColorOption">- Choose line color of the graph</h4>
+        <h4 id="lineColorOption">- Line color </h4>
         <input type="color" id="colorInput_lineColor" value="#FF0000" />
 
-        <h4 id="barColorOption">- Choose what color of the bar you would like show (options will show up once you've selected csv file)</br> </br> </h4> 
+        <h4 id="barColorOption">- Bar color (options will show up once you've selected csv file)</br> </br> </h4> 
 
     </h3>
 
@@ -100,7 +100,7 @@ void main(void) {
     </h3>
 
     <h3> ----------------------For Drawing Each Species----------------------</br>
-        <button  onclick="csv_draw_all_bars()"> Draw All Species </button>
+        <button  onclick="csv_draw_all_bars()"> Draw All </button>
     </h3>
 
  <!-- courtesy:

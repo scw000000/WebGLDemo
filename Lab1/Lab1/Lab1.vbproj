@@ -122,9 +122,9 @@
   <ItemGroup>
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
-    <Content Include="scripts\CheckBoxGeneration.js" />
-    <Content Include="scripts\code05-csv.js" />
-    <Content Include="scripts\code05.js" />
+    <Content Include="scripts\HTMLhelper.js" />
+    <Content Include="scripts\Lab1-csv.js" />
+    <Content Include="scripts\Lab1.js" />
     <Content Include="scripts\glMatrix-0.9.5.min.js" />
     <Content Include="index.html" />
     <Content Include="scripts\read-csv.js" />
