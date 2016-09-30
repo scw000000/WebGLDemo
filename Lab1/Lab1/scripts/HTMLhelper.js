@@ -1,4 +1,4 @@
-﻿
+﻿// These functions are for generate HTML elements or read data from them
 
 function generateSpeciesCheckBoxes( specices )
    {
@@ -52,6 +52,7 @@ function getSelectedLineNumber()
    return Number( element.options[ element.selectedIndex].value );
    }
 
+// Because HTML color input element store RGB data as 255 format, we need to normalize it
 function hexStrToColor( hexStr )
    {
    var subHexStr = hexStr.substring( 1, 7 );
@@ -64,15 +65,6 @@ function hexStrToColor( hexStr )
 function convertColor( event )
    {
    return hexStrToColor( event.srcElement.value );
-   }
-
-function generateSpeciesColorInput( specices )
-   {
-   var container = document.getElementById( 'barColorOption' );
-   for( var i = 0; i < specices.length; ++i )
-      {
-      generateColorInput( container, "colorInput_" + specices[ i ], specices[ i ] );
-      }
    }
 
 function generateColorInput( container, colorInputId, labelText )
@@ -89,6 +81,17 @@ function generateColorInput( container, colorInputId, labelText )
    container.appendChild( label );
    }
 
+// After reading CSV file, now we know how many bars we want to create.
+// And we can generate color input according to these fields.
+function generateSpeciesColorInput( specices )
+   {
+   var container = document.getElementById( 'barColorOption' );
+   for( var i = 0; i < specices.length; ++i )
+      {
+      generateColorInput( container, "colorInput_" + specices[ i ], specices[ i ] );
+      }
+   }
+
 function getInputColor( inputName )
    {
    var speciesBarColorElement = document.getElementById( "colorInput_" + inputName );
@@ -99,6 +102,7 @@ function getInputColor( inputName )
    return hexStrToColor( speciesBarColorElement.value );
    }
 
+// We may want to remove all text lables if we try to redraw the graph
 function removeAllTextNodes()
    {
    var divContainer = document.getElementById( "divContainer" );

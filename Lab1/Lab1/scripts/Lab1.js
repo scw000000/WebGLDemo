@@ -93,6 +93,8 @@ function createBarVertices()
       indices.push( 0 + 4 * i ); indices.push( 1 + 4 * i ); indices.push( 2 + 4 * i );
       indices.push( 0 + 4 * i ); indices.push( 2 + 4 * i ); indices.push( 3 + 4 * i );
 
+      // Each bar has its own color setting read in HTML color input, the color data
+      // is set in Lab1-csv.js
       for( var j = 0; j < 4; ++j )
             {
             barVerticesColors.push( barColors[ i ].r );
@@ -103,21 +105,25 @@ function createBarVertices()
       }
 
    var horLineNum = getSelectedLineNumber();
+   // For each horizontal line, create a text node for them
    createTextNodes( horLineNum, min, max );
+   // For each horizontal line, allocate line vertex data to draw them
    createLineVerticesAndColors( horLineNum );
 
    initBuffers();
 
+   // After setting all of vertes data for drawing, the WebGL now is ready to draw.
    readyToDraw = true;
    }
 
 function createTextNodes( horLineNum, min, max )
    {
+   // Remove all previous drawed text node before create new ones
    removeAllTextNodes();
    for( var i = 0; i < horLineNum + 1; ++i )
       {
       var factor = i / horLineNum;
-      generateTextNode( -1, -1 + v_margin + ( 2 - 2 * v_margin ) * factor, ( min + ( max - min ) * factor ).toFixed( 2 ) );
+      generateTextNode( -1 + 0.05, -1 + v_margin + ( 2 - 2 * v_margin ) * factor, ( min + ( max - min ) * factor ).toFixed( 2 ) );
       }
    }
 
@@ -204,11 +210,10 @@ window.requestAnimFrame = (function() {
          };
 })();
 
-var lerpFactor = 0.94;
-var inverseLerpFactor = 1.0 - lerpFactor;
-
 function updateBarVertices()
-   {   
+   { 
+   var lerpFactor = 0.94;
+   var inverseLerpFactor = 1.0 - lerpFactor;
    for( var i = 0; i < num_bars; ++i )
       {
       if( barVertices[ 12 * i + 7 ] != targetVertices[ 12 * i + 7 ] )
@@ -221,6 +226,8 @@ function updateBarVertices()
    gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( barVertices ), gl.STATIC_DRAW );  
    }
 
+// Request a draw call for next frame,
+// Also, call drawScene if a csv file is selected and draw button is clicked
 function onUpdate() 
    {
    requestAnimFrame( onUpdate );

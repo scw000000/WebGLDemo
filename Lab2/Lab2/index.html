@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>WebGL Test &mdash; test1 </title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<!--  ************** Fragment Shader ************* --> 
+<script id="shader-fs" type="x-shader/x-fragment">
+    
+
+    void main(void) {
+        gl_FragColor = vec4( 0.0, 0.0, 1.0, 1.0);
+    }
+</script>
+<!--  ************** Vertex Shader ************* --> 
+<script id="shader-vs" type="x-shader/x-vertex">
+attribute vec3 aVertexPosition;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
+    void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+       
+    }
+</script>
+
+<script type="text/javascript" src="scripts\glMatrix-0.9.5.min.js"></script>
+<script type="text/javascript" src="scripts\TransformStack.js"></script>
+<script type="text/javascript" src="scripts\Scene.js"></script>
+<script type="text/javascript" src="scripts\SceneNodes.js"></script>
+<script type="text/javascript" src="scripts\shaders_setup.js"></script>
+<script type="text/javascript" src="scripts\code01.js"></script>
+<script type="text/javascript" src="scripts\webgl-utils.js"></script>
+
+
+</head>
+
+
+<body onload="webGLStart();">
+
+    <canvas id="code00-canvas" style="border: none;" width="700" height="500"></canvas>
+
+    <br/>
+
+</body>
+
+
+</html>
+
