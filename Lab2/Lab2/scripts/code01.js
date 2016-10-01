@@ -1,4 +1,4 @@
-var globalScene = new Scene();
+var globalScene;
 
     var gl;
     var shaderProgram;
@@ -72,11 +72,11 @@ function initGL(canvas)
    objectVertexPositionBuffer.numItems = vertices.length / 3;
    }
 
-var cameraPosition = vec3.create();
 var mvMatrix = mat4.create();
 var pMatrix = mat4.create();
-var targetPosition = vec3.create();
-var upVector = vec3.create();
+var cameraPosition;
+var targetPosition;
+var upVector;
 
  function drawScene() 
    {
@@ -87,7 +87,7 @@ var upVector = vec3.create();
    gl.bindBuffer(gl.ARRAY_BUFFER, objectVertexPositionBuffer);
    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, objectVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
    mat4.identity(mvMatrix);
-   mat4.lookAt( cameraPosition, targetPosition, upVector, mvMatrix );
+   mat4.lookAt( mvMatrix, cameraPosition, targetPosition, upVector );
    gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
    gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
        
@@ -154,6 +154,7 @@ function tick()
 
 function webGLStart() 
    {
+   globalScene = new Scene();
    document.onkeydown = handleKeyDown;
    document.onkeyup = handleKeyUp;
    
@@ -168,10 +169,10 @@ function webGLStart()
 
    gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-   cameraPosition = vec3.create( [5.0, 5.0, 5.0] );
-   targetPosition = vec3.create( [0.0, 0.0, 0.0] );
-   upVector = vec3.create( [0.0, 1.0, 0.0] );
-   mat4.perspective( 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix );
+   cameraPosition = vec3.set( vec3.create(), 5.0, 5.0, 5.0 );
+   targetPosition = vec3.set( vec3.create(), 0.0, 0.0, 0.0 );
+   upVector = vec3.set( vec3.create(), 0.0, 1.0, 0.0 );
+   mat4.perspective( pMatrix, 45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0 );
 
    tick();
    }

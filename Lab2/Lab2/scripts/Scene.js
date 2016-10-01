@@ -1,32 +1,46 @@
-﻿function Scene ()
+﻿class Scene
    {
-   this.m_TransformStack = new TransformStack();
+   constructor()
+      {
+      this.TransformStack = new TransformStack();
+      // construct a empty dummy node
+      this.RootNode = new SceneNodes();
+      this.CameraNode = new CameraNode();
+      this.AddChild( this.CameraNode );
+      }
 
-   };
+   AddChild( sceneNode )
+      {
+      this.RootNode.AddChild( sceneNode );
+      }
 
-Scene.prototype = 
-   {
-   m_RootNode: null,
-   m_CameraNode: null,
-   m_TransformStack: null,
+   OnRestore()
+      {
+      this.RootNode.OnRestore();
+      }
+
+   OnRender()
+      {
+      if( this.RootNode != null && this.CameraNode != null )
+         {
+         this.RootNode.PreRender();
+         this.RootNode.OnRender();
+         this.RootNode.RenderChildren();
+         this.RootNode.PostRender();
+         }
+      else
+         {
+         throw( "empty root node or camera" );
+         }
+      }
+
+   PushTransform( matrix )
+      {
+      this.TransformStack.PushTransform( matrix );
+      }
+
+   PopTransform()
+      {
+      this.TransformStack.PopTransform();
+      }
    }
-
-Scene.prototype.OnRender = function()
-   {
-   if( this.m_RootNode != null && this.m_CameraNode != null )
-      {
-      this.m_RootNode.PreRender();
-      this.m_RootNode.OnRender();
-      this.m_RootNode.RenderChildren();
-      this.m_RootNode.PostRender();
-      }
-   else
-      {
-      alert( "empty root node or camera" );
-      }
-   };
-
-Scene.prototype.PushTransform = function( matrix )
-   {
-   this.m_TransformStack.PushTransform();
-   };
