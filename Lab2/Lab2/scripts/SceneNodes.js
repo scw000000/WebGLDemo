@@ -27,6 +27,17 @@
          }
       }
 
+   DelegateUpdate(){}
+
+   OnUpdate()
+      {
+      this.DelegateUpdate();
+      for( var childNode in this.ChildNodes )
+         {
+         childNode.OnUpdate();
+         }
+      }
+
    PreRender()
       {
       globalScene.PushTransform( this.Transform );
@@ -53,6 +64,19 @@
    SetTransform( matrix )
       {
       mat4.copy( this.Transform, matrix);
+      }
+
+   GetToWorldPosition()
+      {
+      var ret = vec3.create();
+      mat4.getTranslation( ret, this.Transform );
+      return ret;
+      }
+
+   GetForwardVector()
+      {
+      var ret = vec3.create();
+      vec3.transformMat4( ret, g_Forward, this.Transform );
       }
 
    }
