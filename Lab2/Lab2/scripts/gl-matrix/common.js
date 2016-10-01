@@ -28,7 +28,7 @@ var glMatrix = {};
 glMatrix.EPSILON = 0.000001;
 glMatrix.ARRAY_TYPE = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
 glMatrix.RANDOM = Math.random;
-glMatrix.ENABLE_SIMD = false;
+glMatrix.ENABLE_SIMD = true;
 
 // Capability detection
 glMatrix.SIMD_AVAILABLE = (glMatrix.ARRAY_TYPE === this.Float32Array) && ('SIMD' in this);

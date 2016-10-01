@@ -11,7 +11,7 @@
          {
          throw "Stack is empty, return";
          }
-      return this.Stack[ this.Stack.length - 1 ]
+      return this.Stack[ this.Stack.length - 1 ];
       }
 
    PushTransform( matrix ) 
@@ -19,8 +19,7 @@
       var copy = mat4.clone( matrix );
       if( this.Stack.length > 0 )
          {
-         var topTransform = this.GetTopTransform();
-         copy = mat4.multiply( topTransform, copy );
+         mat4.mul( copy, this.GetTopTransform(), copy );
          }
       this.Stack.push( copy );
       }

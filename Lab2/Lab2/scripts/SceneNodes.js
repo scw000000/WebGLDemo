@@ -4,6 +4,9 @@
       {
       this.ChildNodes = [];
       this.Transform = mat4.create();
+      this.VertexPosBuffer = null;
+      this.IndexBuffer = null;
+      this.Program = null;
       //var position = vec3.create();
       //position[0] = 1;
       //mat4.translate( this.Transform, this.Transform, vec3.set( vec3.create(), 2, 3, 5 ) );

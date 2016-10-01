@@ -88,8 +88,7 @@ var upVector;
    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, objectVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
    mat4.identity(mvMatrix);
    mat4.lookAt( mvMatrix, cameraPosition, targetPosition, upVector );
-   gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-   gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+   gl.uniformMatrix4fv( shaderProgram.mvpMatrixUniform, false, mat4.mul( mvMatrix, pMatrix, mvMatrix ) );
        
    gl.drawArrays(gl.TRIANGLE_STRIP, 0, objectVertexPositionBuffer.numItems);
    }
@@ -160,7 +159,7 @@ function webGLStart()
    
    var canvas = document.getElementById("code00-canvas");
    initGL(canvas);
-   initShaders();
+   shaderProgram = initShaders( "shader-vs", "shader-fs" );
 
    shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
    gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute); 

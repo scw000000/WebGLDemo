@@ -23,10 +23,7 @@
       {
       if( this.RootNode != null && this.CameraNode != null )
          {
-         this.RootNode.PreRender();
-         this.RootNode.OnRender();
          this.RootNode.RenderChildren();
-         this.RootNode.PostRender();
          }
       else
          {
@@ -43,4 +40,20 @@
       {
       this.TransformStack.PopTransform();
       }
+
+   GetTopTransform()
+      {
+      return this.TransformStack.GetTopTransform();
+      }
+
+   
+   GetMVPMatrix()
+      {
+      if( this.CameraNode == null )
+         {
+         throw "Null camera node!";
+         }
+      return this.CameraNode.GetMVPMatrix();
+      }
+
    }

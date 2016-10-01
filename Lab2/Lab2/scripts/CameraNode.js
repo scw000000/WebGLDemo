@@ -22,7 +22,8 @@
       // Setting view matrix
       var position = this.GetToWorldPosition();
       var targetPosition = vec3.create();
-      mat4.lookAt( this.ViewMatrix, position, vec3.add( targetPosition, position, this.GetForwardVector() ), g_Up );
+      //mat4.lookAt( this.ViewMatrix, position, vec3.add( targetPosition, position, this.GetForwardVector() ), g_Up );
+      mat4.lookAt( this.ViewMatrix, vec3.fromValue( 1, 2, 3 ) , vec3.create(), g_Up );
       }
 
    PreRender()
@@ -33,7 +34,9 @@
 
    GetMVPMatrix()
       {
-
+      var ret = mat4.clone( globalScene.GetTopTransform() );
+      mat4.mul( ret, this.ViewMatrix, ret );
+      return mat4.mul( ret, this.ProjectMatrix, ret );
       }
 
    }
