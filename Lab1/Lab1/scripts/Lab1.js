@@ -283,7 +283,7 @@ function webGLStart()
    shaderProgram.vertexColorAttribute = gl.getAttribLocation( shaderProgram, "aVertexColor" );
    gl.enableVertexAttribArray( shaderProgram.vertexColorAttribute );
 
-   gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+   gl.clearColor( 0.0, 0.0, 0.0, 0.0 );
    onUpdate();
    }
 

@@ -47,7 +47,6 @@ function getShader( gl, id )
 
 function initShaders( vsId, fsId )
    {
-
    var program = gl.createProgram();
 
    var vertexShader = getShader( gl, vsId );
@@ -61,13 +60,6 @@ function initShaders( vsId, fsId )
       {
       alert( "Could not initialise shaders" );
       }
-
-   gl.useProgram( program );
-
-   program.vertexPositionAttribute = gl.getAttribLocation( program, "aVertexPosition" );
-   gl.enableVertexAttribArray( program.vertexPositionAttribute );
-
-   program.mvpMatrixUniform = gl.getUniformLocation( program, "uMVPMatrix" );
    return program;
    }
 
