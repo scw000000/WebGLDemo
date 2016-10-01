@@ -69,7 +69,6 @@
       this.Transform[ 12 ] = newPos[ 0 ];
       this.Transform[ 13 ] = newPos[ 1 ];
       this.Transform[ 14 ] = newPos[ 2 ];
-      console.log( newPos[ 0 ] + " " + newPos[ 1 ] + " " + newPos[ 2 ] );
       }
 
    AddToWorldPosition( offset )

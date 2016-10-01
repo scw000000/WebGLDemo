@@ -1,9 +1,9 @@
-﻿class BoxSceneNode extends SceneNodes
+﻿class CubeSceneNode extends SceneNodes
    {
    constructor()
       {
       super();
-      this.Dimenstion = vec3.fromValues( 2, 3, 5 );
+      this.Size = 1;
       }
 
    Initbuffer()
