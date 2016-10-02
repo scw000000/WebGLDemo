@@ -31,16 +31,16 @@
 
       var vertexColor = [
             // Front face
-            1.0, 0.0, 0.0, 0.0,
-            0.0, 1.0, 0.0, 0.0,
-            0.0, 0.0, 1.0, 0.0,
-            1.0, 0.0, 0.0, 0.0,
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+            1.0, 0.0, 0.0, 1.0,
 
             // Back face
-            1.0, 0.0, 0.0, 0.0,
-            0.0, 1.0, 0.0, 0.0,
-            0.0, 0.0, 1.0, 0.0,
-            1.0, 0.0, 0.0, 0.0
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+            1.0, 0.0, 0.0, 1.0
          ];
       this.VertexColorBuffer = gl.createBuffer();
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexColorBuffer );
@@ -51,8 +51,8 @@
       var vertexIndices = [
             0, 1, 2,   0, 2, 3,    // Front face
             4, 5, 6,   4, 6, 7,    // Back face
-            5, 3, 2,   5, 2, 0,  // Top face
-            4, 7, 2,   4, 2, 0, // Bottom face
+            5, 3, 2,   5, 2, 6,  // Top face
+            4, 7, 1,   4, 1, 0, // Bottom face
             7, 6, 2,   7, 2, 1, // Right face
             4, 0, 3,   4, 3, 5  // Left face
         ];
