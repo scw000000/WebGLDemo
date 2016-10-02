@@ -6,23 +6,26 @@
 <head>
 <title>WebGL Lab &mdash; 2 </title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
 <!--  ************** Fragment Shader ************* --> 
 <script id="shader-fs" type="x-shader/x-fragment">
-    
-
-    void main(void) {
-        gl_FragColor = vec4( 0.0, 0.0, 1.0, 1.0);
+precision mediump float;
+    varying vec4 vColor; 
+void main(void) {
+    //    gl_FragColor = vColor; 
     }
 </script>
+
 <!--  ************** Vertex Shader ************* --> 
 <script id="shader-vs" type="x-shader/x-vertex">
-attribute vec3 aVertexPosition;
 
-    uniform mat4 uMVPMatrix;
+    attribute vec3 aVertexPosition;
+    attribute vec4 aVertexColor;
+    varying vec4 vColor; 
 
     void main(void) {
-        gl_Position = uMVPMatrix * vec4(aVertexPosition, 1.0);
-       
+        gl_Position = vec4(aVertexPosition, 1.0);
+        vColor = aVertexColor; 
     }
 </script>
     
