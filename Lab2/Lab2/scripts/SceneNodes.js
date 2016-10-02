@@ -5,6 +5,7 @@
       this.ChildNodes = [];
       this.Transform = mat4.create();
       this.VertexPosBuffer = null;
+      this.VertexIndexBuffer = null;
       this.IndexBuffer = null;
       this.Program = null;
       }

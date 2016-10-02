@@ -1,5 +1,6 @@
 //this file is for compiling and linking shaders to get final program
 
+
 function getShader( gl, id )
    {
    var shaderScript = document.getElementById( id );
@@ -32,7 +33,6 @@ function getShader( gl, id )
       {
       return null;
       }
-
    gl.shaderSource( shader, str );
    gl.compileShader( shader );
 
@@ -45,12 +45,13 @@ function getShader( gl, id )
    return shader;
    }
 
-function initShaders( vsId, fsId )
+function initShaders( vsName, fsName )
    {
    var program = gl.createProgram();
 
-   var vertexShader = getShader( gl, vsId );
-   var fragmentShader = getShader( gl, fsId );
+   var vertexShader = getShader( gl, vsName );
+   var fragmentShader = getShader( gl, fsName );
+
 
    gl.attachShader( program, vertexShader );
    gl.attachShader( program, fragmentShader );
