@@ -3,49 +3,50 @@
    constructor()
       {
       super();
-      this.Size = 1;
+      this.Size = 5;
       }
 
    Initbuffer()
       {
       this.VertexPosBuffer = gl.createBuffer();
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexPosBuffer );
+      var halfSize = this.Size / 2;
       var vertices = [
             // Front face
-            -1.0, -1.0, 1.0,
-             1.0, -1.0, 1.0,
-             1.0, 1.0, 1.0,
-            -1.0, 1.0, 1.0,
+            -halfSize, -halfSize, halfSize,
+             halfSize, -halfSize, halfSize,
+             halfSize, halfSize, halfSize,
+            -halfSize, halfSize, halfSize,
 
             // Back face
-            -1.0, -1.0, -1.0,
-            -1.0, 1.0, -1.0,
-             1.0, 1.0, -1.0,
-             1.0, -1.0, -1.0,
+            -halfSize, -halfSize, -halfSize,
+            -halfSize, halfSize, -halfSize,
+             halfSize, halfSize, -halfSize,
+             halfSize, -halfSize, -halfSize,
 
             // Top face
-            -1.0, 1.0, -1.0,
-            -1.0, 1.0, 1.0,
-             1.0, 1.0, 1.0,
-             1.0, 1.0, -1.0,
+            -halfSize, halfSize, -halfSize,
+            -halfSize, halfSize, halfSize,
+             halfSize, halfSize, halfSize,
+             halfSize, halfSize, -halfSize,
 
             // Bottom face
-            -1.0, -1.0, -1.0,
-             1.0, -1.0, -1.0,
-             1.0, -1.0, 1.0,
-            -1.0, -1.0, 1.0,
+            -halfSize, -halfSize, -halfSize,
+             halfSize, -halfSize, -halfSize,
+             halfSize, -halfSize, halfSize,
+            -halfSize, -halfSize, halfSize,
 
             // Right face
-             1.0, -1.0, -1.0,
-             1.0, 1.0, -1.0,
-             1.0, 1.0, 1.0,
-             1.0, -1.0, 1.0,
+             halfSize, -halfSize, -halfSize,
+             halfSize, halfSize, -halfSize,
+             halfSize, halfSize, halfSize,
+             halfSize, -halfSize, halfSize,
 
             // Left face
-            -1.0, -1.0, -1.0,
-            -1.0, -1.0, 1.0,
-            -1.0, 1.0, 1.0,
-            -1.0, 1.0, -1.0,
+            -halfSize, -halfSize, -halfSize,
+            -halfSize, -halfSize, halfSize,
+            -halfSize, halfSize, halfSize,
+            -halfSize, halfSize, -halfSize,
       ];
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.STATIC_DRAW );
       this.VertexPosBuffer.ItemSize = 3;

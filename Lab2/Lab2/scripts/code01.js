@@ -45,37 +45,62 @@ function handleKeys()
    // W
    if ( currentlyPressedKeys[ 83 ] ) 
       {
-      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, 0, -0.05 ) );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, 0, -0.1 ) );
       }
 
    // S
    if ( currentlyPressedKeys[ 87 ] ) 
       {
-      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, 0, 0.05 ) );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, 0, 0.1 ) );
       }
 
    // A
    if ( currentlyPressedKeys[ 65 ] ) 
       {
-      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0.05, 0, 0 ) );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0.1, 0, 0 ) );
       }
 
    // D
    if ( currentlyPressedKeys[ 68 ] ) 
       {
-      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( -0.05, 0, 0 ) );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( -0.1, 0, 0 ) );
       }
 
-   // Q
-   if ( currentlyPressedKeys[ 81] ) 
+   // Space
+   if ( currentlyPressedKeys[ 32 ] ) 
       {
-      globalScene.CameraNode.RotateToWorldRad( 0.01, g_Up3v );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, 0.1, 0 ) );
       }
 
-   // E
-   if ( currentlyPressedKeys[ 69] ) 
+   // C
+   if ( currentlyPressedKeys[ 67 ] ) 
       {
-      globalScene.CameraNode.RotateToWorldRad( -0.01, g_Up3v );
+      globalScene.CameraNode.AddFromWorldPosition( vec3.fromValues( 0, -0.1, 0 ) );
+      }
+
+
+   // Left Arrow
+   if ( currentlyPressedKeys[ 37 ] ) 
+      {
+      globalScene.CameraNode.RotateToWorldRad( 0.05, g_Up3v );
+      }
+
+   // Right arrow
+   if ( currentlyPressedKeys[ 39 ] ) 
+      {
+      globalScene.CameraNode.RotateToWorldRad( -0.05, g_Up3v );
+      }
+
+   // Up arrow
+   if ( currentlyPressedKeys[ 38 ] ) 
+      {
+      globalScene.CameraNode.RotateFromWorldRad( -0.05, g_Left3v );
+      }
+
+   // Down arrow
+   if ( currentlyPressedKeys[ 40 ] ) 
+      {
+      globalScene.CameraNode.RotateFromWorldRad( 0.05, g_Left3v );
       }
 
    }

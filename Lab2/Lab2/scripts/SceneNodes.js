@@ -59,6 +59,11 @@
          }
       }
 
+   GetFromWorldTransform()
+      {
+      return mat4.invert( mat4.create(), this.Transform );
+      }
+
    SetTransform( matrix )
       {
       mat4.copy( this.Transform, matrix);
@@ -89,22 +94,33 @@
       return mat4.getTranslation( vec3.create(), this.Transform );
       }
 
+   GetToWorldVector( local3v )
+      {
+      var toWorld4v = vec4.fromValues( local3v[ 0 ], local3v[ 1 ], local3v[ 2 ], 0 );
+      return vec4.transformMat4( toWorld4v, toWorld4v, this.Transform );
+      }
+
    GetForwardVector()
       {
-      var forward4v = vec4.transformMat4( vec4.create(), g_Forward4v, this.Transform );
-      return vec3.fromValues( forward4v[ 0 ], forward4v[ 1 ], forward4v[ 2 ] );
+      return this.GetToWorldVector( g_Forward3v );
+      }
+
+   GetUpVector()
+      {
+      return this.GetToWorldVector( g_Up3v );
       }
 
    RotateToWorldRad( rad, axis )
       {
-      mat4.rotate( this.Transform, this.Transform, rad, axis );
+      var fromWorldTransform = this.GetFromWorldTransform();
+      var axis4v = vec4.fromValues( axis[ 0 ], axis[ 1 ], axis[ 2 ], 0 );
+      vec4.transformMat4( axis4v, axis4v, fromWorldTransform );
+      this.RotateFromWorldRad( rad, axis4v );
       }
 
    RotateFromWorldRad( rad, axis )
       {
-      var localAxis4v = vec4.fromValues( axis[ 0 ], axis[ 1 ], axis[ 2 ], 0 );
-      vec4.transformMat4( localAxis4v, localAxis4v, this.Transform );
-      mat4.rotate( this.Transform, this.Transform, rad, transformMat4 );
+      mat4.rotate( this.Transform, this.Transform, rad, axis );
       }
 
    }
