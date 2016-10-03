@@ -13,16 +13,16 @@
 
    DelegateOnRestore()
       {
-      this.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
+      this.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
       mat4.perspective( this.ProjectMatrix, this.Fov, this.Aspect, this.NearDist, this.FarDist );
       } 
 
    SetViewMatrix()
       {
       // Setting view matrix
-      var position = this.GetToWorldPosition();
-      var targetPosition = vec3.add( vec3.create(), position, this.GetForwardVector() );
-      mat4.lookAt( this.ViewMatrix, position, targetPosition, this.GetUpVector() );
+      var position = this.LocalTransform.GetToWorldPosition();
+      var targetPosition = vec3.add( vec3.create(), position, this.LocalTransform.GetForwardVector() );
+      mat4.lookAt( this.ViewMatrix, position, targetPosition, this.LocalTransform.GetUpVector() );
       }
 
    PreRender()
