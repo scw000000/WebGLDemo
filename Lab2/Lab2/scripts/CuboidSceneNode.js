@@ -1,9 +1,10 @@
-﻿class CubeSceneNode extends SceneNodes
+﻿class CuboidSceneNode extends SceneNodes
    {
-   constructor()
+   constructor( dimension )
       {
       super();
       this.Size = 5;
+      this.Dimension = vec3.clone( dimension );
       this.VertexColorBuffer = null;
       }
 
@@ -11,19 +12,20 @@
       {
       this.VertexPosBuffer = gl.createBuffer();
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexPosBuffer );
-      var halfSize = this.Size / 2;
+      var halfDimension = vec3.fromValues( this.Dimension[ 0 ] / 2, this.Dimension[ 1 ] / 2, this.Dimension[ 2 ] / 2 );
+
       var vertices = [
             // Front face
-            -halfSize, -halfSize, halfSize,
-             halfSize, -halfSize, halfSize,
-             halfSize, halfSize, halfSize,
-            -halfSize, halfSize, halfSize,
+            -halfDimension[ 0 ], -halfDimension[ 1 ], halfDimension[ 2 ],
+             halfDimension[ 0 ], -halfDimension[ 1 ], halfDimension[ 2 ],
+             halfDimension[ 0 ], halfDimension[ 1 ], halfDimension[ 2 ],
+            -halfDimension[ 0 ], halfDimension[ 1 ], halfDimension[ 2 ],
 
             // Back face
-            -halfSize, -halfSize, -halfSize,
-            -halfSize, halfSize, -halfSize,
-             halfSize, halfSize, -halfSize,
-             halfSize, -halfSize, -halfSize
+            -halfDimension[ 0 ], -halfDimension[ 1 ], -halfDimension[ 2 ],
+            -halfDimension[ 0 ], halfDimension[ 1 ], -halfDimension[ 2 ],
+             halfDimension[ 0 ], halfDimension[ 1 ], -halfDimension[ 2 ],
+             halfDimension[ 0 ], -halfDimension[ 1 ], -halfDimension[ 2 ]
          ];
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertices ), gl.STATIC_DRAW );
       this.VertexPosBuffer.ItemSize = 3;

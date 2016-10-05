@@ -52,7 +52,7 @@ function webGLStart()
    canvas.onmouseleave = ( cameraController.ClearMouseBottonState ).bind( cameraController );
 
    initGL();
-   globalScene.AddChild( new CubeSceneNode() );
+   globalScene.AddChild( new CuboidSceneNode( vec3.fromValues( 2, 3, 5 ) ) );
 
    globalScene.OnRestore();
 
