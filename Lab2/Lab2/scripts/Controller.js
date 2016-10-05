@@ -38,6 +38,11 @@
       this.MouseBottonPressed[ event.button ] = false;
       }
 
+   ClearMouseBottonState()
+      {
+      this.MouseBottonPressed = {};
+      }
+
    // I want to accumulate the mouse shift and process them altogether before rendering
    //, so I use 2 variables to hold current mouse position
    OnUpdate()
@@ -45,8 +50,24 @@
       vec2.copy( this.PrevMousePos, this.CurrMousePos );
       vec2.copy( this.CurrMousePos, this.RealCurrMousePos );
       vec2.sub( this.DeltaMousePos, this.CurrMousePos, this.PrevMousePos );
+
+      this.DelegateUpdate();
       //console.log( this.DeltaMousePos[ 0 ] + "  " + this.DeltaMousePos[ 1 ] );
       }
+
+   SetShowingCursor( isShowing )
+      {
+      if( isShowing )
+         {
+         document.body.style.cursor = 'auto';
+         }
+      else
+         {
+         document.body.style.cursor = 'none';
+         }
+      }
+
+   DelegateUpdate(){}
 
    }
 
