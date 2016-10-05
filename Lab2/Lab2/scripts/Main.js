@@ -1,9 +1,9 @@
 var globalScene;
 var gl;
-
+var canvas;
 // ************** Init OpenGL Context etc. ************* 
 
-function initGL(canvas) 
+function initGL() 
    {
    try 
       {
@@ -28,77 +28,77 @@ function initGL(canvas)
 
    }
 
-var currentlyPressedKeys = {};
+var KeyPressed = {};
 
 function handleKeyDown( event ) 
    {
-   currentlyPressedKeys[ event.keyCode ] = true;
+   KeyPressed[ event.keyCode ] = true;
    }
 
 function handleKeyUp( event ) 
    {
-   currentlyPressedKeys[ event.keyCode ] = false;
+   KeyPressed[ event.keyCode ] = false;
    }
 
 function handleKeys() 
    {
    // W
-   if ( currentlyPressedKeys[ 83 ] ) 
+   if ( KeyPressed[ 83 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, -0.1 ) );
       }
 
    // S
-   if ( currentlyPressedKeys[ 87 ] ) 
+   if ( KeyPressed[ 87 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, 0.1 ) );
       }
 
    // A
-   if ( currentlyPressedKeys[ 65 ] ) 
+   if ( KeyPressed[ 65 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0.1, 0, 0 ) );
       }
 
    // D
-   if ( currentlyPressedKeys[ 68 ] ) 
+   if ( KeyPressed[ 68 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( -0.1, 0, 0 ) );
       }
 
    // Space
-   if ( currentlyPressedKeys[ 32 ] ) 
+   if ( KeyPressed[ 32 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0.1, 0 ) );
       }
 
    // C
-   if ( currentlyPressedKeys[ 67 ] ) 
+   if ( KeyPressed[ 67 ] ) 
       {
       globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, -0.1, 0 ) );
       }
 
 
    // Left Arrow
-   if ( currentlyPressedKeys[ 37 ] ) 
+   if ( KeyPressed[ 37 ] ) 
       {
       globalScene.CameraNode.LocalTransform.RotateToWorldRad( 0.05, g_Up3v );
       }
 
    // Right arrow
-   if ( currentlyPressedKeys[ 39 ] ) 
+   if ( KeyPressed[ 39 ] ) 
       {
       globalScene.CameraNode.LocalTransform.RotateToWorldRad( -0.05, g_Up3v );
       }
 
    // Up arrow
-   if ( currentlyPressedKeys[ 38 ] ) 
+   if ( KeyPressed[ 38 ] ) 
       {
       globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Left3v );
       }
 
    // Down arrow
-   if ( currentlyPressedKeys[ 40 ] ) 
+   if ( KeyPressed[ 40 ] ) 
       {
       globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Left3v );
       }
@@ -109,9 +109,14 @@ function tick()
    {
    requestAnimFrame( tick );
    handleKeys();
+   playerController.OnUpdate();
    drawScene();
+
    //animate();
    }
+
+var playerController;
+var canvasOffset;
 
 function webGLStart() 
    {
@@ -119,8 +124,14 @@ function webGLStart()
    document.onkeydown = handleKeyDown;
    document.onkeyup = handleKeyUp;
    
-   var canvas = document.getElementById("WebGL-canvas");
-   initGL( canvas );
+   canvas = document.getElementById("WebGL-canvas");
+   canvasDimension = vec2.fromValues( canvas.width, canvas.height );
+   
+   playerController = new Controller();
+   canvas.onmousemove = ( playerController.OnMouseMove ).bind( playerController );
+   canvas.onmousedown = ( playerController.OnMouseBottonDown ).bind( playerController );
+   canvas.onmouseup = ( playerController.OnMouseBottonUp ).bind( playerController );
+   initGL();
    globalScene.AddChild( new CubeSceneNode() );
 
    globalScene.OnRestore();
