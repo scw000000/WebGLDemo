@@ -10,9 +10,20 @@
       this.Program = null;
       }
 
+   GetGlobalTransform()
+      {
+      if( this.Parent == null )
+         {
+         return mat4.clone( this.LocalTransform.GetToWorld() );
+         }
+      var parentTransform = this.Parent.GetGlobalTransform();
+      return mat4.mul( parentTransform, parentTransform, this.LocalTransform.GetToWorld() );
+      }
+
    AddChild( child )
       {
       this.ChildNodes.push( child );
+      child.Parent = this;
       }
 
    DelegateOnRestore(){ }

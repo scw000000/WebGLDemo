@@ -67,8 +67,8 @@
       if( this.MouseBottonPressed[ 0 ] )
          {
          this.SetShowingCursor( false );
-         globalScene.CameraNode.LocalTransform.RotateToWorldRad( cameraController.DeltaMousePos[ 0 ] , g_Up3v );
-         globalScene.CameraNode.LocalTransform.RotateFromWorldRad( cameraController.DeltaMousePos[ 1 ], g_Left3v );
+         globalScene.CameraNode.LocalTransform.RotateToWorldRad( -this.DeltaMousePos[ 0 ] , g_Up3v );
+         globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -this.DeltaMousePos[ 1 ], g_Left3v );
          }
       else
          {

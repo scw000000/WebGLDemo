@@ -6,6 +6,7 @@ class Transform
       this.ToWorld = mat4.create();
       this.FromWorld = mat4.create();
       this.IsFromWorldDirty = false;
+      this.Parent = null;
       }
 
    GetToWorld()

@@ -123,8 +123,10 @@
     <Content Include="index.html" />
     <Content Include="scripts\ai.0.22.19-build00125.js" />
     <Content Include="scripts\ai.0.22.19-build00125.min.js" />
+    <Content Include="scripts\RobotController.js" />
+    <Content Include="scripts\CameraController.js" />
     <Content Include="scripts\Controller.js" />
-    <Content Include="scripts\CubeSceneNode.js" />
+    <Content Include="scripts\CuboidSceneNode.js" />
     <Content Include="scripts\CameraNode.js" />
     <Content Include="scripts\Main.js" />
     <Content Include="scripts\gl-matrix.js" />

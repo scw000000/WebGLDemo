@@ -6,11 +6,15 @@
       // construct a empty dummy node
       this.RootNode = new SceneNodes();
       this.CameraNode = new CameraNode();
-      this.AddChild( this.CameraNode );
+      //this.AddSceneNode( this.CameraNode );
       }
 
-   AddChild( sceneNode )
+   AddSceneNode( sceneNode )
       {
+      if( sceneNode == null )
+         {
+         return;
+         }
       this.RootNode.AddChild( sceneNode );
       }
 
@@ -21,6 +25,7 @@
 
    OnRender()
       {
+      this.CameraNode.SetVPMatrix();
       if( this.RootNode != null && this.CameraNode != null )
          {
          this.RootNode.RenderChildren();
