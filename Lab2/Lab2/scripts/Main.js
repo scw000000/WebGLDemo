@@ -94,17 +94,17 @@ function webGLStart()
    var leftHandCuboid = new CuboidSceneNode( vec3.fromValues( 1, 0.3, 0.3 ) );
    leftHandCuboid.LocalTransform.SetToWorldPosition( vec3.fromValues( 1, 0, 0 ) );
    torsoCuboid.AddChild( leftHandCuboid );
-   CreateButton( leftHandCuboid, "Left Hand" );
+   CreateButton( leftHandCuboid, "Left Upper Hand" );
 
    var leftLowerHandCuboid = new CuboidSceneNode( vec3.fromValues( 0.3, 0.5, 0.3 ) );
    leftLowerHandCuboid.LocalTransform.SetToWorldPosition( vec3.fromValues( 0.35, -0.4, 0 ) );
    leftHandCuboid.AddChild( leftLowerHandCuboid );
    CreateButton( leftLowerHandCuboid, "Left Lower Hand" );
 
-   var headCuboid = new CuboidSceneNode( vec3.fromValues( 0.5, 0.5, 0.5 ) );
-   headCuboid.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0.7, 0 ) );
-   torsoCuboid.AddChild( headCuboid );
-   CreateButton( headCuboid, "Head" );
+   var headPyramidic = new PyramidicSceneNode( vec3.fromValues( 0.5, 0.5, 0.5 ) );
+   headPyramidic.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0.7, 0 ) );
+   torsoCuboid.AddChild( headPyramidic );
+   CreateButton( headPyramidic, "Head" );
 
    // Attach camera node to torso
    torsoCuboid.AddChild( globalScene.CameraNode );
@@ -113,6 +113,10 @@ function webGLStart()
    floor = new CuboidSceneNode( vec3.fromValues( 30, 0.5, 30 ) );
    floor.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -1, 0 ) );
    globalScene.AddSceneNode( floor );
+
+   var decorativePyramidic = new PyramidicSceneNode( vec3.fromValues( 10, 15, 7 ) );
+   decorativePyramidic.LocalTransform.SetToWorldPosition( vec3.fromValues( 11, 0, 13 ) );
+   globalScene.AddSceneNode( decorativePyramidic );
    
    initGL();
 
