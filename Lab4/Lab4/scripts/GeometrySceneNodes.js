@@ -22,10 +22,12 @@
       gl.enableVertexAttribArray( this.Program.VertexColorAttr );
 
       this.Program.mvpMatrixUni = gl.getUniformLocation( this.Program, "uMVPMatrix" );
-
       this.Program.mvMatrixUni = gl.getUniformLocation( this.Program, "uMVMatrix" );
-
+      this.Program.nMatrixUni = gl.getUniformLocation( this.Program, "uNMatrix" );
+      
       this.Program.LightPositionUni = gl.getUniformLocation( this.Program, "uLightPos_CameraSpace" );
+
+      this.Program.ShininessUni = gl.getUniformLocation( this.Program, "uShininess" );
 
       this.Program.LightAmbientUni = gl.getUniformLocation( this.Program, "uLightAmbient" );
       this.Program.LightDiffuseUni = gl.getUniformLocation( this.Program, "uLightDiffuse" );
@@ -51,14 +53,19 @@
       gl.vertexAttribPointer( this.Program.VertexColorAttr, this.VertexColorBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       gl.uniformMatrix4fv( this.Program.mvpMatrixUni, false, globalScene.GetMVPMatrix() );
-      gl.uniformMatrix4fv( this.Program.mvMatrixUni, false, globalScene.GetMVMatrix() );
+      var mvMat = globalScene.GetMVMatrix();
+      gl.uniformMatrix4fv( this.Program.mvMatrixUni, false, mvMat );
+      mat4.invert( mvMat, mvMat );
+	   mat4.transpose( mvMat, mvMat ); 
+      gl.uniformMatrix4fv( this.Program.nMatrixUni, false, mvMat );
 
       var lightGlobalTransform = globalLight.GetGlobalTransform();
       var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
       var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
     //  console.debug( vec3.str( lightPositionCamera ) );
       gl.uniform3f( this.Program.LightPositionUni, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );
-   //   gl.uniform3f( this.Program.LightPositionUni, eyePositionWorld[ 0 ], eyePositionWorld[ 1 ], eyePositionWorld[ 2 ] );
+      
+      gl.uniform1f( this.Program.ShininessUni, 16.0 );
 
       gl.uniform4f( this.Program.LightAmbientUni, globalLight.Ambient[ 0 ], globalLight.Ambient[ 1 ], globalLight.Ambient[ 2 ], globalLight.Ambient[ 3 ] );
       gl.uniform4f( this.Program.LightDiffuseUni, globalLight.Diffuse[ 0 ], globalLight.Diffuse[ 1 ], globalLight.Diffuse[ 2 ], globalLight.Diffuse[ 3 ] );
