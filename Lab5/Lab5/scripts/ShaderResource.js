@@ -99,6 +99,12 @@ class DeferredShaderResource extends ShaderResource
 
       this.mvpMatrixUni = {};
       this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" )
+
+      this.mvMatrixUni = {};
+      this.mvMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVMatrix" )
+
+      this.nMatrixUni = {};
+      this.nMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uNMatrix" )
       
       this.OnLoaded();
       }

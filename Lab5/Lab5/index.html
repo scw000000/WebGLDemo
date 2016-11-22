@@ -110,11 +110,17 @@ void main(void)
     attribute vec3 aVertexPosition;
     
     uniform mat4 uMVPMatrix;
-    
-    varying vec3 vPosition_WorldSpace;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uNMatrix;
+
+
+    varying vec4 vPosition_CameraSpace;
+    varying vec4 vNormal_CameraSpace;
+
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
-        vPosition_WorldSpace = vec3( gl_Position.x / gl_Position.w, gl_Position.y / gl_Position.w, gl_Position.z / gl_Position.w );
+        vPosition_CameraSpace = uMVMatrix * vec4( aVertexPosition, 1 );
+        vNormal_CameraSpace = uNMatrix * vec4( aVertexPosition, 0 );
     }
 </script>
 
@@ -122,11 +128,14 @@ void main(void)
 #extension GL_EXT_draw_buffers : require
     precision highp float;
 
-    varying vec3 vPosition_WorldSpace;
+    varying vec4 vPosition_CameraSpace;
+    varying vec4 vNormal_CameraSpace;
+
 void main(void) 
     {
      //depth = gl_FragCoord.z;
-    gl_FragData[0] = vec4( vPosition_WorldSpace, 1 ); 
+    gl_FragData[ 0 ] = vPosition_CameraSpace; 
+    gl_FragData[ 1 ] = vNormal_CameraSpace; 
     }
 </script>
 

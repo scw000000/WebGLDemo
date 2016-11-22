@@ -74,12 +74,29 @@ gDeferredDrawer.Init = function()
 
    gDeferredDrawer.PositionTexture.IsLoaded = true;
 
-   var bufs = [];
-        bufs[0] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
-     //   bufs[1] = ext.COLOR_ATTACHMENT1_WEBGL;
-       // bufs[2] = ext.COLOR_ATTACHMENT2_WEBGL;
-       // bufs[3] = ext.COLOR_ATTACHMENT3_WEBGL;
-        mrtExt.drawBuffersWEBGL( bufs );
+///////////////////////////////////////////////////////////////
+
+   // Normal Buffer
+   gDeferredDrawer.NormalTexture = {};
+   gDeferredDrawer.NormalTexture.IsLoaded = false;
+   gDeferredDrawer.NormalTexture.Context = gl.createTexture();
+   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.NormalTexture.Context );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT1_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.NormalTexture.Context, 0 );
+
+   gDeferredDrawer.NormalTexture.IsLoaded = true;
+
+///////////////////////////////////////////////////////////////
+
+
+   var drawBuffers = [];
+        drawBuffers[0] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
+        drawBuffers[1] = mrtExt.COLOR_ATTACHMENT1_WEBGL;
+       // drawBuffers[2] = mrtExt.COLOR_ATTACHMENT2_WEBGL;
+       // drawBuffers[3] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
+        mrtExt.drawBuffersWEBGL( drawBuffers );
 
    var errCode = gl.getError();
 

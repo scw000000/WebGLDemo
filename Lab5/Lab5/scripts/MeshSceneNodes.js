@@ -83,6 +83,9 @@
       gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexPosAttr.Context, this.MeshResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
+      gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvMatrixUni.Context, false, globalScene.GetMVMatrix() );
+      gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.nMatrixUni.Context, false, mvMat );
+
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.VertexIndexBuffer.Context );
 
