@@ -136,7 +136,9 @@
     <Content Include="scripts\gl-matrix\vec4.js" />
     <Content Include="scripts\GlobalConstants.js" />
     <Content Include="scripts\Main.js" />
+    <Content Include="scripts\MeshSceneNodes.js" />
     <Content Include="scripts\PointLightSceneNode.js" />
+    <Content Include="scripts\Resource.js" />
     <Content Include="scripts\RobotController.js" />
     <Content Include="scripts\Scene.js" />
     <Content Include="scripts\SceneNodes.js" />

@@ -25,9 +25,6 @@
       this.Program.VertexUVAttr = gl.getAttribLocation( this.Program, "aVertexUV" );
       gl.enableVertexAttribArray( this.Program.VertexUVAttr );
 
-      //this.Program.VertexColorAttr = gl.getAttribLocation( this.Program, "aVertexColor" );
-      //gl.enableVertexAttribArray( this.Program.VertexColorAttr );
-
       this.Program.mvpMatrixUni = gl.getUniformLocation( this.Program, "uMVPMatrix" );
       this.Program.mvMatrixUni = gl.getUniformLocation( this.Program, "uMVMatrix" );
       this.Program.nMatrixUni = gl.getUniformLocation( this.Program, "uNMatrix" );

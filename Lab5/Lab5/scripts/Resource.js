@@ -52,7 +52,11 @@ class MeshResource extends Resource
    constructor()
       {
       super();
-      this.Context = null
+      this.MeshData = null;
+      this.Context.VertexPosBuffer = null;
+      this.Context.VertexIndexBuffer = null;
+      this.Context.VertexNormalBuffer = null;
+      this.Context.VertexUVBuffer = null;
       }
 
    Load( fileName )
@@ -67,7 +71,7 @@ class MeshResource extends Resource
          if (request.readyState == 4) 
             {
 	         console.log("state ="+request.readyState); 
-            self.Context = JSON.parse( request.responseText );
+            self.MeshData = JSON.parse( request.responseText );
             self.Onloaded();
             }
          };
@@ -79,7 +83,31 @@ class MeshResource extends Resource
       {
       console.log(" in hand LoadedTeapot"); 
 
-      var positions = this.Context.vertexPositions;
+      this.Context.VertexPosBuffer = gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexPosBuffer );
+      gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( this.MeshData.vertexPositions ), gl.STATIC_DRAW );
+      this.Context.VertexPosBuffer.ItemSize = 3;
+      this.Context.VertexPosBuffer.NumItems = this.MeshData.vertexPositions.length / 3; 
+    
+      this.Context.VertexNormalBuffer =  gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexNormalBuffer );
+      gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( this.MeshData.vertexNormals ), gl.STATIC_DRAW );
+      this.Context.VertexNormalBuffer.ItemSize = 3;
+      this.Context.VertexNormalBuffer.NumItems = this.MeshData.vertexNormals.length / 3;
+
+      this.Context.VertexUVBuffer = gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexUVBuffer );
+      gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( this.MeshData.vertexTextureCoords ), gl.STATIC_DRAW);
+      this.Context.VertexUVBuffer.ItemSize = 2;
+      this.Context.VertexUVBuffer.NumItems = this.MeshData.vertexTextureCoords.length / 2;
+
+      this.Context.VertexIndexBuffer = gl.createBuffer();
+      gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.Context.VertexIndexBuffer );
+      gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( this.MeshData.indices ), gl.STATIC_DRAW );
+      this.Context.VertexIndexBuffer.ItemSize = 1;
+      this.Context.VertexIndexBuffer.NumItems = this.MeshData.indices.length;
+
+      var positions = this.MeshData.vertexPositions;
       var xmin, xmax, ymin, ymax, zmin, zmax;
       xmin = xmax = positions[0];
       ymin = ymax = positions[1];
@@ -120,7 +148,7 @@ function initTextures( resource, fileName ) {
 
 function handleTextureLoaded( resource ) {
     gl.bindTexture(gl.TEXTURE_2D, resource.Context );
-   gl.pixelStorei( gl.UNPACK_ALIGNMENT, 1 );
+    gl.pixelStorei( gl.UNPACK_ALIGNMENT, 1 );
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, resource.image);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);

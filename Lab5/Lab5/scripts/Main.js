@@ -221,6 +221,7 @@ function CreateCameraControlButtons()
 
 var globalLight;
 var sphereNode;
+var meshNode;
 var sampleTexture; 
 var textureRes = {};
 var meshRes = {};
@@ -230,7 +231,8 @@ function webGLStart()
    globalScene = new Scene();
    canvas = document.getElementById("WebGL-canvas");
    canvasDimension = vec2.fromValues( canvas.width, canvas.height );
-   
+   initGL();
+
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );
    document.onkeyup = ( controller.OnKeyUp ).bind( controller );
@@ -243,9 +245,17 @@ function webGLStart()
 
    globalScene.AddSceneNode( globalScene.CameraNode );
    
-   sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
-   sphereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
-   globalScene.AddSceneNode( sphereNode );
+   textureRes = new TextureResource();
+   textureRes.Load( "earth.png" );
+   meshRes = new MeshResource();
+   meshRes.Load( "teapot.json" );
+
+   meshNode = new MeshSceneNode( meshRes, textureRes );
+   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
+   globalScene.AddSceneNode( meshNode );
+   //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
+   //sphereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
+   //globalScene.AddSceneNode( sphereNode );
 
    globalLight = new PointLightSceneNode( vec4.fromValues( 0.2, 0.2, 0.2, 1.0 ), vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 0.7, 0.7, 0.7, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
@@ -256,11 +266,7 @@ function webGLStart()
    CreateLightControlButtons();
    CreateCameraControlButtons();
 
-   initGL();
-   textureRes = new TextureResource();
-   textureRes.Load( "earth.png" );
-   meshRes = new MeshResource();
-   meshRes.Load( "teapot.json" );
+   
    //initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();

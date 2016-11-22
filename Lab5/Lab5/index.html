@@ -48,9 +48,9 @@ precision mediump float;
         if ( ndotl > 0.0 ) 
             specular = uLightSpecular * pow( rdotv, uShininess ); 
 
-        gl_FragColor = uLightAmbient * uMaterialAmbient + diffuse * uMaterialDiffuse + specular * uMaterialSpecular; 
+        gl_FragColor = texColor * ( uLightAmbient * uMaterialAmbient + diffuse * uMaterialDiffuse ) + specular * uMaterialSpecular; 
         gl_FragColor.a = 1.0;
-        gl_FragColor = texColor;
+        //gl_FragColor = texColor;
        // gl_FragColor = uLightAmbient;
       //  gl_FragColor = vec4( vNormal, 1.0 );
         }
@@ -109,6 +109,7 @@ precision mediump float;
 <script type="text/javascript" src="scripts\SceneNodes.js"></script>
 <script type="text/javascript" src="scripts\CameraNode.js"></script>
 <script type="text/javascript" src="scripts\GeometrySceneNodes.js"></script>
+<script type="text/javascript" src="scripts\MeshSceneNodes.js"></script>
 <script type="text/javascript" src="scripts\PointLightSceneNode.js"></script>
 <script type="text/javascript" src="scripts\shaders_setup.js"></script>
 <script type="text/javascript" src="scripts\Main.js"></script>
