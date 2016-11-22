@@ -235,6 +235,7 @@ function webGLStart()
    initGL();
 
    gTextureDrawer.Init();
+   gDeferredDrawer.Init();
 
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );

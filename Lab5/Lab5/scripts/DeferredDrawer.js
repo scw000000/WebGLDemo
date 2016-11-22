@@ -2,17 +2,18 @@
 
 gDeferredDrawer.Init = function()
    {
-   gTextureDrawer.ShaderResource = new TextureShaderResource();
-   gTextureDrawer.ShaderResource.Load( "deferredShader-vs", "deferredShader-fs" );
-   gTextureDrawer.ScreenResource = {};
+   gDeferredDrawer.ShaderResource = new DeferredShaderResource();
+   gDeferredDrawer.ShaderResource.Load( "deferredShader-vs", "deferredShader-fs" );
 
    // Create and bind frame buffer
-   gTextureDrawer.ScreenResource.FrameBuffer,Context = gl.createFramebuffer();
-   gl.bindFramebuffer( gl.FRAMEBUFFER, gTextureDrawer.ScreenResource.Contrxt.FrameBuffer );
+   gDeferredDrawer.FrameBuffer = {};
+   gDeferredDrawer.FrameBuffer.Context = gl.createFramebuffer();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
 
    // Create and bind depth texture
-   gTextureDrawer.ScreenResource.DepthTexture,Context = gl.createTexture();
-   gl.bindTexture( gl.TEXTURE_2D, gTextureDrawer.ScreenResource.DepthTexture,Context );
+   gDeferredDrawer.DepthTexture = {};
+   gDeferredDrawer.DepthTexture.Context = gl.createTexture();
+   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context );
    gl.texImage2D( gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT, gl.viewportWidth, gl.viewportWidth, 0, gl.DEPTH_COMPONENT, gl.FLOAT, null);
    gl.pixelStorei( gl.UNPACK_ALIGNMENT, 1 );
    
@@ -21,8 +22,8 @@ gDeferredDrawer.Init = function()
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_COMPARE_FUNC, gl.LEQUAL );
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_COMPARE_MODE, gl.COMPARE_R_TO_TEXTURE );
 
-   gl.FramebufferTexture( gl.FRAMEBUFFER, gl._DEPTH_ATTACHMENT, gTextureDrawer.ScreenResource.DepthTexture,Context, 0 );
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl._DEPTH_ATTACHMENT, gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context, 0 );
 
-   gl.bindFramebuffer( gl.FRAMEBUFFER, 0 );
+   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    //gTextureDrawer.ScreenResource.FrameBuffer = gl.
    }
