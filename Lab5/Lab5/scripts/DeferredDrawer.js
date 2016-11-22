@@ -30,8 +30,8 @@ gDeferredDrawer.Init = function()
       return; 
       }
 
-   gDeferredDrawer.ShaderResource = new DeferredShaderResource();
-   gDeferredDrawer.ShaderResource.Load( "deferredShader-vs", "deferredShader-fs" );
+   gDeferredDrawer.GeometryShaderResource = new DeferredGemotryShaderResource();
+   gDeferredDrawer.GeometryShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );
 
    // Create and bind frame buffer
    gDeferredDrawer.FrameBuffer = {};
@@ -127,5 +127,13 @@ gDeferredDrawer.Init = function()
       }
 
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
-   //gTextureDrawer.ScreenResource.FrameBuffer = gl.
+   
+   ////////////////////// Ligh Shader 
+   //gDeferredDrawer.LightShaderResource = new ();
+   //gDeferredDrawer.LightShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );
+   }
+
+gDeferredDrawer.FinalRender = function()
+   {
+
    }
