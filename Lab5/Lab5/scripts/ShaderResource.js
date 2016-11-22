@@ -101,14 +101,21 @@ class DeferredShaderResource extends ShaderResource
       this.VertexNormalAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexNormal" );
       gl.enableVertexAttribArray( this.VertexNormalAttr.Context );
 
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
       this.mvpMatrixUni = {};
-      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" )
+      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" );
 
       this.mvMatrixUni = {};
-      this.mvMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVMatrix" )
+      this.mvMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVMatrix" );
 
       this.nMatrixUni = {};
-      this.nMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uNMatrix" )
+      this.nMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uNMatrix" );
+
+      this.MeshTextureUni = {};
+      this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
       
       this.OnLoaded();
       }

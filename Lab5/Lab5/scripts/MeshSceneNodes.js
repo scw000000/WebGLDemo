@@ -88,6 +88,10 @@
       gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexNormalBuffer.Context );
       gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexNormalAttr.Context, this.MeshResource.VertexNormalBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
+      gl.enableVertexAttribArray( gDeferredDrawer.ShaderResource.VertexUVAttr.Context );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexUVBuffer.Context );
+      gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexUVAttr.Context, this.MeshResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
       /////// Vertex Attributes
 
       /////// Uniforms
@@ -95,6 +99,10 @@
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvMatrixUni.Context, false, globalScene.GetMVMatrix() );
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.nMatrixUni.Context, false, mvMat );
+
+      gl.activeTexture( gl.TEXTURE0 );  
+	   gl.bindTexture( gl.TEXTURE_2D, this.MeshTextureResource.Context );   
+	   gl.uniform1i( gDeferredDrawer.ShaderResource.MeshTextureUni.Context, 0 );   
 
       /////// Uniforms
 
