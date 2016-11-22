@@ -256,9 +256,9 @@ function webGLStart()
    CreateCameraControlButtons();
 
    initGL();
-
-
-   initTextures( textureRes, "earth.png" );
+   textureRes = new TextureResource();
+   textureRes.Load( "earth.png" );
+   //initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();
 
