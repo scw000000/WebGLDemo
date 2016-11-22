@@ -33,6 +33,7 @@ function tick()
    requestAnimFrame( tick );
    controller.OnUpdate();
    drawScene();
+   gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
 var controller;
@@ -222,7 +223,6 @@ function CreateCameraControlButtons()
 var globalLight;
 var sphereNode;
 var meshNode;
-var sampleTexture; 
 var forwardShader;
 var textureRes = {};
 var meshRes = {};
@@ -233,6 +233,8 @@ function webGLStart()
    canvas = document.getElementById("WebGL-canvas");
    canvasDimension = vec2.fromValues( canvas.width, canvas.height );
    initGL();
+
+   gTextureDrawer.Init();
 
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );

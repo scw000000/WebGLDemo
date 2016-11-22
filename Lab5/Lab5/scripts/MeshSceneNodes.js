@@ -40,9 +40,6 @@
       gl.vertexAttribPointer( this.ShaderResource.Context.VertexUVAttr, this.MeshResource.Context.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.Context.VertexIndexBuffer );
-      //gl.enableVertexAttribArray( this.Program.VertexColorAttr );
-      //gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexColorBuffer );
-      //gl.vertexAttribPointer( this.Program.VertexColorAttr, this.VertexColorBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       gl.activeTexture( gl.TEXTURE0 );   // set texture unit 0 to use 
 	   gl.bindTexture( gl.TEXTURE_2D, this.MeshTextureResource.Context );    // bind the texture object to the texture unit 

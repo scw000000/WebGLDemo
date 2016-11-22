@@ -53,3 +53,19 @@ class ForwardShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class TextureShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+      this.Context.VertexPosAttr = gl.getAttribLocation( this.Context.Program, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.Context.VertexPosAttr );
+
+      this.Context.VertexUVAttr = gl.getAttribLocation( this.Context.Program, "aVertexUV" );
+      gl.enableVertexAttribArray( this.Context.VertexUVAttr );
+
+      this.Context.TextureUni = gl.getUniformLocation( this.Context.Program, "uTexture" );
+      
+      this.OnLoaded();
+      }
+   }
