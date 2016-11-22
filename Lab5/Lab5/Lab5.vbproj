@@ -124,6 +124,7 @@
     <Content Include="scripts\CameraController.js" />
     <Content Include="scripts\CameraNode.js" />
     <Content Include="scripts\Controller.js" />
+    <Content Include="scripts\DeferredDrawer.js" />
     <Content Include="scripts\GeometrySceneNodes.js" />
     <Content Include="scripts\gl-matrix\common.js" />
     <Content Include="scripts\gl-matrix\mat2.js" />
@@ -142,7 +143,9 @@
     <Content Include="scripts\RobotController.js" />
     <Content Include="scripts\Scene.js" />
     <Content Include="scripts\SceneNodes.js" />
+    <Content Include="scripts\ShaderResource.js" />
     <Content Include="scripts\shaders_setup.js" />
+    <Content Include="scripts\TextureDrawer.js" />
     <Content Include="scripts\Transform.js" />
     <Content Include="scripts\TransformStack.js" />
     <Content Include="scripts\webgl-utils.js" />
