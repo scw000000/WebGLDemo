@@ -129,11 +129,80 @@ gDeferredDrawer.Init = function()
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    
    ////////////////////// Ligh Shader 
-   //gDeferredDrawer.LightShaderResource = new ();
-   //gDeferredDrawer.LightShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );
+   gDeferredDrawer.LightShaderResource = new DeferredLightShaderResource();
+   gDeferredDrawer.LightShaderResource.Load( "deferredLightShader-vs", "deferredLightShader-fs" );
+
+   gDeferredDrawer.QuadResource = {};
+  // gDeferredDrawer.QuadResource.Context = {};
+
+   var vertexPos = [   
+      -1.0, -1.0, 
+      1.0, -1.0, 
+      1.0, 1.0, 
+      -1.0, 1.0 
+      ];
+
+   gDeferredDrawer.QuadResource.VertexPosBuffer = {};
+   gDeferredDrawer.QuadResource.VertexPosBuffer.Context = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexPosBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( vertexPos ), gl.STATIC_DRAW );
+   gDeferredDrawer.QuadResource.VertexPosBuffer.ItemSize = 2;
+   gDeferredDrawer.QuadResource.VertexPosBuffer.NumItems = vertexPos.length / gDeferredDrawer.QuadResource.VertexPosBuffer.ItemSize; 
+
+   var vertexUVs = [
+      0.0, 0.0, 
+      1.0, 0.0,
+      1.0, 1.0,
+      0.0, 1.0 
+      ];
+
+   gDeferredDrawer.QuadResource.VertexUVBuffer = {};
+   gDeferredDrawer.QuadResource.VertexUVBuffer.Context = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexUVBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( vertexUVs ), gl.STATIC_DRAW);
+   gDeferredDrawer.QuadResource.VertexUVBuffer.ItemSize = 2;
+   gDeferredDrawer.QuadResource.VertexUVBuffer.NumItems = vertexUVs.length / gDeferredDrawer.QuadResource.VertexUVBuffer.ItemSize;
+
+   var indices = [ 0, 1, 2, 0, 2, 3 ];
+
+   gDeferredDrawer.QuadResource.VertexIndexBuffer = {};
+   gDeferredDrawer.QuadResource.VertexIndexBuffer.Context = gl.createBuffer();
+   gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexIndexBuffer.Context );
+   gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( indices ), gl.STATIC_DRAW );
+   gDeferredDrawer.QuadResource.VertexIndexBuffer.ItemSize = 1;
+   gDeferredDrawer.QuadResource.VertexIndexBuffer.NumItems = indices.length;
+
    }
 
 gDeferredDrawer.FinalRender = function()
    {
+   gl.useProgram( gDeferredDrawer.LightShaderResource.Program.Context );
 
-   }
+   ////////////////////// VBOs
+
+   gl.enableVertexAttribArray( gDeferredDrawer.LightShaderResource.VertexPosAttr.Context );
+   gl.bindBuffer( gl.ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexPosBuffer.Context );
+   gl.vertexAttribPointer( gDeferredDrawer.LightShaderResource.VertexPosAttr.Context, gDeferredDrawer.QuadResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+   gl.enableVertexAttribArray( gDeferredDrawer.LightShaderResource.VertexUVAttr.Context );
+   gl.bindBuffer( gl.ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexUVBuffer.Context );
+   gl.vertexAttribPointer( gDeferredDrawer.LightShaderResource.VertexUVAttr.Context, gDeferredDrawer.QuadResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+   gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gDeferredDrawer.QuadResource.VertexIndexBuffer.Context );
+
+   ////////////////////// VBOs
+
+   gl.activeTexture( gl.TEXTURE0 );  
+	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.PositionTexture.Context );  
+	gl.uniform1i( gDeferredDrawer.LightShaderResource.PositionTextureUni.Context, 0 );  
+
+   gl.activeTexture( gl.TEXTURE1 );  
+	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.NormalTexture.Context );  
+	gl.uniform1i( gDeferredDrawer.LightShaderResource.NormalTextureUni.Context, 1 );  
+
+   gl.activeTexture( gl.TEXTURE2 );  
+	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.AlbedoTexture.Context );  
+	gl.uniform1i( gDeferredDrawer.LightShaderResource.AlbedoTextureUni.Context, 2 );  
+
+   gl.drawElements( gl.TRIANGLES, gDeferredDrawer.QuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
+   };

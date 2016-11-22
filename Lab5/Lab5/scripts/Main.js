@@ -33,6 +33,7 @@ function tick()
    requestAnimFrame( tick );
    controller.OnUpdate();
    drawScene();
+   gDeferredDrawer.FinalRender();
    gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );

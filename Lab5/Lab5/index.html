@@ -147,6 +147,35 @@ void main(void)
     }
 </script>
 
+
+<script id="deferredLightShader-vs" type="x-shader/x-vertex">
+    precision highp float;
+    attribute vec2 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = vec4( aVertexPosition, 0.5, 1 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+ <script id="deferredLightShader-fs" type="x-shader/x-fragment">
+    precision highp float;
+
+    varying vec2 vVertexUV;
+
+    uniform sampler2D uPositionTex_CameraSpace; 
+    uniform sampler2D uNormalTex_CameraSpace; 
+    uniform sampler2D uAlbedoTex; 
+
+void main(void) 
+    {
+    gl_FragColor = texture2D( uNormalTex_CameraSpace, vVertexUV ); 
+    }
+</script>
+
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2d.js"></script>

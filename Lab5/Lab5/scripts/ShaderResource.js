@@ -130,25 +130,20 @@ class DeferredLightShaderResource extends ShaderResource
       this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
       gl.enableVertexAttribArray( this.VertexPosAttr.Context );
 
-      this.VertexNormalAttr = {};
-      this.VertexNormalAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexNormal" );
-      gl.enableVertexAttribArray( this.VertexNormalAttr.Context );
-
       this.VertexUVAttr = {};
       this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
       gl.enableVertexAttribArray( this.VertexUVAttr.Context );
 
-      this.mvpMatrixUni = {};
-      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" );
+      //////////////////////////////////
 
-      this.mvMatrixUni = {};
-      this.mvMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVMatrix" );
+      this.PositionTextureUni = {};
+      this.PositionTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uPositionTex_CameraSpace" );
 
-      this.nMatrixUni = {};
-      this.nMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uNMatrix" );
+      this.NormalTextureUni = {};
+      this.NormalTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uNormalTex_CameraSpace" );
 
-      this.MeshTextureUni = {};
-      this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
+      this.AlbedoTextureUni = {};
+      this.AlbedoTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uAlbedoTex" );
       
       this.OnLoaded();
       }
