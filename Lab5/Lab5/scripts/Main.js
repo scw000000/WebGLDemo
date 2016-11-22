@@ -223,6 +223,7 @@ var globalLight;
 var sphereNode;
 var meshNode;
 var sampleTexture; 
+var forwardShader;
 var textureRes = {};
 var meshRes = {};
 
@@ -249,8 +250,10 @@ function webGLStart()
    textureRes.Load( "earth.png" );
    meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
+   forwardShader = new ForwardShaderResource();
+   forwardShader.Load( "shader-vs", "shader-fs" );
 
-   meshNode = new MeshSceneNode( meshRes, textureRes );
+   meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
    meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    globalScene.AddSceneNode( meshNode );
    //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );

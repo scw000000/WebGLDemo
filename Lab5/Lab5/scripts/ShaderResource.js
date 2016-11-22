@@ -1,18 +1,28 @@
 ﻿class ShaderResource extends Resource
    {
-   constructor( vsName, fsName )
+   constructor()
       {
       super();
+      this.Context.Program = null;
+      }
+
+   Load( vsName, fsName )
+      {
       this.Context.Program = initShaders( vsName, fsName );
+      this.InitAttrbutesAndUniforms();
       this.IsLoaded = true;
       }
+
+   InitAttrbutesAndUniforms()
+      {
+      }
+
    }
 
-class ForwardShaderResource extends Resource
+class ForwardShaderResource extends ShaderResource
    {
-   constructor( vsName, fsName )
+   InitAttrbutesAndUniforms()
       {
-      super( vsName, fsName );
       this.Context.VertexPosAttr = gl.getAttribLocation( this.Context.Program, "aVertexPosition" );
       gl.enableVertexAttribArray( this.Context.VertexPosAttr );
 
@@ -39,5 +49,7 @@ class ForwardShaderResource extends Resource
       this.Context.LightSpecularUni = gl.getUniformLocation( this.Context.Program, "uMaterialSpecular" );
 
       this.Context.MeshTextureUni = gl.getUniformLocation( this.Context.Program, "uMeshTexture" );
+      
+      this.OnLoaded();
       }
    }
