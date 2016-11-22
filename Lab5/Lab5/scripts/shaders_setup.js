@@ -8,7 +8,7 @@ function getShader( gl, id )
       {
       return null;
       }  
-
+   
    var str = "";
    var k = shaderScript.firstChild;
    while ( k )

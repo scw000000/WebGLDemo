@@ -22,6 +22,9 @@
       this.Program.VertexNormalAttr = gl.getAttribLocation( this.Program, "aVertexNormal" );
       gl.enableVertexAttribArray( this.Program.VertexNormalAttr );
 
+      this.Program.VertexUVAttr = gl.getAttribLocation( this.Program, "aVertexUV" );
+      gl.enableVertexAttribArray( this.Program.VertexUVAttr );
+
       //this.Program.VertexColorAttr = gl.getAttribLocation( this.Program, "aVertexColor" );
       //gl.enableVertexAttribArray( this.Program.VertexColorAttr );
 
@@ -41,6 +44,8 @@
       this.Program.LightDiffuseUni = gl.getUniformLocation( this.Program, "uMaterialDiffuse" );
       this.Program.LightSpecularUni = gl.getUniformLocation( this.Program, "uMaterialSpecular" );
 
+      this.Program.MeshTextureUni = gl.getUniformLocation( this.Program, "uMeshTexture" );
+
       this.Initbuffer();
       }
 
@@ -56,9 +61,18 @@
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexNormalBuffer );
       gl.vertexAttribPointer( this.Program.VertexNormalAttr, this.VertexNormalBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
+      gl.enableVertexAttribArray( this.Program.VertexUVAttr );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexUVBuffer );
+      gl.vertexAttribPointer( this.Program.VertexUVAttr, this.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+
       //gl.enableVertexAttribArray( this.Program.VertexColorAttr );
       //gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexColorBuffer );
       //gl.vertexAttribPointer( this.Program.VertexColorAttr, this.VertexColorBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+      gl.activeTexture( gl.TEXTURE0 );   // set texture unit 0 to use 
+	   gl.bindTexture( gl.TEXTURE_2D, textureRes.Context );    // bind the texture object to the texture unit 
+	   gl.uniform1i(this.Program.MeshTextureUni, 0);   // pass the texture unit to the shader 
 
       gl.uniformMatrix4fv( this.Program.mvpMatrixUni, false, globalScene.GetMVPMatrix() );
       var mvMat = globalScene.GetMVMatrix();
@@ -232,12 +246,14 @@ class SphereSceneNode extends GeometrySceneNodes
       this.Color = color;
       this.VertexColorBuffer = null;
       this.VertexNormalBuffer = null;
+      this.VertexUVBuffer = null;
       }
 
    Initbuffer()
       {
       var vertices = [];
       var normals = [];
+      var uvs = [];
       var sphericalcoord = vec3.scale( vec3.create(), g_Down3v, this.Radius );
       var deltaRad = Math.PI / ( this.SliceNum - 1 );
       
@@ -253,6 +269,9 @@ class SphereSceneNode extends GeometrySceneNodes
             normals.push( normal[ 0 ] );
             normals.push( normal[ 1 ] );
             normals.push( normal[ 2 ] );
+
+            uvs.push( polar / this.SliceNum );
+            uvs.push( azimuthal / this.SectorNum );
             if( polar == 0 || polar == this.SliceNum - 1 )
                {
                break;
@@ -274,6 +293,12 @@ class SphereSceneNode extends GeometrySceneNodes
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( normals ), gl.STATIC_DRAW );
       this.VertexNormalBuffer.ItemSize = 3;
       this.VertexNormalBuffer.NumItems = normals.length / this.VertexNormalBuffer.ItemSize;
+
+      this.VertexUVBuffer = gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexUVBuffer );
+      gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( uvs ), gl.STATIC_DRAW );
+      this.VertexUVBuffer.ItemSize = 2;
+      this.VertexUVBuffer.NumItems = uvs.length / this.VertexUVBuffer.ItemSize;
 
       //var vertexColor = [];
       //for( var i = 0; i < this.VertexPosBuffer.NumItems; ++i )

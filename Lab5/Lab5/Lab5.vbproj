@@ -120,6 +120,30 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="index.html" />
+    <Content Include="scripts\CameraController.js" />
+    <Content Include="scripts\CameraNode.js" />
+    <Content Include="scripts\Controller.js" />
+    <Content Include="scripts\GeometrySceneNodes.js" />
+    <Content Include="scripts\gl-matrix\common.js" />
+    <Content Include="scripts\gl-matrix\mat2.js" />
+    <Content Include="scripts\gl-matrix\mat2d.js" />
+    <Content Include="scripts\gl-matrix\mat3.js" />
+    <Content Include="scripts\gl-matrix\mat4.js" />
+    <Content Include="scripts\gl-matrix\quat.js" />
+    <Content Include="scripts\gl-matrix\vec2.js" />
+    <Content Include="scripts\gl-matrix\vec3.js" />
+    <Content Include="scripts\gl-matrix\vec4.js" />
+    <Content Include="scripts\GlobalConstants.js" />
+    <Content Include="scripts\Main.js" />
+    <Content Include="scripts\PointLightSceneNode.js" />
+    <Content Include="scripts\RobotController.js" />
+    <Content Include="scripts\Scene.js" />
+    <Content Include="scripts\SceneNodes.js" />
+    <Content Include="scripts\shaders_setup.js" />
+    <Content Include="scripts\Transform.js" />
+    <Content Include="scripts\TransformStack.js" />
+    <Content Include="scripts\webgl-utils.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

@@ -7,12 +7,12 @@
 <title>WebGL Lab &mdash; 5 </title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
-<!--  ************** Fragment Shader ************* --> 
 <script id="shader-fs" type="x-shader/x-fragment">
 precision mediump float;
    // varying vec4 vColor; 
     varying vec3 vNormal_CameraSpace;
     varying vec3 vVertexPos_CameraSpace;
+    varying vec2 vVertexUV;
 
     uniform vec3 uLightPos_CameraSpace;
 
@@ -26,8 +26,12 @@ precision mediump float;
     uniform vec4 uMaterialDiffuse; 
     uniform vec4 uMaterialSpecular;
 
+    uniform sampler2D uMeshTexture; 
+
     void main(void) 
         {
+        vec4 texColor = texture2D( uMeshTexture, vVertexUV ); 
+
         vec3 lightVec = normalize( vec3( uLightPos_CameraSpace - vVertexPos_CameraSpace ) ); 
 
         vec3 eyeVec = normalize( -vec3( vVertexPos_CameraSpace ) );
@@ -46,17 +50,17 @@ precision mediump float;
 
         gl_FragColor = uLightAmbient * uMaterialAmbient + diffuse * uMaterialDiffuse + specular * uMaterialSpecular; 
         gl_FragColor.a = 1.0;
+        gl_FragColor = texColor;
        // gl_FragColor = uLightAmbient;
       //  gl_FragColor = vec4( vNormal, 1.0 );
         }
 </script>
 
-<!--  ************** Vertex Shader ************* --> 
 <script id="shader-vs" type="x-shader/x-vertex">
 precision mediump float;
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
-   // attribute vec4 aVertexColor;
+    attribute vec2 aVertexUV;
 
     uniform mat4 uMVPMatrix;
     uniform mat4 uMVMatrix;
@@ -65,15 +69,17 @@ precision mediump float;
     varying vec4 vColor; 
     varying vec3 vNormal_CameraSpace;
     varying vec3 vVertexPos_CameraSpace;
+    varying vec2 vVertexUV;
 
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1.0 );
       //  vColor = aVertexColor; 
         vNormal_CameraSpace = vec3( uNMatrix * vec4( aVertexNormal, 0.0 ) );
         vVertexPos_CameraSpace = vec3( uMVMatrix * vec4( aVertexPosition, 1.0 ) );
+        vVertexUV = aVertexUV;
     }
 </script>
-    
+
 <!--   
 <script id="shader-fs" type="x-shader/x-fragment" src="effects\basicShader.fs"></script>
 
@@ -91,6 +97,7 @@ precision mediump float;
 
 
 <script type="text/javascript" src="scripts\webgl-utils.js"></script>
+<script type="text/javascript" src="scripts\Resource.js"></script>
 
 <script type="text/javascript" src="scripts\GlobalConstants.js"></script>
 <script type="text/javascript" src="scripts\Controller.js"></script>

@@ -221,6 +221,8 @@ function CreateCameraControlButtons()
 
 var globalLight;
 var sphereNode;
+var sampleTexture; 
+var textureRes = {};
 
 function webGLStart() 
    {
@@ -254,6 +256,9 @@ function webGLStart()
    CreateCameraControlButtons();
 
    initGL();
+
+
+   initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();
 
