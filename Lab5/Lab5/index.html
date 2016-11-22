@@ -170,9 +170,40 @@ void main(void)
     uniform sampler2D uNormalTex_CameraSpace; 
     uniform sampler2D uAlbedoTex; 
 
+    uniform vec3 uLightPos_CameraSpace;
+
+    uniform vec4 uLightAmbient; 
+    uniform vec4 uLightDiffuse; 
+    uniform vec4 uLightSpecular;
+
+    uniform float uShininess;
+
 void main(void) 
     {
-    gl_FragColor = texture2D( uNormalTex_CameraSpace, vVertexUV ); 
+    vec3 vertexPos_CameraSpace = texture2D( uPositionTex_CameraSpace, vVertexUV ).xyz;
+    vec3 vertexNormal_CameraSpace = texture2D( uNormalTex_CameraSpace, vVertexUV ).xyz;
+    vec4 albedo = texture2D( uAlbedoTex, vVertexUV );  
+
+    vec3 lightVec = normalize( uLightPos_CameraSpace - vertexPos_CameraSpace ); 
+
+    vec3 eyeVec = normalize( -vertexPos_CameraSpace );
+      
+    float ndotl = max( dot( vertexNormal_CameraSpace, lightVec ), 0.0 ); 
+
+    vec4 diffuse = uLightDiffuse * ndotl;
+
+    vec3 reflectVec = normalize( 2.0 * ndotl * vertexNormal_CameraSpace - lightVec );
+        
+    float rdotv = max( dot( reflectVec, eyeVec ), 0.0 );
+
+    vec4 specular = vec4( 0, 0, 0, 1); 
+    if ( ndotl > 0.0 ) 
+        specular = uLightSpecular * pow( rdotv, uShininess ); 
+
+    gl_FragColor = albedo * ( uLightAmbient + diffuse ) + specular; 
+    gl_FragColor.a = 1.0;
+
+   // gl_FragColor = texture2D( uNormalTex_CameraSpace, vVertexUV ); 
     }
 </script>
 

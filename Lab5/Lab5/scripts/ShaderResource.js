@@ -145,6 +145,20 @@ class DeferredLightShaderResource extends ShaderResource
       this.AlbedoTextureUni = {};
       this.AlbedoTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uAlbedoTex" );
       
+      this.LightPositionUni = {};
+      this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );
+
+      this.ShininessUni = {};
+      this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
+
+      this.LightAmbientUni = {};
+      this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
+      this.LightDiffuseUni = {};
+      this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
+      this.LightSpecularUni = {};
+      this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
+
+
       this.OnLoaded();
       }
    }

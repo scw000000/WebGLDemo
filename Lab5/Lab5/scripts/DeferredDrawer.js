@@ -204,5 +204,20 @@ gDeferredDrawer.FinalRender = function()
 	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.AlbedoTexture.Context );  
 	gl.uniform1i( gDeferredDrawer.LightShaderResource.AlbedoTextureUni.Context, 2 );  
 
+   // Uniforms for lights
+   var lightGlobalTransform = globalLight.GetGlobalTransform();
+   var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
+   var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
+    
+   gl.uniform3f( gDeferredDrawer.LightShaderResource.LightPositionUni.Context, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );   
+
+   gl.uniform1f( gDeferredDrawer.LightShaderResource.ShininessUni.Context, 3 );
+
+   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightAmbientUni.Context, globalLight.Ambient[ 0 ], globalLight.Ambient[ 1 ], globalLight.Ambient[ 2 ], globalLight.Ambient[ 3 ] );
+   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, globalLight.Diffuse[ 0 ], globalLight.Diffuse[ 1 ], globalLight.Diffuse[ 2 ], globalLight.Diffuse[ 3 ] );
+   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni.Context, globalLight.Specular[ 0 ], globalLight.Specular[ 1 ], globalLight.Specular[ 2 ], globalLight.Specular[ 3 ] );
+
+
+
    gl.drawElements( gl.TRIANGLES, gDeferredDrawer.QuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
    };
