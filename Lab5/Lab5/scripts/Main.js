@@ -243,8 +243,6 @@ function webGLStart()
    canvas.onmousedown = ( controller.OnMouseBottonDown ).bind( controller );
    canvas.onmouseup = ( controller.OnMouseBottonUp ).bind( controller );
    canvas.onmouseleave = ( controller.ClearMouseBottonState ).bind( controller );
-  
-  // globalScene.AddSceneNode( torsoCuboid );
 
    globalScene.AddSceneNode( globalScene.CameraNode );
    

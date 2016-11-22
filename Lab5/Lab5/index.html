@@ -105,10 +105,26 @@ void main(void)
     }
 </script>
 
-<!--   
-<script id="shader-fs" type="x-shader/x-fragment" src="effects\basicShader.fs"></script>
+<script id="deferredShader-vs" type="x-shader/x-vertex">
+precision mediump float;
+    attribute vec3 aVertexPosition;
+    
+    uniform mat4 uMVPMatrix;
 
-<script id="shader-vs" type="x-shader/x-vertex" src="effects\basicShader.vs"></script>-->
+    void main(void) {
+        gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
+    }
+</script>
+
+ <script id="deferredShader-fs" type="x-shader/x-fragment">
+precision mediump float;
+varying vec2 vVertexUV;
+
+void main(void) 
+    {
+   // gl_FragColor = texture2D( uTexture, vVertexUV ); 
+    }
+</script>
 
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>

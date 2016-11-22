@@ -53,10 +53,10 @@ class MeshResource extends Resource
       {
       super();
       this.MeshData = null;
-      this.Context.VertexPosBuffer = null;
-      this.Context.VertexIndexBuffer = null;
-      this.Context.VertexNormalBuffer = null;
-      this.Context.VertexUVBuffer = null;
+      this.VertexPosBuffer = {};
+      this.VertexIndexBuffer = {};
+      this.VertexNormalBuffer = {};
+      this.VertexUVBuffer = {};
       }
 
    Load( fileName )
@@ -83,29 +83,29 @@ class MeshResource extends Resource
       {
       console.log(" in hand LoadedTeapot"); 
 
-      this.Context.VertexPosBuffer = gl.createBuffer();
-      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexPosBuffer );
+      this.VertexPosBuffer.Context = gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexPosBuffer.Context );
       gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( this.MeshData.vertexPositions ), gl.STATIC_DRAW );
-      this.Context.VertexPosBuffer.ItemSize = 3;
-      this.Context.VertexPosBuffer.NumItems = this.MeshData.vertexPositions.length / 3; 
+      this.VertexPosBuffer.ItemSize = 3;
+      this.VertexPosBuffer.NumItems = this.MeshData.vertexPositions.length / 3; 
     
-      this.Context.VertexNormalBuffer =  gl.createBuffer();
-      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexNormalBuffer );
+      this.VertexNormalBuffer.Context =  gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexNormalBuffer.Context );
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( this.MeshData.vertexNormals ), gl.STATIC_DRAW );
-      this.Context.VertexNormalBuffer.ItemSize = 3;
-      this.Context.VertexNormalBuffer.NumItems = this.MeshData.vertexNormals.length / 3;
+      this.VertexNormalBuffer.ItemSize = 3;
+      this.VertexNormalBuffer.NumItems = this.MeshData.vertexNormals.length / 3;
 
-      this.Context.VertexUVBuffer = gl.createBuffer();
-      gl.bindBuffer( gl.ARRAY_BUFFER, this.Context.VertexUVBuffer );
+      this.VertexUVBuffer.Context = gl.createBuffer();
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexUVBuffer.Context );
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( this.MeshData.vertexTextureCoords ), gl.STATIC_DRAW);
-      this.Context.VertexUVBuffer.ItemSize = 2;
-      this.Context.VertexUVBuffer.NumItems = this.MeshData.vertexTextureCoords.length / 2;
+      this.VertexUVBuffer.ItemSize = 2;
+      this.VertexUVBuffer.NumItems = this.MeshData.vertexTextureCoords.length / 2;
 
-      this.Context.VertexIndexBuffer = gl.createBuffer();
-      gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.Context.VertexIndexBuffer );
+      this.VertexIndexBuffer.Context = gl.createBuffer();
+      gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.VertexIndexBuffer.Context );
       gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, new Uint16Array( this.MeshData.indices ), gl.STATIC_DRAW );
-      this.Context.VertexIndexBuffer.ItemSize = 1;
-      this.Context.VertexIndexBuffer.NumItems = this.MeshData.indices.length;
+      this.VertexIndexBuffer.ItemSize = 1;
+      this.VertexIndexBuffer.NumItems = this.MeshData.indices.length;
 
       var positions = this.MeshData.vertexPositions;
       var xmin, xmax, ymin, ymax, zmin, zmax;

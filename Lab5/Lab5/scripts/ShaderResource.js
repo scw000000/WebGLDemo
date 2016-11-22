@@ -3,12 +3,12 @@
    constructor()
       {
       super();
-      this.Context.Program = null;
+      this.Program = {};
       }
 
    Load( vsName, fsName )
       {
-      this.Context.Program = initShaders( vsName, fsName );
+      this.Program.Context = initShaders( vsName, fsName );
       this.InitAttrbutesAndUniforms();
       this.IsLoaded = true;
       }
@@ -23,32 +23,48 @@ class ForwardShaderResource extends ShaderResource
    {
    InitAttrbutesAndUniforms()
       {
-      this.Context.VertexPosAttr = gl.getAttribLocation( this.Context.Program, "aVertexPosition" );
-      gl.enableVertexAttribArray( this.Context.VertexPosAttr );
 
-      this.Context.VertexNormalAttr = gl.getAttribLocation( this.Context.Program, "aVertexNormal" );
-      gl.enableVertexAttribArray( this.Context.VertexNormalAttr );
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
 
-      this.Context.VertexUVAttr = gl.getAttribLocation( this.Context.Program, "aVertexUV" );
-      gl.enableVertexAttribArray( this.Context.VertexUVAttr );
+      this.VertexNormalAttr = {};
+      this.VertexNormalAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexNormal" );
+      gl.enableVertexAttribArray( this.VertexNormalAttr.Context );
 
-      this.Context.mvpMatrixUni = gl.getUniformLocation( this.Context.Program, "uMVPMatrix" );
-      this.Context.mvMatrixUni = gl.getUniformLocation( this.Context.Program, "uMVMatrix" );
-      this.Context.nMatrixUni = gl.getUniformLocation( this.Context.Program, "uNMatrix" );
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      this.mvpMatrixUni = {};
+      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" );
+      this.mvMatrixUni = {};
+      this.mvMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVMatrix" );
+      this.nMatrixUni = {};
+      this.nMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uNMatrix" );
       
-      this.Context.LightPositionUni = gl.getUniformLocation( this.Context.Program, "uLightPos_CameraSpace" );
+      this.LightPositionUni = {};
+      this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );
 
-      this.Context.ShininessUni = gl.getUniformLocation( this.Context.Program, "uShininess" );
+      this.ShininessUni = {};
+      this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
 
-      this.Context.MaterialAmbientUni = gl.getUniformLocation( this.Context.Program, "uLightAmbient" );
-      this.Context.MaterialDiffuseUni = gl.getUniformLocation( this.Context.Program, "uLightDiffuse" );
-      this.Context.MaterialSpecularUni = gl.getUniformLocation( this.Context.Program, "uLightSpecular" );
+      this.MaterialAmbientUni = {};
+      this.MaterialAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
+      this.MaterialDiffuseUni = {};
+      this.MaterialDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
+      this.MaterialSpecularUni = {};
+      this.MaterialSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
 
-      this.Context.LightAmbientUni = gl.getUniformLocation( this.Context.Program, "uMaterialAmbient" );
-      this.Context.LightDiffuseUni = gl.getUniformLocation( this.Context.Program, "uMaterialDiffuse" );
-      this.Context.LightSpecularUni = gl.getUniformLocation( this.Context.Program, "uMaterialSpecular" );
+      this.LightAmbientUni = {};
+      this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialAmbient" );
+      this.LightDiffuseUni = {};
+      this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuse" );
+      this.LightSpecularUni = {};
+      this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialSpecular" );
 
-      this.Context.MeshTextureUni = gl.getUniformLocation( this.Context.Program, "uMeshTexture" );
+      this.MeshTextureUni = {};
+      this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
       
       this.OnLoaded();
       }
@@ -58,13 +74,29 @@ class TextureShaderResource extends ShaderResource
    {
    InitAttrbutesAndUniforms()
       {
-      this.Context.VertexPosAttr = gl.getAttribLocation( this.Context.Program, "aVertexPosition" );
-      gl.enableVertexAttribArray( this.Context.VertexPosAttr );
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
 
-      this.Context.VertexUVAttr = gl.getAttribLocation( this.Context.Program, "aVertexUV" );
-      gl.enableVertexAttribArray( this.Context.VertexUVAttr );
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+      
+      this.TextureUni = {};
+      this.TextureUni.Context = gl.getUniformLocation( this.Program.Context, "uTexture" );
+      
+      this.OnLoaded();
+      }
+   }
 
-      this.Context.TextureUni = gl.getUniformLocation( this.Context.Program, "uTexture" );
+class DeferredShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" )
       
       this.OnLoaded();
       }
