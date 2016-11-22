@@ -78,14 +78,25 @@
       gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
       gl.enable(gl.DEPTH_TEST);
 
+      /////// Vertex Attributes
+
       gl.enableVertexAttribArray( gDeferredDrawer.ShaderResource.VertexPosAttr.Context );
       gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexPosBuffer.Context );
       gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexPosAttr.Context, this.MeshResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+      gl.enableVertexAttribArray( gDeferredDrawer.ShaderResource.VertexNormalAttr.Context );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexNormalBuffer.Context );
+      gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexNormalAttr.Context, this.MeshResource.VertexNormalBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+      /////// Vertex Attributes
+
+      /////// Uniforms
 
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvMatrixUni.Context, false, globalScene.GetMVMatrix() );
       gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.nMatrixUni.Context, false, mvMat );
 
+      /////// Uniforms
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.VertexIndexBuffer.Context );
 

@@ -108,7 +108,8 @@ void main(void)
 <script id="deferredShader-vs" type="x-shader/x-vertex">
     precision highp float;
     attribute vec3 aVertexPosition;
-    
+    attribute vec3 aVertexNormal;
+
     uniform mat4 uMVPMatrix;
     uniform mat4 uMVMatrix;
     uniform mat4 uNMatrix;
@@ -120,7 +121,7 @@ void main(void)
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
         vPosition_CameraSpace = uMVMatrix * vec4( aVertexPosition, 1 );
-        vNormal_CameraSpace = uNMatrix * vec4( aVertexPosition, 0 );
+        vNormal_CameraSpace = uNMatrix * vec4( aVertexNormal, 0 );
     }
 </script>
 
@@ -130,6 +131,8 @@ void main(void)
 
     varying vec4 vPosition_CameraSpace;
     varying vec4 vNormal_CameraSpace;
+
+   // uniform sampler2D uMeshTexture; 
 
 void main(void) 
     {

@@ -90,6 +90,19 @@ gDeferredDrawer.Init = function()
 
 ///////////////////////////////////////////////////////////////
 
+   //// Albedo Buffer
+   //gDeferredDrawer.AlbedoTexture = {};
+   //gDeferredDrawer.AlbedoTexture.IsLoaded = false;
+   //gDeferredDrawer.AlbedoTexture.Context = gl.createTexture();
+   //gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.AlbedoTexture.Context );
+   //gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   //gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   //gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
+   //gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT2_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.AlbedoTexture.Context, 0 );
+
+   //gDeferredDrawer.AlbedoTexture.IsLoaded = true;
+
+///////////////////////////////////////////////////////////////
 
    var drawBuffers = [];
         drawBuffers[0] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
