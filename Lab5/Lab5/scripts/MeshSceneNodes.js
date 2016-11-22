@@ -69,5 +69,25 @@
       gl.uniform4f( this.ShaderResource.MaterialSpecularUni.Context, this.MaterialSpecular[ 0 ], this.MaterialSpecular[ 1 ], this.MaterialSpecular[ 2 ], this.MaterialSpecular[ 3 ] );
 
       gl.drawElements( gl.TRIANGLES, this.MeshResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
+
+
+      // Deferred Rendering
+      gl.useProgram( gDeferredDrawer.ShaderResource.Program.Context );
+      gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+
+      gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+      gl.enable(gl.DEPTH_TEST);
+
+      gl.enableVertexAttribArray( gDeferredDrawer.ShaderResource.VertexPosAttr.Context );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexPosBuffer.Context );
+      gl.vertexAttribPointer( gDeferredDrawer.ShaderResource.VertexPosAttr.Context, this.MeshResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+      gl.uniformMatrix4fv( gDeferredDrawer.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
+
+      gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.VertexIndexBuffer.Context );
+
+      gl.drawElements( gl.TRIANGLES, this.MeshResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
+
+      gl.bindFramebuffer( gl.FRAMEBUFFER, null );
       }
    }
