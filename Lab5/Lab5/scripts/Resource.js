@@ -47,6 +47,68 @@ class TextureResource extends Resource
       }
    }
 
+class MeshResource extends Resource
+   {
+   constructor()
+      {
+      super();
+      this.Context = null
+      }
+
+   Load( fileName )
+      {
+      console.log("loading mesh....");
+      var request = new  XMLHttpRequest();
+      request.open( "GET", fileName );    
+      var self = this;
+      request.onreadystatechange =
+      function () 
+         {
+         if (request.readyState == 4) 
+            {
+	         console.log("state ="+request.readyState); 
+            self.Context = JSON.parse( request.responseText );
+            self.Onloaded();
+            }
+         };
+      request.send();    
+      console.log("loading mesh....!");
+      }
+
+   Onloaded()
+      {
+      console.log(" in hand LoadedTeapot"); 
+
+      var positions = this.Context.vertexPositions;
+      var xmin, xmax, ymin, ymax, zmin, zmax;
+      xmin = xmax = positions[0];
+      ymin = ymax = positions[1];
+      zmin = zmax = positions[2];
+      for (var i = 0; i< positions.length/3; i++) 
+         {
+	      if (positions[i*3] < xmin) xmin = positions[i*3];
+	      if (positions[i*3] > xmax) xmax = positions[i*3]; 	
+
+	      if (positions[i*3+1] < ymin) ymin = positions[i*3+1];
+	      if (positions[i*3+1] > ymax) ymax = positions[i*3+1]; 	
+
+	      if (positions[i*3+2] < zmin) zmin = positions[i*3+2];
+	      if (positions[i*3+2] > zmax) zmax = positions[i*3+2]; 	
+         }
+      console.log("*****xmin = "+xmin + "xmax = "+xmax);
+      console.log("*****ymin = "+ymin + "ymax = "+ymax);
+      console.log("*****zmin = "+zmin + "zmax = "+zmax);    
+
+      console.log("*****xmin = "+xmin + "xmax = "+xmax);
+      console.log("*****ymin = "+ymin + "ymax = "+ymax);
+      console.log("*****zmin = "+zmin + "zmax = "+zmax);       
+
+      super.OnLoaded();
+      console.log("loading complete!!");
+      }
+   }
+
+
 function initTextures( resource, fileName ) {
     resource.Context = gl.createTexture();
     resource.image = new Image();

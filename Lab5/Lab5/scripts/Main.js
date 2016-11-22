@@ -223,6 +223,7 @@ var globalLight;
 var sphereNode;
 var sampleTexture; 
 var textureRes = {};
+var meshRes = {};
 
 function webGLStart() 
    {
@@ -258,6 +259,8 @@ function webGLStart()
    initGL();
    textureRes = new TextureResource();
    textureRes.Load( "earth.png" );
+   meshRes = new MeshResource();
+   meshRes.Load( "teapot.json" );
    //initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();
