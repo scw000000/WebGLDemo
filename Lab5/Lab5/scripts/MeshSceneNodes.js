@@ -75,9 +75,6 @@
       gl.useProgram( gDeferredDrawer.GeometryShaderResource.Program.Context );
       gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
 
-      gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-      gl.enable(gl.DEPTH_TEST);
-
       /////// Vertex Attributes
 
       gl.enableVertexAttribArray( gDeferredDrawer.GeometryShaderResource.VertexPosAttr.Context );

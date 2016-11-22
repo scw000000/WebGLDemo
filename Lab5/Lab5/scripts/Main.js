@@ -11,6 +11,7 @@ function initGL()
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
       gl.viewport( 0, 0, gl.viewportWidth, gl.viewportHeight );
+      gl.enable(gl.DEPTH_TEST);
       } 
    catch (e) 
       {}
@@ -32,12 +33,12 @@ function tick()
    {
    requestAnimFrame( tick );
    controller.OnUpdate();
+   gDeferredDrawer.PreRender();
    drawScene();
    gDeferredDrawer.FinalRender();
-   gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.DepthTexture, 0, 0, 300, 300 );
+   gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
@@ -262,8 +263,12 @@ function webGLStart()
    meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
    meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    globalScene.AddSceneNode( meshNode );
+
+   var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
+   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -20, 20 ) );
+   globalScene.AddSceneNode( meshNode2 );
    //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
-   //sphereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
+   //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    //globalScene.AddSceneNode( sphereNode );
 
    globalLight = new PointLightSceneNode( vec4.fromValues( 0.2, 0.2, 0.2, 1.0 ), vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 0.7, 0.7, 0.7, 1.0 ) );

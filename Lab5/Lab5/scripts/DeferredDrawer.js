@@ -174,6 +174,13 @@ gDeferredDrawer.Init = function()
 
    }
 
+gDeferredDrawer.PreRender = function()
+   {
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+   gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+   }
+
 gDeferredDrawer.FinalRender = function()
    {
    gl.useProgram( gDeferredDrawer.LightShaderResource.Program.Context );
