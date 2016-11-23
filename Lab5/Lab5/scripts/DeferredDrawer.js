@@ -104,11 +104,25 @@ gDeferredDrawer.Init = function()
 
 ///////////////////////////////////////////////////////////////
 
+   // Dissuse Buffer
+   gDeferredDrawer.DiffuseTexture = {};
+   gDeferredDrawer.DiffuseTexture.IsLoaded = false;
+   gDeferredDrawer.DiffuseTexture.Context = gl.createTexture();
+   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DiffuseTexture.Context );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT3_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.DiffuseTexture.Context, 0 );
+
+   gDeferredDrawer.DiffuseTexture.IsLoaded = true;
+
+///////////////////////////////////////////////////////////////
+
    var drawBuffers = [];
         drawBuffers[0] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
         drawBuffers[1] = mrtExt.COLOR_ATTACHMENT1_WEBGL;
         drawBuffers[2] = mrtExt.COLOR_ATTACHMENT2_WEBGL;
-       // drawBuffers[3] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
+        drawBuffers[3] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
         mrtExt.drawBuffersWEBGL( drawBuffers );
 
    var errCode = gl.getError();
@@ -210,6 +224,10 @@ gDeferredDrawer.FinalRender = function()
    gl.activeTexture( gl.TEXTURE2 );  
 	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.AlbedoTexture.Context );  
 	gl.uniform1i( gDeferredDrawer.LightShaderResource.AlbedoTextureUni.Context, 2 );  
+
+   gl.activeTexture( gl.TEXTURE3 );  
+	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DiffuseTexture.Context );  
+	gl.uniform1i( gDeferredDrawer.LightShaderResource.MaterialDiffuseTextureUni.Context, 3 );  
 
    // Uniforms for lights
    var lightGlobalTransform = globalLight.GetGlobalTransform();

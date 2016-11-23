@@ -116,6 +116,12 @@ class DeferredGemotryShaderResource extends ShaderResource
 
       this.MeshTextureUni = {};
       this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
+
+      this.ShininessUni = {};
+      this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
+
+      this.MaterialDiffuseUni = {};
+      this.MaterialDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuse" );
       
       this.OnLoaded();
       }
@@ -144,6 +150,9 @@ class DeferredLightShaderResource extends ShaderResource
 
       this.AlbedoTextureUni = {};
       this.AlbedoTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uAlbedoTex" );
+
+      this.MaterialDiffuseTextureUni = {};
+      this.MaterialDiffuseTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuseTex" );
       
       this.LightPositionUni = {};
       this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );

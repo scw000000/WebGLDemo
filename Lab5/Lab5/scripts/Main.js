@@ -36,9 +36,10 @@ function tick()
    gDeferredDrawer.PreRender();
    drawScene();
    gDeferredDrawer.FinalRender();
+   gTextureDrawer.DrawTexture( gDeferredDrawer.DiffuseTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
-   gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
@@ -261,11 +262,15 @@ function webGLStart()
    forwardShader.Load( "shader-vs", "shader-fs" );
 
    meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
-   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
+   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 5, 0, 20 ) );
+   meshNode.Shininess = 10.0;
+   meshNode.MaterialDiffuse = vec4.fromValues( 0.0, 1.0, 0.0, 1.0 );
    globalScene.AddSceneNode( meshNode );
 
    var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
-   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -20, 20 ) );
+   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
+   meshNode2.Shininess = 1.0;
+   meshNode2.MaterialDiffuse = vec4.fromValues( 1.0, 0.0, 0.0, 1.0 );
    globalScene.AddSceneNode( meshNode2 );
    //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
    //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
