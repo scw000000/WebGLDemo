@@ -102,6 +102,8 @@ uniform sampler2D uTexture;
 void main(void) 
     {
     gl_FragColor = texture2D( uTexture, vVertexUV ); 
+    //vec4 color = texture2D( uTexture, vVertexUV ); 
+    //gl_FragColor = vec4( color.x, color.x, color.x, 1 );
     }
 </script>
 
@@ -149,7 +151,8 @@ void main(void)
     gl_FragData[ 0 ] = vPosition_CameraSpace; 
     gl_FragData[ 0 ].a = uShininess;
     
-    gl_FragData[ 1 ] = vNormal_CameraSpace; 
+    // Warning: do NOT normalize vec4!
+    gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
     gl_FragData[ 1 ].a = uMaterialSpecular.x;
 
     gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
@@ -233,6 +236,84 @@ void main(void)
     }
 </script>
 
+    
+<script id="SSAOShader-vs" type="x-shader/x-vertex">
+    precision highp float;
+    attribute vec2 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = vec4( aVertexPosition, 0, 1 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+ <script id="SSAOShader-fs" type="x-shader/x-fragment">
+    precision highp float;
+    const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 64;
+    const float RADIUS = 1.0;
+    varying vec2 vVertexUV;
+
+    uniform sampler2D uPositionTex_CameraSpace; 
+    uniform sampler2D uNormalTex_CameraSpace; 
+    uniform sampler2D uNoiseTex;
+
+    uniform vec2 uNoiseScale;
+    uniform vec3 uSamplePoints[ MAXIUM_SAMPLE_POINTS_SUPPORTED ];
+    uniform int uSampleNum;
+    uniform mat4 uPMatrix;
+
+    void main(void) {
+        vec3 normalVec = texture2D( uNormalTex_CameraSpace ,vVertexUV ).xyz;
+        vec3 originPoint = texture2D( uPositionTex_CameraSpace ,vVertexUV ).xyz;
+        
+        // Generate TBN matrix
+        // find random vector
+        vec3 randomVec = texture2D( uNoiseTex, vVertexUV * uNoiseScale ).xyz;
+        vec3 tangentVec = normalize( randomVec - normalVec * dot( normalVec, randomVec ) );
+        vec3 biTangentVec = normalize( cross( normalVec, tangentVec ) );
+        mat3 tbn = mat3( tangentVec, biTangentVec, normalVec );
+        
+        float occlusion = 0.0;
+        vec3 test;
+        for( int i = 0; i < MAXIUM_SAMPLE_POINTS_SUPPORTED; ++i )
+            {
+            if( i == uSampleNum )
+                {
+                break;
+                }
+
+            // This is still a vector
+            // get sample vector in camera space
+            vec3 samplePoint = tbn * uSamplePoints[ i ];
+
+            // Convert to point
+            samplePoint = originPoint + samplePoint * RADIUS;
+            
+            // Find the project point in clip space
+            vec4 p = uPMatrix * vec4( samplePoint, 1 );
+            vec3 projectPoint = p.xyz / p.w;
+            projectPoint = ( projectPoint + vec3( 1, 1, 1 ) ) * 0.5;
+            projectPoint = texture2D( uPositionTex_CameraSpace, projectPoint.xy ).xyz;
+ 
+            // sample point is behind the projected point -> occolued
+            if( -projectPoint.z <= -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= RADIUS )
+                {
+                occlusion += abs( 1.0 );
+                }
+            
+            }
+     
+        // inverse the occlusion value, higher occlusion means darker
+        occlusion = 1.0 - occlusion / ( float( uSampleNum ) );
+        gl_FragColor = vec4( occlusion, occlusion, occlusion, 1 );
+
+      //  gl_FragColor = vec4( -originPoint.z, -originPoint.z, -originPoint.z, 1 );
+    }
+</script>
+
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2d.js"></script>
@@ -268,6 +349,7 @@ void main(void)
 <script type="text/javascript" src="scripts\Resources\QuadResource.js"></script>
 <script type="text/javascript" src="scripts\Drawers\TextureDrawer.js"></script>
 <script type="text/javascript" src="scripts\Drawers\DeferredDrawer.js"></script>
+<script type="text/javascript" src="scripts\Drawers\SSAODrawer.js"></script>
 
 </head>
 
