@@ -186,12 +186,15 @@ void main(void)
     uniform sampler2D uNormalTex_CameraSpace; 
     uniform sampler2D uAlbedoTex; 
     uniform sampler2D uMaterialDiffuseTex; 
+    uniform sampler2D uBlurTex; 
 
     uniform vec3 uLightPos_CameraSpace;
 
     uniform vec4 uLightAmbient; 
     uniform vec4 uLightDiffuse; 
     uniform vec4 uLightSpecular;
+
+    uniform int uUseSSAO;
 
 void main(void) 
     {
@@ -207,6 +210,11 @@ void main(void)
     temp = texture2D( uAlbedoTex, vVertexUV );  
     vec4 albedo = vec4( temp.xyz, 1 );
     materialSpecular.y = temp.w;
+
+    if( uUseSSAO == 1 )
+        {
+        albedo *= texture2D( uBlurTex, vVertexUV );
+        }
 
     temp = texture2D( uMaterialDiffuseTex, vVertexUV );
     vec4 materialDiffuse = vec4( temp.xyz, 1 ); 
@@ -232,7 +240,7 @@ void main(void)
     gl_FragColor.a = 1.0;
     
    // gl_FragColor = materialSpecular;
-   // gl_FragColor = texture2D( uNormalTex_CameraSpace, vVertexUV ); 
+   // gl_FragColor = texture2D( uBlurTex, vVertexUV ); 
     }
 </script>
 
@@ -253,7 +261,7 @@ void main(void)
  <script id="SSAOShader-fs" type="x-shader/x-fragment">
     precision mediump float;
     const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 64;
-    const float RADIUS = 2.0;
+    const float RADIUS = 5.0;
     varying vec2 vVertexUV;
 
     uniform sampler2D uPositionTex_CameraSpace; 
@@ -299,7 +307,7 @@ void main(void)
             projectPoint = texture2D( uPositionTex_CameraSpace, projectPoint.xy ).xyz;
  
             // sample point is behind the projected point -> occolued
-            if( -projectPoint.z <= -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= RADIUS )
+            if( -projectPoint.z < -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= RADIUS )
                 {
                 occlusion += abs( 1.0 );
                 }
@@ -313,6 +321,46 @@ void main(void)
       //  gl_FragColor = vec4( -originPoint.z, -originPoint.z, -originPoint.z, 1 );
     }
 </script>
+
+<script id="blurShader-vs" type="x-shader/x-vertex">
+    precision mediump float;
+    attribute vec2 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = vec4( aVertexPosition, 0, 1 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+
+ <script id="blurShader-fs" type="x-shader/x-fragment">
+    precision mediump float;
+    const int NOISE_TEXTURE_SIZE = 4;
+    const int HALF_NOISE_TEXTURE_SIZE = NOISE_TEXTURE_SIZE / 2;
+    const int SAMPLE_COUNT = NOISE_TEXTURE_SIZE * NOISE_TEXTURE_SIZE;
+    varying vec2 vVertexUV;
+
+    uniform sampler2D uSSAOTex;
+    uniform vec2 uInvTexureSize;
+
+    void main(void) {
+
+        gl_FragColor = vec4( 0 );
+        for( int x = -HALF_NOISE_TEXTURE_SIZE; x < HALF_NOISE_TEXTURE_SIZE; ++x )
+            {
+            for( int y = -HALF_NOISE_TEXTURE_SIZE; y < HALF_NOISE_TEXTURE_SIZE; ++y )
+                {
+                vec2 shift = vec2( x, y ) * uInvTexureSize;
+                gl_FragColor += texture2D( uSSAOTex, shift + vVertexUV );
+                }
+            }
+        gl_FragColor /= float( SAMPLE_COUNT );
+    }
+</script>
+
 
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
@@ -356,7 +404,7 @@ void main(void)
 
 <body onload="webGLStart();">
 
-    <canvas id="WebGL-canvas" style="border: none;" width="1024" height="512"></canvas>
+    <canvas id="WebGL-canvas" style="border: none;" width="512" height="512"></canvas>
 
     <br/>
 

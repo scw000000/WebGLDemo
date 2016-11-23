@@ -145,6 +145,8 @@ gDeferredDrawer.Init = function()
    ////////////////////// Ligh Shader 
    gDeferredDrawer.LightShaderResource = new DeferredLightShaderResource();
    gDeferredDrawer.LightShaderResource.Load( "deferredLightShader-vs", "deferredLightShader-fs" );
+
+   gDeferredDrawer.UseSSAO = 1;
    }
 
 gDeferredDrawer.PreRender = function()
@@ -192,6 +194,10 @@ gDeferredDrawer.FinalRender = function()
 	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DiffuseTexture.Context );  
 	gl.uniform1i( gDeferredDrawer.LightShaderResource.MaterialDiffuseTextureUni.Context, 3 );  
 
+   gl.activeTexture( gl.TEXTURE4 );  
+	gl.bindTexture( gl.TEXTURE_2D, gSSAODrawer.BlurTexture.Context );  
+	gl.uniform1i( gDeferredDrawer.LightShaderResource.BlurTextureUni.Context, 4 );  
+
    // Uniforms for lights
    var lightGlobalTransform = globalLight.GetGlobalTransform();
    var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
@@ -203,7 +209,8 @@ gDeferredDrawer.FinalRender = function()
    gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, globalLight.Diffuse[ 0 ], globalLight.Diffuse[ 1 ], globalLight.Diffuse[ 2 ], globalLight.Diffuse[ 3 ] );
    gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni.Context, globalLight.Specular[ 0 ], globalLight.Specular[ 1 ], globalLight.Specular[ 2 ], globalLight.Specular[ 3 ] );
 
-
+   gl.uniform1i( gDeferredDrawer.LightShaderResource.UseSSAOUni.Context, gDeferredDrawer.UseSSAO );
 
    gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
    };
+

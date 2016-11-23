@@ -161,6 +161,9 @@ class DeferredLightShaderResource extends ShaderResource
       this.MaterialDiffuseTextureUni = {};
       this.MaterialDiffuseTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuseTex" );
       
+      this.BlurTextureUni = {};
+      this.BlurTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uBlurTex" );
+
       this.LightPositionUni = {};
       this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );
 
@@ -174,6 +177,8 @@ class DeferredLightShaderResource extends ShaderResource
       this.LightSpecularUni = {};
       this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
 
+      this.UseSSAOUni = {};
+      this.UseSSAOUni.Context = gl.getUniformLocation( this.Program.Context, "uUseSSAO" );
 
       this.OnLoaded();
       }
@@ -217,6 +222,32 @@ class SSAOShaderResource extends ShaderResource
 
       this.pMatrixUni = {};
       this.pMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uPMatrix" );
+
+      this.OnLoaded();
+      }
+   }
+
+
+class BlurShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      //////////////////////////////////
+
+      this.SSAOTextureUni = {};
+      this.SSAOTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uSSAOTex" );
+
+      this.InvTextureSizeUni = {};
+      this.InvTextureSizeUni.Context = gl.getUniformLocation( this.Program.Context, "uInvTexureSize" );
+
 
       this.OnLoaded();
       }

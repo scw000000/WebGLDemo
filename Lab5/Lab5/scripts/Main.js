@@ -38,10 +38,11 @@ function tick()
    gDeferredDrawer.PreRender();
    drawScene();
    gSSAODrawer.DrawSSAO();
+   gSSAODrawer.DrawBlur();
    gDeferredDrawer.FinalRender();
    //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
-   gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
-   gTextureDrawer.DrawTexture( gDeferredDrawer.DepthTexture, 0, 0, 300, 300 );
+  // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
+  // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
@@ -114,7 +115,9 @@ function CreateLightControlButtons()
    button = document.createElement( "input" );
    button.type = "button";
    button.value = "Set Shininess";
-   button.onclick = function(){  sphereNode.Shininess = parseFloat( text.value ); };
+   button.onclick = function(){
+      gDeferredDrawer.UseSSAO = gDeferredDrawer.UseSSAO == 1 ? 0: 1;
+   };
    container.appendChild( button );
    }
 
@@ -262,7 +265,8 @@ function webGLStart()
    globalScene.AddSceneNode( globalScene.CameraNode );
    
    textureRes = new TextureResource();
-   textureRes.Load( "earth.png" );
+ //  textureRes.Load( "earth.png" );
+   textureRes.Load( "gray.jpg" );
    meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
    forwardShader = new ForwardShaderResource();
@@ -285,7 +289,7 @@ function webGLStart()
    //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    //globalScene.AddSceneNode( sphereNode );
 
-   globalLight = new PointLightSceneNode( vec4.fromValues( 0.3, 0.3, 0.3, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ) );
+   globalLight = new PointLightSceneNode( vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
    globalScene.AddSceneNode( globalLight );
 
@@ -299,7 +303,7 @@ function webGLStart()
 
    globalScene.OnRestore();
 
-   gl.clearColor(0.0, 0.0, 0.0, 1.0);
+   gl.clearColor( 1.0, 1.0, 1.0, 1.0);
    gl.enable( gl.CULL_FACE );
    gl.cullFace( gl.BACK );
    gl.enable(gl.DEPTH_TEST);
