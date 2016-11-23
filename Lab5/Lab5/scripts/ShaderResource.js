@@ -120,8 +120,15 @@ class DeferredGemotryShaderResource extends ShaderResource
       this.ShininessUni = {};
       this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
 
+      this.MaterialAmbientUni = {};
+      this.MaterialAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialAmbient" );
+      
       this.MaterialDiffuseUni = {};
       this.MaterialDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuse" );
+      
+      this.MaterialSpecularUni = {};
+      this.MaterialSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialSpecular" );
+
       
       this.OnLoaded();
       }

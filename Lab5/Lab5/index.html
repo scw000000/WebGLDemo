@@ -138,19 +138,25 @@ void main(void)
 
     uniform sampler2D uMeshTexture; 
     uniform float uShininess;
+    uniform vec4 uMaterialAmbient;
     uniform vec4 uMaterialDiffuse;
-      
+    uniform vec4 uMaterialSpecular;
+
 void main(void) 
     {
+    vec4 textureColor = texture2D( uMeshTexture, vVertexUV );
      //depth = gl_FragCoord.z;
     gl_FragData[ 0 ] = vPosition_CameraSpace; 
     gl_FragData[ 0 ].a = uShininess;
     
     gl_FragData[ 1 ] = vNormal_CameraSpace; 
-    
-    gl_FragData[ 2 ] = texture2D( uMeshTexture, vVertexUV ); 
+    gl_FragData[ 1 ].a = uMaterialSpecular.x;
 
-    gl_FragData[ 3 ] = uMaterialDiffuse; 
+    gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
+    gl_FragData[ 2 ].a = uMaterialSpecular.y;
+
+    gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
+    gl_FragData[ 3 ].a = uMaterialSpecular.z;
     }
 </script>
 
@@ -189,12 +195,19 @@ void main(void)
      // This texture stores position + shininess 
     vec4 temp = texture2D( uPositionTex_CameraSpace, vVertexUV );
     vec3 vertexPos_CameraSpace = temp.xyz;
-    float shininess = texture2D( uPositionTex_CameraSpace, vVertexUV ).w;
+    float shininess = temp.w;
 
-    vec3 vertexNormal_CameraSpace = texture2D( uNormalTex_CameraSpace, vVertexUV ).xyz;
-    vec4 albedo = texture2D( uAlbedoTex, vVertexUV );  
+    temp = texture2D( uNormalTex_CameraSpace, vVertexUV );
+    vec3 vertexNormal_CameraSpace = temp.xyz;
+    vec4 materialSpecular = vec4( temp.w, 0, 0, 1 );
 
-    vec4 materialDiffuse = vec4( texture2D( uMaterialDiffuseTex, vVertexUV ).xyz, 1 ); 
+    temp = texture2D( uAlbedoTex, vVertexUV );  
+    vec4 albedo = vec4( temp.xyz, 1 );
+    materialSpecular.y = temp.w;
+
+    temp = texture2D( uMaterialDiffuseTex, vVertexUV );
+    vec4 materialDiffuse = vec4( temp.xyz, 1 ); 
+    materialSpecular.z = temp.w;
      
     vec3 lightVec = normalize( uLightPos_CameraSpace - vertexPos_CameraSpace ); 
 
@@ -212,10 +225,10 @@ void main(void)
     if ( ndotl > 0.0 ) 
         specular = uLightSpecular * pow( rdotv, shininess ); 
 
-    gl_FragColor = albedo * ( uLightAmbient + diffuse * materialDiffuse ) + specular; 
+    gl_FragColor = albedo * uLightAmbient + diffuse * materialDiffuse + specular * materialSpecular; 
     gl_FragColor.a = 1.0;
     
-    
+   // gl_FragColor = materialSpecular;
    // gl_FragColor = texture2D( uNormalTex_CameraSpace, vVertexUV ); 
     }
 </script>

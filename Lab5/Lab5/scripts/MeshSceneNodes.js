@@ -60,8 +60,13 @@
 
       gl.uniform1f( gDeferredDrawer.GeometryShaderResource.ShininessUni.Context, this.Shininess );
 
-      gl.uniform4f( gDeferredDrawer.GeometryShaderResource.MaterialDiffuseUni.Context, this.MaterialDiffuse[ 0 ], this.MaterialDiffuse[ 1 ], this.MaterialDiffuse[ 2 ], this.MaterialDiffuse[ 3 ] );
+      gl.uniform4f( gDeferredDrawer.GeometryShaderResource.MaterialAmbientUni.Context, this.MaterialAmbient[ 0 ], this.MaterialAmbient[ 1 ], this.MaterialAmbient[ 2 ], this.MaterialAmbient[ 3 ] );
 
+      gl.uniform4f( gDeferredDrawer.GeometryShaderResource.MaterialDiffuseUni.Context, this.MaterialDiffuse[ 0 ], this.MaterialDiffuse[ 1 ], this.MaterialDiffuse[ 2 ], this.MaterialDiffuse[ 3 ] );
+      
+      gl.uniform4f( gDeferredDrawer.GeometryShaderResource.MaterialSpecularUni.Context, this.MaterialSpecular[ 0 ], this.MaterialSpecular[ 1 ], this.MaterialSpecular[ 2 ], this.MaterialSpecular[ 3 ] );
+
+      
       /////// Uniforms
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.VertexIndexBuffer.Context );
