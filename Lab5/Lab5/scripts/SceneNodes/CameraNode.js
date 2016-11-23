@@ -39,6 +39,11 @@
       var ret = mat4.clone( globalScene.GetTopTransform() );
       return mat4.mul( ret, this.VMatrix, ret );
       }
+
+   GetPMatrix()
+      {
+      return this.PMatrix;
+      }
    }
 
 

@@ -178,3 +178,46 @@ class DeferredLightShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class SSAOShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      //////////////////////////////////
+
+      this.PositionTextureUni = {};
+      this.PositionTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uPositionTex_CameraSpace" );
+
+      this.NormalTextureUni = {};
+      this.NormalTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uNormalTex_CameraSpace" );
+
+      this.NoiseTextureUni = {};
+      this.NoiseTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uNoiseTex" );
+
+      this.NoiseScaleUni = {};
+      this.NoiseScaleUni.Context = gl.getUniformLocation( this.Program.Context, "uNoiseScale" );
+
+      this.SamplePointsUni = [];
+      for( var i = 0; i < gMaxinumSamplePointsSupported; ++i )
+         {
+         this.SamplePointsUni[ i ] = {};
+         this.SamplePointsUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uSamplePoints[" + i + "]" );
+         }
+
+      this.SampleNumUni = {};
+      this.SampleNumUni.Context = gl.getUniformLocation( this.Program.Context, "uSampleNum" );
+
+      this.pMatrixUni = {};
+      this.pMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uPMatrix" );
+
+      this.OnLoaded();
+      }
+   }

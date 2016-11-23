@@ -14,6 +14,11 @@ gTextureDrawer.DrawTexture = function( textureResource, pointX, pointY, sizeX, s
       {
       return;
       }
+   if( gDrawable == false )
+      {
+      return;
+      }
+
    gl.viewport(  pointX, pointY, sizeX, sizeY );
 
    gl.useProgram( gTextureDrawer.ShaderResource.Program.Context );

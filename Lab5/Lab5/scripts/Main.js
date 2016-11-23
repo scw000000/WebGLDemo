@@ -1,6 +1,8 @@
 var globalScene;
 var gl;
 var canvas;
+var gMaxinumSamplePointsSupported = 64;
+var gDrawable = false;
 // ************** Init OpenGL Context etc. ************* 
 
 function initGL() 
@@ -35,8 +37,11 @@ function tick()
    controller.OnUpdate();
    gDeferredDrawer.PreRender();
    drawScene();
+   gSSAODrawer.DrawSSAO();
    gDeferredDrawer.FinalRender();
-   gTextureDrawer.DrawTexture( gDeferredDrawer.DiffuseTexture, 0, 0, 300, 300 );
+   //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
+   gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
+   gTextureDrawer.DrawTexture( gDeferredDrawer.DepthTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
@@ -244,6 +249,7 @@ function webGLStart()
    gQuadResource.Init();
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
+   gSSAODrawer.Init();
 
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );
@@ -263,23 +269,23 @@ function webGLStart()
    forwardShader.Load( "shader-vs", "shader-fs" );
 
    meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
-   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 5, 0, 20 ) );
+   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 10 ) );
    meshNode.Shininess = 10.0;
    //meshNode.MaterialSpecular = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
   // meshNode.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
    globalScene.AddSceneNode( meshNode );
 
-   var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
-   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
-   meshNode2.Shininess = 1.0;
+ //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
+//   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
+ //  meshNode2.Shininess = 1.0;
   // meshNode2.MaterialSpecular = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
  //  meshNode2.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
-   globalScene.AddSceneNode( meshNode2 );
+   //globalScene.AddSceneNode( meshNode2 );
    //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
    //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    //globalScene.AddSceneNode( sphereNode );
 
-   globalLight = new PointLightSceneNode( vec4.fromValues( 0.2, 0.2, 0.2, 1.0 ), vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 0.7, 0.7, 0.7, 1.0 ) );
+   globalLight = new PointLightSceneNode( vec4.fromValues( 0.3, 0.3, 0.3, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
    globalScene.AddSceneNode( globalLight );
 

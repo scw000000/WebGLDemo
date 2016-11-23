@@ -70,4 +70,13 @@
       return this.CameraNode.GetMVMatrix();
       }
 
+   GetPMatrix()
+      {
+      if( this.CameraNode == null )
+         {
+         throw "Null camera node!";
+         }
+      return this.CameraNode.GetPMatrix();
+      }
+
    }

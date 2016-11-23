@@ -119,11 +119,11 @@ gDeferredDrawer.Init = function()
 ///////////////////////////////////////////////////////////////
 
    var drawBuffers = [];
-        drawBuffers[0] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
-        drawBuffers[1] = mrtExt.COLOR_ATTACHMENT1_WEBGL;
-        drawBuffers[2] = mrtExt.COLOR_ATTACHMENT2_WEBGL;
-        drawBuffers[3] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
-        mrtExt.drawBuffersWEBGL( drawBuffers );
+   drawBuffers[ 0 ] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
+   drawBuffers[ 1 ] = mrtExt.COLOR_ATTACHMENT1_WEBGL;
+   drawBuffers[ 2 ] = mrtExt.COLOR_ATTACHMENT2_WEBGL;
+   drawBuffers[ 3 ] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
+   mrtExt.drawBuffersWEBGL( drawBuffers );
 
    var errCode = gl.getError();
 
@@ -156,6 +156,10 @@ gDeferredDrawer.PreRender = function()
 
 gDeferredDrawer.FinalRender = function()
    {
+   if( gDrawable == false )
+      {
+      return;
+      }
    gl.useProgram( gDeferredDrawer.LightShaderResource.Program.Context );
 
    ////////////////////// VBOs
@@ -194,8 +198,6 @@ gDeferredDrawer.FinalRender = function()
    var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
     
    gl.uniform3f( gDeferredDrawer.LightShaderResource.LightPositionUni.Context, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );   
-
-   gl.uniform1f( gDeferredDrawer.LightShaderResource.ShininessUni.Context, 3 );
 
    gl.uniform4f( gDeferredDrawer.LightShaderResource.LightAmbientUni.Context, globalLight.Ambient[ 0 ], globalLight.Ambient[ 1 ], globalLight.Ambient[ 2 ], globalLight.Ambient[ 3 ] );
    gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, globalLight.Diffuse[ 0 ], globalLight.Diffuse[ 1 ], globalLight.Diffuse[ 2 ], globalLight.Diffuse[ 3 ] );

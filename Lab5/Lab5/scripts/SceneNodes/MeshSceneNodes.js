@@ -24,7 +24,7 @@
          {
          return;
          }
-         
+      gDrawable = true;
       ////////////////////////////////////// Deferred Rendering
       gl.useProgram( gDeferredDrawer.GeometryShaderResource.Program.Context );
       gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
