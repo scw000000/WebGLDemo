@@ -241,6 +241,7 @@ function webGLStart()
    canvasDimension = vec2.fromValues( canvas.width, canvas.height );
    initGL();
 
+   gQuadResource.Init();
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
 
