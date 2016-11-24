@@ -3,6 +3,7 @@ var gl;
 var canvas;
 var gMaxinumSamplePointsSupported = 64;
 var gDrawable = false;
+var gRenderFunction = function(){};
 // ************** Init OpenGL Context etc. ************* 
 
 function initGL() 
@@ -38,15 +39,10 @@ function ouputBuffer()
       {
       return;
       }
-   if( true )
-      {
-      gDeferredDrawer.FinalRender();
-      }
-   else
-      {
-      
-      gl.bindFramebuffer( gl.FRAMEBUFFER, null );
-      }
+   
+
+
+   gRenderFunction();
    }
 
 function tick() 
@@ -63,8 +59,8 @@ function tick()
   // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
   // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
-   gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
-   gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 300, 0, 300, 300 );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 300, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
@@ -82,62 +78,73 @@ function CreateButton( node, btnText )
    container.appendChild( button );
    }
 
-function CreateLightControlButtons()
+function CreateSSAOControlButtons()
    {
-   var container = document.getElementById( 'LightControlOption' );
+   var container = document.getElementById( 'SSAOControlOption' );
 
-   var button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Forward";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, 3 ) ) };
-   container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Backward";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, -3 ) ) };
-   container.appendChild( button );
+   var cb = document.createElement( "input" );
+   cb.type = "checkbox";
+   cb.checked  = true;
+   cb.onchange = function(){ gDeferredDrawer.UseSSAO = cb.checked? 1: 0; };
+   container.appendChild( cb );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Left";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 3, 0, 0 ) ) };
-   container.appendChild( button );
+   var cbLabel = document.createElement('label')
+   cbLabel.appendChild( document.createTextNode( "Enable SSAO" ) );
+   container.appendChild( cbLabel );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Right";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( -3, 0, 0 ) ) };
-   container.appendChild( button );
+   ////////////// SSAO radius
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Up";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 3, 0 ) ) };
-   container.appendChild( button );
+   var radLabel = document.createElement('label')
+   radLabel.appendChild( document.createTextNode( "SSAO Radius: " ) );
+   var radTextNode = document.createTextNode( gSSAODrawer.SampleRadius.Value.toString() );
+   radLabel.appendChild( radTextNode );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Move Down";
-   button.onclick = function(){  controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, -3, 0 ) ) };
-   container.appendChild( button );
+   var radRange = document.createElement( "input" );
+   radRange.type = "range";
+   radRange.min = gSSAODrawer.SampleRadius.Min;
+   radRange.max = gSSAODrawer.SampleRadius.Max;
+   radRange.step = 0.1;
+   radRange.value = gSSAODrawer.SampleRadius.Value;
+   radRange.checked  = true;
+   radRange.oninput = function(){ gSSAODrawer.SampleRadius.Value = radRange.value; radTextNode.textContent = radRange.value; };
+   container.appendChild( radRange );
 
-   generateColorInput( container, "#FFFFFF", "Ambient", setAmbient );
-   generateColorInput( container, "#FFFFFF", "Diffuse", setDiffuse );
-   generateColorInput( container, "#FFFFFF", "Specular", setSpecular );
+   container.appendChild( radLabel );
 
-   text = document.createElement( "input" );
-   text.type = "text";
-   text.value = "3.0";
-   container.appendChild( text );
+   ////////////// SSAO power
+   var powerLabel = document.createElement('label')
+   powerLabel.appendChild( document.createTextNode( "SSAO Power: " ) );
+   var powerTextNode = document.createTextNode( gSSAODrawer.SSAOPower.Value.toString() );
+   powerLabel.appendChild( powerTextNode );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Set Shininess";
-   button.onclick = function(){
-      gDeferredDrawer.UseSSAO = gDeferredDrawer.UseSSAO == 1 ? 0: 1;
-   };
-   container.appendChild( button );
+   var powerRange = document.createElement( "input" );
+   powerRange.type = "range";
+   powerRange.min = gSSAODrawer.SSAOPower.Min;
+   powerRange.max = gSSAODrawer.SSAOPower.Max;
+   powerRange.step = 0.1;
+   powerRange.value = gSSAODrawer.SSAOPower.Value;
+   powerRange.checked  = true;
+   powerRange.oninput = function(){ gSSAODrawer.SSAOPower.Value = powerRange.value; powerTextNode.textContent = powerRange.value; };
+   container.appendChild( powerRange );
+
+   container.appendChild( powerLabel );
+   //generateColorInput( container, "#FFFFFF", "Ambient", setAmbient );
+   //generateColorInput( container, "#FFFFFF", "Diffuse", setDiffuse );
+   //generateColorInput( container, "#FFFFFF", "Specular", setSpecular );
+
+   //text = document.createElement( "input" );
+   //text.type = "text";
+   //text.value = "3.0";
+   //container.appendChild( text );
+
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Set Shininess";
+   //button.onclick = function(){
+   //   gDeferredDrawer.UseSSAO = gDeferredDrawer.UseSSAO == 1 ? 0: 1;
+   //};
+   //container.appendChild( button );
    }
 
 function setAmbient( ambient )
@@ -177,81 +184,88 @@ function generateColorInput( container, defaultColor, labelText, changeFunction 
    container.appendChild( label );
    }
 
-function CreateCameraControlButtons()
+function CreateRenderingControlButtons()
    {
-   var container = document.getElementById( 'CameraControlOption' );
+   var container = document.getElementById( 'RenderControlOption' );
 
    var button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Forward";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, 0.5 ) ) };
+   button.value = "Default";
+   button.onclick = function(){ gRenderFunction = gDeferredDrawer.FinalRender; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Backward";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, -0.5 ) ) };
+   button.value = "Position CameraSpace";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Left";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0.5, 0, 0 ) ) };
+   button.value = "Normal CameraSpace";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Right";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( -0.5, 0, 0 ) ) };
+   button.value = "Albedo";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Up";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0.5, 0 ) ) };
+   button.value = "Material Diffuse";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.DiffuseTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Move Down";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, -0.5, 0 ) ) };
+   button.value = "SSAO";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Look Left";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateToWorldRad( 0.05, g_Up3v ) };
+   button.value = "SSAO Blur";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Look Right";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateToWorldRad( -0.05, g_Up3v ) };
-   container.appendChild( button );
+    //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
+  // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, gl.viewportWidth, gl.viewportHeight  );
+  // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
+   //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
+   //
+   //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Look Right";
+   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateToWorldRad( -0.05, g_Up3v ) };
+   //container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Look Up";
-   button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Left3v ) };
-   container.appendChild( button );
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Look Up";
+   //button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Left3v ) };
+   //container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Look Down";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Left3v ) };
-   container.appendChild( button );
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Look Down";
+   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Left3v ) };
+   //container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Look Clockwise";
-   button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Forward3v ) };
-   container.appendChild( button );
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Look Clockwise";
+   //button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Forward3v ) };
+   //container.appendChild( button );
 
-   button = document.createElement( "input" );
-   button.type = "button";
-   button.value = "Look Counter Clockwise";
-   button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Forward3v ) };
-   container.appendChild( button );
+   //button = document.createElement( "input" );
+   //button.type = "button";
+   //button.value = "Look Counter Clockwise";
+   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Forward3v ) };
+   //container.appendChild( button );
    }
 
 var globalLight;
@@ -263,15 +277,18 @@ var meshRes = {};
 
 function webGLStart() 
    {
-   globalScene = new Scene();
    canvas = document.getElementById("WebGL-canvas");
    canvasDimension = vec2.fromValues( canvas.width, canvas.height );
    initGL();
 
+   globalScene = new Scene();
+   
    gQuadResource.Init();
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
    gSSAODrawer.Init();
+
+   gRenderFunction = gDeferredDrawer.FinalRender;
 
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );
@@ -284,17 +301,17 @@ function webGLStart()
    globalScene.AddSceneNode( globalScene.CameraNode );
    
    textureRes = new TextureResource();
- //  textureRes.Load( "earth.png" );
-   textureRes.Load( "gray.jpg" );
+   textureRes.Load( "earth.png" );
+   //textureRes.Load( "gray.jpg" );
    meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
    forwardShader = new ForwardShaderResource();
    forwardShader.Load( "shader-vs", "shader-fs" );
 
    meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
-   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 10 ) );
+   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    meshNode.Shininess = 10.0;
-   //meshNode.MaterialSpecular = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
+   meshNode.MaterialAmbient= vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
   // meshNode.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
    globalScene.AddSceneNode( meshNode );
 
@@ -314,9 +331,8 @@ function webGLStart()
 
    controllingNode = globalLight;
    
-   CreateLightControlButtons();
-   CreateCameraControlButtons();
-
+   CreateRenderingControlButtons();
+   CreateSSAOControlButtons();
    
    //initTextures( textureRes, "earth.png" );
 

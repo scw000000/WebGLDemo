@@ -149,21 +149,7 @@ void main(void)
 
 void main(void) 
     {
-    vec4 textureColor = texture( uMeshTexture, vec2( 0, 0 ) );
-     //depth = gl_FragCoord.z;
-  //  gl_FragData[ 0 ] = vPosition_CameraSpace; 
-  //  gl_FragData[ 0 ].a = uShininess;
-    
-    // Warning: do NOT normalize vec4!
-  //  gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
- //   gl_FragData[ 1 ].a = uMaterialSpecular.x;
-
- //   gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
- //   gl_FragData[ 2 ].a = uMaterialSpecular.y;
-
- //   gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
-//    gl_FragData[ 3 ].a = uMaterialSpecular.z;
-     /////////////////////////////////////////
+    vec4 textureColor = texture( uMeshTexture, vec2( vVertexUV ) );
       oPosition = vPosition_CameraSpace; 
       oPosition.a = uShininess;
     
@@ -277,7 +263,6 @@ void main(void)
  <script id="SSAOShader-fs" type="x-shader/x-fragment">
     precision mediump float;
     const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 64;
-    const float RADIUS = 5.0;
     varying vec2 vVertexUV;
 
     uniform sampler2D uPositionTex_CameraSpace; 
@@ -288,6 +273,8 @@ void main(void)
     uniform vec3 uSamplePoints[ MAXIUM_SAMPLE_POINTS_SUPPORTED ];
     uniform int uSampleNum;
     uniform mat4 uPMatrix;
+    uniform float uSampleRadius;
+    uniform float uSSAOPower;
 
     void main(void) {
         vec3 normalVec = texture2D( uNormalTex_CameraSpace ,vVertexUV ).xyz;
@@ -314,7 +301,7 @@ void main(void)
             vec3 samplePoint = tbn * uSamplePoints[ i ];
 
             // Convert to point
-            samplePoint = originPoint + samplePoint * RADIUS;
+            samplePoint = originPoint + samplePoint * uSampleRadius;
             
             // Find the project point in clip space
             vec4 p = uPMatrix * vec4( samplePoint, 1 );
@@ -323,7 +310,7 @@ void main(void)
             projectPoint = texture2D( uPositionTex_CameraSpace, projectPoint.xy ).xyz;
  
             // sample point is behind the projected point -> occolued
-            if( -projectPoint.z < -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= RADIUS )
+            if( -projectPoint.z < -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= uSampleRadius )
                 {
                 occlusion += abs( 1.0 );
                 }
@@ -331,7 +318,7 @@ void main(void)
             }
      
         // inverse the occlusion value, higher occlusion means darker
-        occlusion = 1.0 - occlusion / ( float( uSampleNum ) );
+        occlusion = pow( 1.0 - occlusion / ( float( uSampleNum ) ), uSSAOPower );
         gl_FragColor = vec4( occlusion, occlusion, occlusion, 1 );
 
       //  gl_FragColor = vec4( -originPoint.z, -originPoint.z, -originPoint.z, 1 );
@@ -378,6 +365,32 @@ void main(void)
 </script>
 
 
+<script id="skyShader-vs" type="x-shader/x-vertex">
+precision mediump float;
+    attribute vec3 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    uniform mat4 uMVPMatrix;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = uMVPMatrix * vec4( aVertexPosition, 1.0 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+<script id="skyShader-fs" type="x-shader/x-fragment">
+precision mediump float;
+    varying vec2 vVertexUV;
+
+    uniform sampler2D uMeshTexture; 
+
+    void main(void) 
+        {
+        gl_FragColor = texture2D( uMeshTexture, vVertexUV ); 
+        }
+</script>
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2d.js"></script>
@@ -420,13 +433,13 @@ void main(void)
 
 <body onload="webGLStart();">
 
-    <canvas id="WebGL-canvas" style="border: none;" width="512" height="512"></canvas>
+    <canvas id="WebGL-canvas" style="border: none;" width="400" height="300"></canvas>
 
     <br/>
 
-    <h4 id="LightControlOption">- Control your light</br> </br> </h4> 
+    <h4 id="RenderControlOption">- Control Render Output</br> </br> </h4> 
 
-    <h4 id="CameraControlOption">- Control your camera</br> </br> </h4> 
+    <h4 id="SSAOControlOption">- Control SSAO parameters</br> </br> </h4> 
 </body>
 
 

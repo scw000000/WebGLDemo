@@ -9,6 +9,18 @@ gSSAODrawer.Init = function()
       return; 
       }
 
+   gSSAODrawer.SampleRadius = {};
+   gSSAODrawer.SampleRadius.Min = 0.3;
+   gSSAODrawer.SampleRadius.Max = 10.0;
+   gSSAODrawer.SampleRadius.Value = 3.0;
+
+   gSSAODrawer.SampleNum = 64;
+
+   gSSAODrawer.SSAOPower = {};
+   gSSAODrawer.SSAOPower.Min = 0.3;
+   gSSAODrawer.SSAOPower.Max = 10.0;
+   gSSAODrawer.SSAOPower.Value = 2.0;
+
    gSSAODrawer.SSAOShaderResource = new SSAOShaderResource();
    gSSAODrawer.SSAOShaderResource.Load( "SSAOShader-vs", "SSAOShader-fs" );
    
@@ -231,10 +243,14 @@ gSSAODrawer.DrawSSAO = function()
          gSSAODrawer.SamplePoints.Data[ i * 3 + 2 ] );
       }
 
-   gl.uniform1i( gSSAODrawer.SSAOShaderResource.SampleNumUni.Context, 64 );
+   gl.uniform1i( gSSAODrawer.SSAOShaderResource.SampleNumUni.Context, gSSAODrawer.SampleNum );
 
    gl.uniformMatrix4fv( gSSAODrawer.SSAOShaderResource.pMatrixUni.Context, false, globalScene.GetPMatrix() );
    
+   gl.uniform1f( gSSAODrawer.SSAOShaderResource.SampleRadiusUni.Context, gSSAODrawer.SampleRadius.Value );
+   
+   gl.uniform1f( gSSAODrawer.SSAOShaderResource.SSAOPowerUni.Context, gSSAODrawer.SSAOPower.Value );
+
    gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
 
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );

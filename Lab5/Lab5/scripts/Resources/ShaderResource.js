@@ -223,6 +223,12 @@ class SSAOShaderResource extends ShaderResource
       this.pMatrixUni = {};
       this.pMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uPMatrix" );
 
+      this.SampleRadiusUni = {};
+      this.SampleRadiusUni.Context = gl.getUniformLocation( this.Program.Context, "uSampleRadius" );
+
+      this.SSAOPowerUni = {};
+      this.SSAOPowerUni.Context = gl.getUniformLocation( this.Program.Context, "uSSAOPower" );
+
       this.OnLoaded();
       }
    }

@@ -4,7 +4,7 @@
       {
       super();
       this.Fov = 45;
-      this.Aspect = 1.0;
+      this.Aspect = gl.viewportWidth / gl.viewportHeight;
       this.NearDist = 0.1;
       this.FarDist = 1000.0;
       this.VMatrix = mat4.create();
