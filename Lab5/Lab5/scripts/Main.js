@@ -1,7 +1,6 @@
 var globalScene;
 var gl;
 var canvas;
-var gMaxinumSamplePointsSupported = 64;
 var gDrawable = false;
 var gRenderFunction = function(){};
 // ************** Init OpenGL Context etc. ************* 
@@ -129,6 +128,24 @@ function CreateSSAOControlButtons()
    container.appendChild( powerRange );
 
    container.appendChild( powerLabel );
+
+   ////////////// Sample Num
+   var sampleNumLabel = document.createElement('label')
+   sampleNumLabel.appendChild( document.createTextNode( "Sample Num: " ) );
+   var sampleNumTextNode = document.createTextNode( gSSAODrawer.SampleNum.Value.toString() );
+   sampleNumLabel.appendChild( sampleNumTextNode );
+
+   var sampleNumRange = document.createElement( "input" );
+   sampleNumRange.type = "range";
+   sampleNumRange.min = gSSAODrawer.SampleNum.Min;
+   sampleNumRange.max = gSSAODrawer.SampleNum.Max;
+   sampleNumRange.step = 1;
+   sampleNumRange.value = gSSAODrawer.SampleNum.Value;
+   sampleNumRange.checked  = true;
+   sampleNumRange.oninput = function(){ gSSAODrawer.SampleNum.Value = sampleNumRange.value; sampleNumTextNode.textContent = sampleNumRange.value; };
+   container.appendChild( sampleNumRange );
+
+   container.appendChild( sampleNumLabel );
    //generateColorInput( container, "#FFFFFF", "Ambient", setAmbient );
    //generateColorInput( container, "#FFFFFF", "Diffuse", setDiffuse );
    //generateColorInput( container, "#FFFFFF", "Specular", setSpecular );

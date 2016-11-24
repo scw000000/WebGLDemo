@@ -14,7 +14,10 @@ gSSAODrawer.Init = function()
    gSSAODrawer.SampleRadius.Max = 10.0;
    gSSAODrawer.SampleRadius.Value = 3.0;
 
-   gSSAODrawer.SampleNum = 64;
+   gSSAODrawer.SampleNum = {};
+   gSSAODrawer.SampleNum.Min = 10;
+   gSSAODrawer.SampleNum.Max = 300;
+   gSSAODrawer.SampleNum.Value = 64;
 
    gSSAODrawer.SSAOPower = {};
    gSSAODrawer.SSAOPower.Min = 0.3;
@@ -98,14 +101,14 @@ gSSAODrawer.Init = function()
       }
 
    gSSAODrawer.SamplePoints = {};
-   gSSAODrawer.SamplePoints.Num = gMaxinumSamplePointsSupported;
    // generate a randoom sample point in tangent space, the value range for xyz is ( [ -1, 1 ], [ -1, 1 ], [ 0, 1 ] ) for hemisphere
    gSSAODrawer.SamplePoints.Data = [];
-   for( var i = 0; i < gSSAODrawer.SamplePoints.Num; ++i )
+   for( var i = 0; i < gSSAODrawer.SampleNum.Max; ++i )
       {
       var randomVec = vec3.fromValues(( Math.random() - 0.5 ) * 2.0, ( Math.random() - 0.5 ) * 2.0, Math.random() );
       vec3.normalize( randomVec, randomVec );
-      var scale = i / gSSAODrawer.SamplePoints.Num;
+      //var scale = i / gSSAODrawer.SamplePoints.Num;
+      var scale = Math.random();
       scale = lerp( scale * scale, 0.1, 1 );
 
       vec3.scale( randomVec, randomVec, scale );
@@ -235,7 +238,7 @@ gSSAODrawer.DrawSSAO = function()
 
    gl.uniform2f( gSSAODrawer.SSAOShaderResource.NoiseScaleUni.Context, gSSAODrawer.NoiseTexture.NoiseScale[ 0 ], gSSAODrawer.NoiseTexture.NoiseScale[ 1 ] );
 
-   for( var i = 0; i < gMaxinumSamplePointsSupported; ++i )
+   for( var i = 0; i < gSSAODrawer.SampleNum.Max; ++i )
       {
       gl.uniform3f( gSSAODrawer.SSAOShaderResource.SamplePointsUni[ i ].Context, 
          gSSAODrawer.SamplePoints.Data[ i * 3     ], 
@@ -243,7 +246,7 @@ gSSAODrawer.DrawSSAO = function()
          gSSAODrawer.SamplePoints.Data[ i * 3 + 2 ] );
       }
 
-   gl.uniform1i( gSSAODrawer.SSAOShaderResource.SampleNumUni.Context, gSSAODrawer.SampleNum );
+   gl.uniform1i( gSSAODrawer.SSAOShaderResource.SampleNumUni.Context, gSSAODrawer.SampleNum.Value );
 
    gl.uniformMatrix4fv( gSSAODrawer.SSAOShaderResource.pMatrixUni.Context, false, globalScene.GetPMatrix() );
    

@@ -211,7 +211,7 @@ class SSAOShaderResource extends ShaderResource
       this.NoiseScaleUni.Context = gl.getUniformLocation( this.Program.Context, "uNoiseScale" );
 
       this.SamplePointsUni = [];
-      for( var i = 0; i < gMaxinumSamplePointsSupported; ++i )
+      for( var i = 0; i < gSSAODrawer.SampleNum.Max; ++i )
          {
          this.SamplePointsUni[ i ] = {};
          this.SamplePointsUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uSamplePoints[" + i + "]" );
