@@ -2,13 +2,6 @@
 
 gSSAODrawer.Init = function()
    {
-   var texFloatExt = gl.getExtension( "OES_texture_float" );
-   if( !texFloatExt ) 
-      { 
-      alert( "error" );
-      return; 
-      }
-
    var texFloatLinearExt = gl.getExtension( "OES_texture_float_linear" );
    if( !texFloatLinearExt ) 
       { 
@@ -18,20 +11,6 @@ gSSAODrawer.Init = function()
 
    gSSAODrawer.SSAOShaderResource = new SSAOShaderResource();
    gSSAODrawer.SSAOShaderResource.Load( "SSAOShader-vs", "SSAOShader-fs" );
-
-   //var depthTextureExt = gl.getExtension( "WEBGL_depth_texture" );
-   //if( !depthTextureExt ) 
-   //   { 
-   //   alert( "error" );
-   //   return; 
-   //   }
-
-   //var mrtExt = gl.getExtension( "WEBGL_draw_buffers" );
-   //if( !mrtExt )
-   //   {
-   //   alert( "error" );
-   //   return; 
-   //   }
    
    //gSSAODrawer.GeometryShaderResource = new DeferredGemotryShaderResource();
    //gSSAODrawer.GeometryShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );

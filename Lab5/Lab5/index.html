@@ -107,20 +107,19 @@ void main(void)
     }
 </script>
 
-<script id="deferredGeometryShader-vs" type="x-shader/x-vertex">
+<script id="deferredGeometryShader-vs" type="x-shader/x-vertex">#version 300 es
     precision mediump float;
-    attribute vec3 aVertexPosition;
-    attribute vec3 aVertexNormal;
-    attribute vec2 aVertexUV;
+    layout (location = 0) in vec3 aVertexPosition;
+    layout (location = 1) in vec3 aVertexNormal;
+    layout (location = 2) in vec2 aVertexUV;
 
     uniform mat4 uMVPMatrix;
     uniform mat4 uMVMatrix;
     uniform mat4 uNMatrix;
 
-
-    varying vec4 vPosition_CameraSpace;
-    varying vec4 vNormal_CameraSpace;
-    varying vec2 vVertexUV;
+    out vec4 vPosition_CameraSpace;
+    out vec4 vNormal_CameraSpace;
+    out vec2 vVertexUV;
 
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
@@ -130,36 +129,53 @@ void main(void)
     }
 </script>
 
- <script id="deferredGeometryShader-fs" type="x-shader/x-fragment">
-#extension GL_EXT_draw_buffers : require
+ <script id="deferredGeometryShader-fs" type="x-shader/x-fragment">#version 300 es
     precision mediump float;
 
-    varying vec4 vPosition_CameraSpace;
-    varying vec4 vNormal_CameraSpace;
-    varying vec2 vVertexUV;
+    in vec4 vPosition_CameraSpace;
+    in vec4 vNormal_CameraSpace;
+    in vec2 vVertexUV;
 
     uniform sampler2D uMeshTexture; 
     uniform float uShininess;
     uniform vec4 uMaterialAmbient;
     uniform vec4 uMaterialDiffuse;
     uniform vec4 uMaterialSpecular;
+    
+     layout (location = 0) out vec4 oPosition;
+     layout (location = 1) out vec4 oNormal;
+     layout (location = 2) out vec4 oAlbedo;
+     layout (location = 3) out vec4 oDiffuse;
 
 void main(void) 
     {
-    vec4 textureColor = texture2D( uMeshTexture, vVertexUV );
+    vec4 textureColor = texture( uMeshTexture, vec2( 0, 0 ) );
      //depth = gl_FragCoord.z;
-    gl_FragData[ 0 ] = vPosition_CameraSpace; 
-    gl_FragData[ 0 ].a = uShininess;
+  //  gl_FragData[ 0 ] = vPosition_CameraSpace; 
+  //  gl_FragData[ 0 ].a = uShininess;
     
     // Warning: do NOT normalize vec4!
-    gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
-    gl_FragData[ 1 ].a = uMaterialSpecular.x;
+  //  gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
+ //   gl_FragData[ 1 ].a = uMaterialSpecular.x;
 
-    gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
-    gl_FragData[ 2 ].a = uMaterialSpecular.y;
+ //   gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
+ //   gl_FragData[ 2 ].a = uMaterialSpecular.y;
 
-    gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
-    gl_FragData[ 3 ].a = uMaterialSpecular.z;
+ //   gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
+//    gl_FragData[ 3 ].a = uMaterialSpecular.z;
+     /////////////////////////////////////////
+      oPosition = vPosition_CameraSpace; 
+      oPosition.a = uShininess;
+    
+    // Warning: do NOT normalize vec4!
+      oNormal.xyz = normalize( vNormal_CameraSpace.xyz ); 
+      oNormal.a = uMaterialSpecular.x;
+
+      oAlbedo = textureColor * uMaterialAmbient; 
+      oAlbedo.a = uMaterialSpecular.y;
+
+      oDiffuse = textureColor * uMaterialDiffuse; 
+      oDiffuse.a = uMaterialSpecular.z;
     }
 </script>
 

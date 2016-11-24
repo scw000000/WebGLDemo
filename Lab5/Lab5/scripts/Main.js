@@ -9,7 +9,8 @@ function initGL()
    {
    try 
       {
-      gl = canvas.getContext("experimental-webgl");
+      gl = canvas.getContext("webgl2");
+      //gl = canvas.getContext("experimental-webgl");
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
       gl.viewport( 0, 0, gl.viewportWidth, gl.viewportHeight );
@@ -31,6 +32,23 @@ function initGL()
 
    }
 
+function ouputBuffer()
+   {
+   if( gDrawable == false )
+      {
+      return;
+      }
+   if( true )
+      {
+      gDeferredDrawer.FinalRender();
+      }
+   else
+      {
+      
+      gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+      }
+   }
+
 function tick() 
    {
    requestAnimFrame( tick );
@@ -39,13 +57,14 @@ function tick()
    drawScene();
    gSSAODrawer.DrawSSAO();
    gSSAODrawer.DrawBlur();
-   gDeferredDrawer.FinalRender();
+   ouputBuffer();
+   
    //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
   // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
   // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, 300, 300 );
+   gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
+   gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 300, 0, 300, 300 );
    //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
