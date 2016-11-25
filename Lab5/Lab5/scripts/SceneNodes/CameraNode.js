@@ -19,12 +19,12 @@
 
    SetVPMatrix()
       {
-      var globalTransform = new Transform();
-      globalTransform.SetToWorld( this.GetGlobalTransform() );
+     // var globalTransform = new Transform();
+    //  globalTransform.SetToWorld( this.GetGlobalTransform() );
       // Setting view matrix
-      var position = globalTransform.GetToWorldPosition();
-      var targetPosition = vec3.add( vec3.create(), position, globalTransform.GetForwardVector() );
-      mat4.lookAt( this.VMatrix, position, targetPosition, globalTransform.GetUpVector() );
+      var position = this.GlobalTransform.GetToWorldPosition();
+      var targetPosition = vec3.add( vec3.create(), position, this.GlobalTransform.GetForwardVector() );
+      mat4.lookAt( this.VMatrix, position, targetPosition, this.GlobalTransform.GetUpVector() );
       mat4.mul( this.VPMatrix, this.PMatrix, this.VMatrix );
       }
 

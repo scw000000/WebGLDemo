@@ -45,6 +45,7 @@ function tick()
    {
    requestAnimFrame( tick );
    controller.OnUpdate();
+   globalScene.OnUpdate();
    gDeferredDrawer.PreRender();
    drawScene();
    
@@ -252,43 +253,6 @@ function CreateRenderingControlButtons()
    button.value = "SSAO Blur";
    button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
-
-    //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
-  // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, gl.viewportWidth, gl.viewportHeight  );
-  // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, gl.viewportWidth, gl.viewportHeight  );
-   //
-   //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Look Right";
-   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateToWorldRad( -0.05, g_Up3v ) };
-   //container.appendChild( button );
-
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Look Up";
-   //button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Left3v ) };
-   //container.appendChild( button );
-
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Look Down";
-   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Left3v ) };
-   //container.appendChild( button );
-
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Look Clockwise";
-   //button.onclick = function(){ globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -0.05, g_Forward3v ) };
-   //container.appendChild( button );
-
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Look Counter Clockwise";
-   //button.onclick = function(){  globalScene.CameraNode.LocalTransform.RotateFromWorldRad( 0.05, g_Forward3v ) };
-   //container.appendChild( button );
    }
 
 var globalLight;

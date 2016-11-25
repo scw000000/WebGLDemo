@@ -257,7 +257,7 @@ gDeferredDrawer.FinalRender = function()
    var readLightNum = Math.min( gLightManager.MaximumLightSupported, gLightManager.LightNodes.length );
    for( var i = 0; i < readLightNum; ++i )
       {
-      var lightGlobalTransform = gLightManager.LightNodes[ i ].GetGlobalTransform();
+      var lightGlobalTransform = gLightManager.LightNodes[ i ].GetGlobalTransform().GetToWorld();
       var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
       var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
     
