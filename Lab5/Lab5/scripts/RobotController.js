@@ -64,8 +64,8 @@
 
       if( this.MouseBottonPressed[ 0 ] )
          {
-         controllingNode.LocalTransform.RotateFromWorldRad( this.DeltaMousePos[ 0 ] , g_Up3v );
-         controllingNode.LocalTransform.RotateFromWorldRad( this.DeltaMousePos[ 1 ] , g_Left3v );
+      //   controllingNode.LocalTransform.RotateFromWorldRad( this.DeltaMousePos[ 0 ] , g_Up3v );
+      //   controllingNode.LocalTransform.RotateFromWorldRad( this.DeltaMousePos[ 1 ] , g_Left3v );
          this.SetShowingCursor( false );
          }
       else
@@ -78,12 +78,12 @@
          if( this.DeltaMousePos[ 1 ] > 0  )
             {
             var scaleFactor = Math.abs( this.DeltaMousePos[ 1 ] ) + 1;
-            controllingNode.LocalTransform.Scale( vec3.fromValues( scaleFactor, scaleFactor, scaleFactor ) );
+      //      controllingNode.LocalTransform.Scale( vec3.fromValues( scaleFactor, scaleFactor, scaleFactor ) );
             }
          else
             {
             var scaleFactor = 1 - Math.abs( this.DeltaMousePos[ 1 ] );
-            controllingNode.LocalTransform.Scale( vec3.fromValues( scaleFactor, scaleFactor, scaleFactor ) );
+        //    controllingNode.LocalTransform.Scale( vec3.fromValues( scaleFactor, scaleFactor, scaleFactor ) );
             }
          
          this.SetShowingCursor( false );

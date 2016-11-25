@@ -48,14 +48,6 @@ function tick()
    globalScene.OnUpdate();
    gDeferredDrawer.PreRender();
    drawScene();
-   
-   //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
-  // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
-  // gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.AlbedoTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.NormalTexture, 0, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 300, 0, 300, 300 );
-   //gTextureDrawer.DrawTexture( textureRes, 0, 0, 300, 300 );
    }
 
 var controller;
@@ -100,7 +92,6 @@ function CreateSSAOControlButtons()
    radRange.max = gSSAODrawer.SampleRadius.Max;
    radRange.step = 0.1;
    radRange.value = gSSAODrawer.SampleRadius.Value;
-   radRange.checked  = true;
    radRange.oninput = function(){ gSSAODrawer.SampleRadius.Value = radRange.value; radTextNode.textContent = radRange.value; };
    container.appendChild( radRange );
 
@@ -118,7 +109,6 @@ function CreateSSAOControlButtons()
    powerRange.max = gSSAODrawer.SSAOPower.Max;
    powerRange.step = 0.1;
    powerRange.value = gSSAODrawer.SSAOPower.Value;
-   powerRange.checked  = true;
    powerRange.oninput = function(){ gSSAODrawer.SSAOPower.Value = powerRange.value; powerTextNode.textContent = powerRange.value; };
    container.appendChild( powerRange );
 
@@ -136,7 +126,6 @@ function CreateSSAOControlButtons()
    sampleNumRange.max = gSSAODrawer.SampleNum.Max;
    sampleNumRange.step = 1;
    sampleNumRange.value = gSSAODrawer.SampleNum.Value;
-   sampleNumRange.checked  = true;
    sampleNumRange.oninput = function(){ gSSAODrawer.SampleNum.Value = sampleNumRange.value; sampleNumTextNode.textContent = sampleNumRange.value; };
    container.appendChild( sampleNumRange );
 
@@ -158,21 +147,6 @@ function CreateSSAOControlButtons()
    //};
    //container.appendChild( button );
    }
-
-function setAmbient( ambient )
-      {
-      globalLight.Ambient = ambient;
-      }
-
-function setDiffuse( diffuse )
-      {
-      globalLight.Diffuse = diffuse;
-      }
-
-function setSpecular( specular )
-      {
-      globalLight.Specular = specular;
-      }
 
 function hexStrToColor( hexStr )
    {
@@ -255,6 +229,26 @@ function CreateRenderingControlButtons()
    container.appendChild( button );
    }
 
+function CreateLightControlButtons()
+   {
+   var container = document.getElementById( 'LightControlOption' );
+   var radLabel = document.createElement('label')
+   radLabel.appendChild( document.createTextNode( "Light Radius: " ) );
+   var radTextNode = document.createTextNode( Math.sqrt( gLightManager.LightRadiusSqr.Value ).toString() );
+   radLabel.appendChild( radTextNode );
+
+   var radRange = document.createElement( "input" );
+   radRange.type = "range";
+   radRange.min = gLightManager.LightRadiusSqr.Min;
+   radRange.max = gLightManager.LightRadiusSqr.Max;
+   radRange.step = 0.1;
+   radRange.value = Math.sqrt( gLightManager.LightRadiusSqr.Value );
+   radRange.oninput = function(){ gLightManager.LightRadiusSqr.Value = radRange.value * radRange.value; radTextNode.textContent = radRange.value; };
+   container.appendChild( radRange );
+
+   container.appendChild( radLabel );
+   }
+
 var globalLight;
 var sphereNode;
 var meshNode;
@@ -298,19 +292,20 @@ function webGLStart()
    globalScene.AddSceneNode( globalScene.CameraNode );
    
    textureRes = new TextureResource();
-   textureRes.Load( "earth.png" );
-   //textureRes.Load( "gray.jpg" );
+   //textureRes.Load( "earth.png" );
+   textureRes.Load( "gray.jpg" );
    meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
    forwardShader = new ForwardShaderResource();
    forwardShader.Load( "shader-vs", "shader-fs" );
 
-   meshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureRes );
-   meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
-   meshNode.Shininess = 10.0;
-   meshNode.MaterialAmbient= vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
-  // meshNode.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
-   globalScene.AddSceneNode( meshNode, 0 );
+  // meshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureRes );
+  // meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
+  // meshNode.Shininess = 10.0;
+  // meshNode.MaterialAmbient= vec4.fromValues( 0.01, 0.01, 0.01, 1.0 );
+ //  meshNode.MaterialDiffuse = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
+  // meshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
+  // globalScene.AddSceneNode( meshNode, 0 );
 
    skySphereRes = new MeshResource();
    skySphereRes.Load( "skySphere.json" );
@@ -336,26 +331,31 @@ function webGLStart()
    lightCubeShader = new LightCubeShaderResource( );
    lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
 
-   var dummyNode = new SceneNodes();
-   dummyNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 10, 0 ) );
+   //var dummyNode = new SceneNodes();
+   //dummyNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 10, 0 ) );
 
-   globalLight = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
-   globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
-   dummyNode.AddChild( globalLight );
-   //globalScene.AddSceneNode( globalLight, 1 );
+   //globalLight = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
+   //globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
+   //dummyNode.AddChild( globalLight );
+   ////globalScene.AddSceneNode( globalLight, 1 );
 
-   var light = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 0.0, 0.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
-   light.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 50 ) );
-   dummyNode.AddChild( light )
-   //globalScene.AddSceneNode( light, 1 );
+   //var light = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 0.0, 0.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
+   //light.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 50 ) );
+   //dummyNode.AddChild( light )
+   ////globalScene.AddSceneNode( light, 1 );
 
-   globalScene.AddSceneNode( dummyNode, 1 );
+   //globalScene.AddSceneNode( dummyNode, 1 );
+   globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 20, 20, -20 ) );
+         
+
+   InitLightControlNode();
+   InitTeapotControlNode();
 
    controllingNode = globalLight;
    
    CreateRenderingControlButtons();
    CreateSSAOControlButtons();
-   
+   CreateLightControlButtons();
    //initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();

@@ -12,10 +12,9 @@
 
    UpdateGlobalTransform()
       {
-      if( this.Parent == null )
+      if( this.Parent == null ) // Root node, leave
          {
          return;
-         //this.GlobalTransform.SetToWorld( this.LocalTransform.GetToWorld() );
          }
       var parentTransform = this.Parent.GetGlobalTransform();
       var parentToWorld = parentTransform.GetToWorld();
@@ -25,12 +24,12 @@
    GetGlobalTransform()
       {
       return this.GlobalTransform;
-      if( this.Parent == null )
-         {
-         return mat4.clone( this.LocalTransform.GetToWorld() );
-         }
-      var parentToWorld = this.Parent.GetGlobalTransform().GetToWorld();
-      return mat4.mul( parentToWorld, parentToWorld, this.LocalTransform.GetToWorld() );
+      //if( this.Parent == null )
+      //   {
+      //   return mat4.clone( this.LocalTransform.GetToWorld() );
+      //   }
+      //var parentToWorld = this.Parent.GetGlobalTransform().GetToWorld();
+      //return mat4.mul( parentToWorld, parentToWorld, this.LocalTransform.GetToWorld() );
       }
 
    AddChild( child )

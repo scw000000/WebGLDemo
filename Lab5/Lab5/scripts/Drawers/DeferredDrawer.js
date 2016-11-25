@@ -254,8 +254,7 @@ gDeferredDrawer.FinalRender = function()
    //gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, gLightManager.LightNodes[ 0 ].Diffuse[ 0 ], gLightManager.LightNodes[ 0 ].Diffuse[ 1 ], gLightManager.LightNodes[ 0 ].Diffuse[ 2 ], gLightManager.LightNodes[ 0 ].Diffuse[ 3 ] );
    //gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni.Context, gLightManager.LightNodes[ 0 ].Specular[ 0 ], gLightManager.LightNodes[ 0 ].Specular[ 1 ], gLightManager.LightNodes[ 0 ].Specular[ 2 ], gLightManager.LightNodes[ 0 ].Specular[ 3 ] );
 
-   var readLightNum = Math.min( gLightManager.MaximumLightSupported, gLightManager.LightNodes.length );
-   for( var i = 0; i < readLightNum; ++i )
+   for( var i = 0; i < gLightManager.LightNum.Value; ++i )
       {
       var lightGlobalTransform = gLightManager.LightNodes[ i ].GetGlobalTransform().GetToWorld();
       var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
@@ -268,10 +267,9 @@ gDeferredDrawer.FinalRender = function()
       gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni[ i ].Context, gLightManager.LightNodes[ i ].Specular[ 0 ], gLightManager.LightNodes[ i ].Specular[ 1 ], gLightManager.LightNodes[ i ].Specular[ 2 ], gLightManager.LightNodes[ i ].Specular[ 3 ] );
       }
 
-   gl.uniform1i( gDeferredDrawer.LightShaderResource.LightNumUni.Context, readLightNum );
+   gl.uniform1i( gDeferredDrawer.LightShaderResource.LightNumUni.Context, gLightManager.LightNum.Value );
 
-   //gLightManager
-
+   gl.uniform1f( gDeferredDrawer.LightShaderResource.LightRadiusSqrUni.Context, gLightManager.LightRadiusSqr.Value );
 
    gl.uniform1i( gDeferredDrawer.LightShaderResource.UseSSAOUni.Context, gDeferredDrawer.UseSSAO );
 

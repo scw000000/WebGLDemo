@@ -174,7 +174,7 @@ class DeferredLightShaderResource extends ShaderResource
       this.LightAmbientUni = [];
       this.LightDiffuseUni = [];
       this.LightSpecularUni = [];
-      for( var i = 0; i < gLightManager.MaximumLightSupported; ++i )
+      for( var i = 0; i < gLightManager.LightNum.Max; ++i )
          { 
          this.LightPositionUni[ i ] = {};
          this.LightPositionUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace[" + i + "]" );
@@ -191,6 +191,9 @@ class DeferredLightShaderResource extends ShaderResource
 
       this.LightNumUni = {};
       this.LightNumUni.Context = gl.getUniformLocation( this.Program.Context, "uLightNum" );
+
+      this.LightRadiusSqrUni = {};
+      this.LightRadiusSqrUni.Context = gl.getUniformLocation( this.Program.Context, "uLightRadiusSqr" );
 
       //this.LightAmbientUni = {};
       //this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
