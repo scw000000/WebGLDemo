@@ -344,6 +344,8 @@ function webGLStart()
    skySphereShader = new SkySphereShaderResource( );
    skySphereShader.Load( "skyShader-vs", "skyShader-fs" );
    skySphereNode = new SkySphereSceneNode( skySphereShader, skySphereRes, skyMapRes );
+   skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
+   
    globalScene.AddSceneNode( skySphereNode );
  //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
 //   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
