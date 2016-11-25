@@ -38,9 +38,6 @@ function ouputBuffer()
       {
       return;
       }
-   
-
-
    gRenderFunction();
    }
 
@@ -205,13 +202,25 @@ function CreateRenderingControlButtons()
    var button = document.createElement( "input" );
    button.type = "button";
    button.value = "Default";
-   button.onclick = function(){ gRenderFunction = gDeferredDrawer.FinalRender; };
+   button.onclick = function()
+      { 
+      gRenderFunction = function()
+            { 
+            gTextureDrawer.DrawTexture( gDeferredDrawer.OutputTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); 
+            }; 
+      };
    container.appendChild( button );
 
    button = document.createElement( "input" );
    button.type = "button";
    button.value = "Position CameraSpace";
-   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
+   button.onclick = function()
+      { 
+         gRenderFunction = function()
+            { 
+            gTextureDrawer.DrawTexture( gDeferredDrawer.PositionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); 
+            }; 
+      };
    container.appendChild( button );
 
    button = document.createElement( "input" );
@@ -304,8 +313,12 @@ function webGLStart()
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
    gSSAODrawer.Init();
+   gSkyPassFrameBuffer.Init();
 
-   gRenderFunction = gDeferredDrawer.FinalRender;
+   gRenderFunction = function()
+      { 
+      gTextureDrawer.DrawTexture( gDeferredDrawer.OutputTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); 
+      }; 
 
    controller = new RobotController();
    document.onkeydown = ( controller.OnKeyDown ).bind( controller );

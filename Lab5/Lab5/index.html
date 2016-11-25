@@ -334,7 +334,7 @@ void main(void)
     precision mediump float;
     const int NOISE_TEXTURE_SIZE = 4;
     const int HALF_NOISE_TEXTURE_SIZE = NOISE_TEXTURE_SIZE / 2;
-    const int SAMPLE_COUNT = NOISE_TEXTURE_SIZE * NOISE_TEXTURE_SIZE;
+    const int SAMPLE_COUNT = ( HALF_NOISE_TEXTURE_SIZE * 2 + 1 ) * ( HALF_NOISE_TEXTURE_SIZE * 2 + 1 );
     varying vec2 vVertexUV;
 
     uniform sampler2D uSSAOTex;
@@ -343,9 +343,9 @@ void main(void)
     void main(void) {
 
         gl_FragColor = vec4( 0 );
-        for( int x = -HALF_NOISE_TEXTURE_SIZE; x < HALF_NOISE_TEXTURE_SIZE; ++x )
+        for( int x = -HALF_NOISE_TEXTURE_SIZE; x <= HALF_NOISE_TEXTURE_SIZE; ++x )
             {
-            for( int y = -HALF_NOISE_TEXTURE_SIZE; y < HALF_NOISE_TEXTURE_SIZE; ++y )
+            for( int y = -HALF_NOISE_TEXTURE_SIZE; y <= HALF_NOISE_TEXTURE_SIZE; ++y )
                 {
                 vec2 shift = vec2( x, y ) * uInvTexureSize;
                 gl_FragColor += texture2D( uSSAOTex, shift + vVertexUV );
@@ -380,6 +380,7 @@ precision mediump float;
     void main(void) 
         {
         gl_FragColor = texture2D( uMeshTexture, vVertexUV ); 
+     //   gl_FragColor = vec4( 1, 0, 0, 1 );
         }
 </script>
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>

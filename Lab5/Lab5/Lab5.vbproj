@@ -146,6 +146,7 @@
     <Content Include="scripts\Scene.js" />
     <Content Include="scripts\SceneNodes\SceneNodes.js" />
     <Content Include="scripts\Resources\ShaderResource.js" />
+    <Content Include="scripts\SceneNodes\SkySphereSceneNode.js" />
     <Content Include="scripts\shaders_setup.js" />
     <Content Include="scripts\Drawers\TextureDrawer.js" />
     <Content Include="scripts\Transform.js" />

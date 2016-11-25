@@ -18,10 +18,9 @@
          {
          return;
          }
-      ////////////////////////////////////// Deferred Rendering
+      
       gl.useProgram( this.ShaderResource.Program.Context );
-      gl.bindFramebuffer( gl.FRAMEBUFFER, null );
-
+      gl.bindFramebuffer( gl.FRAMEBUFFER, gSkyPassFrameBuffer.Context );
       /////// Vertex Attributes
 
       gl.enableVertexAttribArray( this.ShaderResource.VertexPosAttr.Context );
@@ -32,17 +31,12 @@
       gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexUVBuffer.Context );
       gl.vertexAttribPointer( this.ShaderResource.VertexUVAttr.Context, this.MeshResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
-      /////// Vertex Attributes
-
       /////// Uniforms
-
       gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
 
       gl.activeTexture( gl.TEXTURE0 );  
 	   gl.bindTexture( gl.TEXTURE_2D, this.MeshTextureResource.Context );   
 	   gl.uniform1i( this.ShaderResource.MeshTextureUni.Context, 0 );   
-
-      /////// Uniforms
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.MeshResource.VertexIndexBuffer.Context );
 
@@ -50,4 +44,24 @@
 
       gl.bindFramebuffer( gl.FRAMEBUFFER, null );
       }
+   }
+
+gSkyPassFrameBuffer = {};
+
+gSkyPassFrameBuffer.Init = function()
+   {
+   gSkyPassFrameBuffer.Context = gl.createFramebuffer();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gSkyPassFrameBuffer.Context );
+   // Use the depth buffer in geometry pass
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.GeometryDepthBuffer.Context );
+
+   // Output Buffer
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
+   var fboCheckCode = gl.checkFramebufferStatus( gl.FRAMEBUFFER );
+   if( fboCheckCode != gl.FRAMEBUFFER_COMPLETE )
+      {
+      alert( "Frame Buffer error" );
+      }
+
+   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    }

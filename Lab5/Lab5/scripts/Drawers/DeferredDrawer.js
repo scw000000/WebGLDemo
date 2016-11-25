@@ -13,29 +13,29 @@ gDeferredDrawer.Init = function()
    gDeferredDrawer.GeometryShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );
 
    // Create and bind frame buffer
-   gDeferredDrawer.FrameBuffer = {};
-   gDeferredDrawer.FrameBuffer.Context = gl.createFramebuffer();
-   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+   gDeferredDrawer.GeometryFrameBuffer = {};
+   gDeferredDrawer.GeometryFrameBuffer.Context = gl.createFramebuffer();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.GeometryFrameBuffer.Context );
 
-   // Create the render buffer
-   //gDeferredDrawer.RenderBuffer = {};
-   //gDeferredDrawer.RenderBuffer.Context = gl.createRenderbuffer();
-   //gl.bindRenderbuffer( gl.RENDERBUFFER, gDeferredDrawer.RenderBuffer.Context );
-   //gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
-   //gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.RenderBuffer.Context );
+   // Create the render buffer, which hold the real depth value
+   gDeferredDrawer.GeometryDepthBuffer = {};
+   gDeferredDrawer.GeometryDepthBuffer.Context = gl.createRenderbuffer();
+   gl.bindRenderbuffer( gl.RENDERBUFFER, gDeferredDrawer.GeometryDepthBuffer.Context );
+   gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.GeometryDepthBuffer.Context );
 
    ///////////////////////////////////////////////////////////////
    // Create and bind depth texture
-   gDeferredDrawer.DepthTexture = {};
-   gDeferredDrawer.DepthTexture.IsLoaded = false;
-   gDeferredDrawer.DepthTexture.Context = gl.createTexture();
-   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context );
-   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
-   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
-   gl.texImage2D( gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null );   
-   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context, 0 );
+   //gDeferredDrawer.DepthTexture = {};
+   //gDeferredDrawer.DepthTexture.IsLoaded = false;
+   //gDeferredDrawer.DepthTexture.Context = gl.createTexture();
+   //gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context );
+   //gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   //gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   //gl.texImage2D( gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null );   
+   //gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context, 0 );
 
-   gDeferredDrawer.DepthTexture.IsLoaded = true;
+   //gDeferredDrawer.DepthTexture.IsLoaded = true;
 
 ///////////////////////////////////////////////////////////////
    var errCode = gl.getError();
@@ -149,11 +149,51 @@ gDeferredDrawer.Init = function()
    gDeferredDrawer.LightShaderResource.Load( "deferredLightShader-vs", "deferredLightShader-fs" );
 
    gDeferredDrawer.UseSSAO = 1;
+
+      // Create and bind frame buffer
+   gDeferredDrawer.LightPassFrameBuffer = {};
+   gDeferredDrawer.LightPassFrameBuffer.Context = gl.createFramebuffer();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.LightPassFrameBuffer.Context );
+
+   // Create the render buffer
+   //gDeferredDrawer.LightRenderBuffer = {};
+   //gDeferredDrawer.LightRenderBuffer.Context = gl.createRenderbuffer();
+   //gl.bindRenderbuffer( gl.RENDERBUFFER, gDeferredDrawer.LightRenderBuffer.Context );
+   //gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, null );
+
+   // Output Buffer
+   gDeferredDrawer.OutputTexture = {};
+   gDeferredDrawer.OutputTexture.IsLoaded = false;
+   gDeferredDrawer.OutputTexture.Context = gl.createTexture();
+   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
+   gDeferredDrawer.OutputTexture.IsLoaded = true;
+
+   gl.drawBuffers( [ gl.COLOR_ATTACHMENT0 ] );
+
+   var errCode = gl.getError();
+
+   if( errCode != 0 )
+      {
+      alert( "WebGL error" );
+      }
+
+   gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+
+   var fboCheckCode = gl.checkFramebufferStatus( gl.FRAMEBUFFER );
+   if( fboCheckCode != gl.FRAMEBUFFER_COMPLETE )
+      {
+      alert( "Frame Buffer error" );
+      }
    }
 
 gDeferredDrawer.PreRender = function()
    {
-   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.GeometryFrameBuffer.Context );
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    }
@@ -165,7 +205,8 @@ gDeferredDrawer.FinalRender = function()
       return;
       }
    gl.useProgram( gDeferredDrawer.LightShaderResource.Program.Context );
-
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.LightPassFrameBuffer.Context );
+   
    ////////////////////// VBOs
 
    gl.enableVertexAttribArray( gDeferredDrawer.LightShaderResource.VertexPosAttr.Context );
@@ -214,5 +255,7 @@ gDeferredDrawer.FinalRender = function()
    gl.uniform1i( gDeferredDrawer.LightShaderResource.UseSSAOUni.Context, gDeferredDrawer.UseSSAO );
 
    gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
+
+   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    };
 

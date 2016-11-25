@@ -47,14 +47,16 @@
          this.DeferredPassNodes.RenderChildren();
          gSSAODrawer.DrawSSAO();
          gSSAODrawer.DrawBlur();
+         gDeferredDrawer.FinalRender();
+         this.SkyPassNode.RenderChildren();
          ouputBuffer();
-         //gl.bindFramebuffer( gl.READ_FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+         //gl.bindFramebuffer( gl.READ_FRAMEBUFFER, gDeferredDrawer.GeometryFrameBuffer.Context );
          //gl.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null ); 
          //gl.clearBufferfv( gl.DEPTH, null, [0.0, 0.0, 0.0, 1.0]);
          //gl.blitFramebuffer( 0, 0, gl.viewportWidth, gl.viewportHeight, 0, 0, gl.viewportWidth, gl.viewportHeight, gl.DEPTH_BUFFER_BIT, gl.NEAREST );
-         //gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+      //   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
 
-         this.SkyPassNode.RenderChildren();
+         
          }
       else
          {

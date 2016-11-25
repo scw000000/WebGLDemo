@@ -151,11 +151,11 @@ gSSAODrawer.Init = function()
    gl.bindFramebuffer( gl.FRAMEBUFFER, gSSAODrawer.BlurFrameBuffer.Context );
 
    // Create the render buffer
-   gSSAODrawer.BlurRenderBuffer = {};
-   gSSAODrawer.BlurRenderBuffer.Context = gl.createRenderbuffer();
-   gl.bindRenderbuffer( gl.RENDERBUFFER, gSSAODrawer.BlurRenderBuffer.Context );
-   gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
-   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.BlurRenderBuffer.Context );
+  // gSSAODrawer.BlurRenderBuffer = {};
+  // gSSAODrawer.BlurRenderBuffer.Context = gl.createRenderbuffer();
+ //  gl.bindRenderbuffer( gl.RENDERBUFFER, gSSAODrawer.BlurRenderBuffer.Context );
+ //  gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
 
    var errCode = gl.getError();
 

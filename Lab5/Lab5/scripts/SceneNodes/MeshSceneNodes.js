@@ -27,7 +27,7 @@
       gDrawable = true;
       ////////////////////////////////////// Deferred Rendering
       gl.useProgram( this.ShaderResource.Program.Context );
-      gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.FrameBuffer.Context );
+      gl.bindFramebuffer( gl.FRAMEBUFFER, gDeferredDrawer.GeometryFrameBuffer.Context );
 
       /////// Vertex Attributes
 
