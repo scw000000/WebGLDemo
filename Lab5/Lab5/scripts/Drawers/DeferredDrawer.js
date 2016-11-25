@@ -21,16 +21,10 @@ gDeferredDrawer.Init = function()
    //gDeferredDrawer.RenderBuffer = {};
    //gDeferredDrawer.RenderBuffer.Context = gl.createRenderbuffer();
    //gl.bindRenderbuffer( gl.RENDERBUFFER, gDeferredDrawer.RenderBuffer.Context );
-   //gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeigh );
+   //gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
    //gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.RenderBuffer.Context );
 
    ///////////////////////////////////////////////////////////////
-   var errCode = gl.getError();
-
-   if( errCode != 0 )
-      {
-      alert( "WebGL error" );
-      }
    // Create and bind depth texture
    gDeferredDrawer.DepthTexture = {};
    gDeferredDrawer.DepthTexture.IsLoaded = false;
@@ -38,19 +32,7 @@ gDeferredDrawer.Init = function()
    gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context );
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
-    var errCode = gl.getError();
-
-   if( errCode != 0 )
-      {
-      alert( "WebGL error" );
-      }
    gl.texImage2D( gl.TEXTURE_2D, 0, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight, 0, gl.DEPTH_COMPONENT, gl.UNSIGNED_SHORT, null );   
-    var errCode = gl.getError();
-
-   if( errCode != 0 )
-      {
-      alert( "WebGL error" );
-      }
    gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.TEXTURE_2D, gDeferredDrawer.DepthTexture.Context, 0 );
 
    gDeferredDrawer.DepthTexture.IsLoaded = true;

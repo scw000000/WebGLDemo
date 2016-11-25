@@ -14,7 +14,7 @@ function initGL()
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
       gl.viewport( 0, 0, gl.viewportWidth, gl.viewportHeight );
-      gl.enable(gl.DEPTH_TEST);
+      gl.enable( gl.DEPTH_TEST );
       } 
    catch (e) 
       {}
@@ -50,9 +50,6 @@ function tick()
    controller.OnUpdate();
    gDeferredDrawer.PreRender();
    drawScene();
-   gSSAODrawer.DrawSSAO();
-   gSSAODrawer.DrawBlur();
-   ouputBuffer();
    
    //gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 0, 0, gl.viewportWidth, gl.viewportHeight );
   // gTextureDrawer.DrawTexture( gSSAODrawer.OcclusionTexture, 300, 0, 300, 300 );
