@@ -29,13 +29,13 @@
       // Space: part move upward
       if ( this.KeyPressed[ 32 ] ) 
          {
-         controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0.5, 0 ) );
+          globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0.5, 0 ) );
          }
 
       // C: part move downward
       if ( this.KeyPressed[ 67 ] ) 
          {
-         controllingNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, -0.5, 0 ) );
+          globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, -0.5, 0 ) );
          }
 
       // Left Arrow: camera rotate global Y axis

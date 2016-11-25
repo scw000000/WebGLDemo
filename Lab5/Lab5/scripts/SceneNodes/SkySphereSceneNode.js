@@ -14,13 +14,13 @@
 
    OnRender()
       {
-      if( !this.ShaderResource || !this.MeshResource.IsLoaded || !this.MeshTextureResource.IsLoaded )
+      if( !this.ShaderResource || !this.MeshResource.IsLoaded || !this.MeshTextureResource.IsLoaded || !gDrawable)
          {
          return;
          }
       
       gl.useProgram( this.ShaderResource.Program.Context );
-      gl.bindFramebuffer( gl.FRAMEBUFFER, gSkyPassFrameBuffer.Context );
+      gl.bindFramebuffer( gl.FRAMEBUFFER, gSecondPassFrameBuffer.Context );
       /////// Vertex Attributes
 
       gl.enableVertexAttribArray( this.ShaderResource.VertexPosAttr.Context );
@@ -46,12 +46,12 @@
       }
    }
 
-gSkyPassFrameBuffer = {};
+gSecondPassFrameBuffer = {};
 
-gSkyPassFrameBuffer.Init = function()
+gSecondPassFrameBuffer.Init = function()
    {
-   gSkyPassFrameBuffer.Context = gl.createFramebuffer();
-   gl.bindFramebuffer( gl.FRAMEBUFFER, gSkyPassFrameBuffer.Context );
+   gSecondPassFrameBuffer.Context = gl.createFramebuffer();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, gSecondPassFrameBuffer.Context );
    // Use the depth buffer in geometry pass
    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.GeometryDepthBuffer.Context );
 

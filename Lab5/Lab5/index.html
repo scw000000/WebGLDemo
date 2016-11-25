@@ -383,6 +383,27 @@ precision mediump float;
      //   gl_FragColor = vec4( 1, 0, 0, 1 );
         }
 </script>
+
+<script id="lightCubeShader-vs" type="x-shader/x-vertex">
+precision mediump float;
+    attribute vec3 aVertexPosition;
+
+    uniform mat4 uMVPMatrix;
+
+    void main(void) {
+        gl_Position = uMVPMatrix * vec4( aVertexPosition, 1.0 );
+    }
+</script>
+
+<script id="lightCubeShader-fs" type="x-shader/x-fragment">
+precision mediump float;
+    uniform vec4 uLightColor; 
+
+    void main(void) 
+        {
+        gl_FragColor = uLightColor; 
+        }
+</script>
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2d.js"></script>
@@ -426,13 +447,20 @@ precision mediump float;
 
 <body onload="webGLStart();">
 
-    <canvas id="WebGL-canvas" style="border: none;" width="400" height="300"></canvas>
+    <canvas id="WebGL-canvas" style="border: none;" width="800" height="600"></canvas>
 
     <br/>
 
     <h4 id="RenderControlOption">- Control Render Output</br> </br> </h4> 
 
     <h4 id="SSAOControlOption">- Control SSAO parameters</br> </br> </h4> 
+
+    <h4 id="Instruction">- How to execute on your browser:</h4> 
+    <h4>     1. Currently it will only support Google Chrome</br>
+             2. Enter about:flags in address bar.</br>
+             3. Find the field "WebGL 2.0 Prototype" and enable it.
+        </h4> 
+
 </body>
 
 

@@ -296,6 +296,7 @@ var sphereNode;
 var meshNode;
 var forwardShader;
 var skySphereShader;
+var lightCubeShader;
 var textureRes = {};
 var meshRes = {};
 var skySphereRes = {};
@@ -310,10 +311,11 @@ function webGLStart()
    globalScene = new Scene();
    
    gQuadResource.Init();
+   gCubeResource.Init();
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
    gSSAODrawer.Init();
-   gSkyPassFrameBuffer.Init();
+   gSecondPassFrameBuffer.Init();
 
    gRenderFunction = function()
       { 
@@ -356,7 +358,7 @@ function webGLStart()
    skySphereNode = new SkySphereSceneNode( skySphereShader, skySphereRes, skyMapRes );
    skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
    
-   globalScene.AddSceneNode( skySphereNode, 1 );
+   globalScene.AddSceneNode( skySphereNode, 2 );
  //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
 //   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
  //  meshNode2.Shininess = 1.0;
@@ -366,10 +368,13 @@ function webGLStart()
    //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
    //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    //globalScene.AddSceneNode( sphereNode );
+   lightCubeShader = new LightCubeShaderResource( );
+   lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
 
-   globalLight = new PointLightSceneNode( vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ) );
+
+   globalLight = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
-   globalScene.AddSceneNode( globalLight, 0 );
+   globalScene.AddSceneNode( globalLight, 1 );
 
    controllingNode = globalLight;
    

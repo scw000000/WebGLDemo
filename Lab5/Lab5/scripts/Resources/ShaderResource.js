@@ -281,3 +281,22 @@ class SkySphereShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class LightCubeShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.mvpMatrixUni = {};
+      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" );
+
+      this.LightColorUni = {};
+      this.LightColorUni.Context = gl.getUniformLocation( this.Program.Context, "uLightColor" );
+      
+      this.OnLoaded();
+      }
+   }

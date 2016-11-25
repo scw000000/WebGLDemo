@@ -4,11 +4,17 @@
       {
       this.TransformStack = new TransformStack();
       // construct a empty dummy node
-      this.DeferredPassNodes = new SceneNodes();
-      this.SkyPassNode = new SceneNodes();
       this.RootNode = new SceneNodes();
+
+      this.DeferredPassNodes = new SceneNodes();
       this.RootNode.AddChild( this.DeferredPassNodes );
-      this.RootNode.AddChild( this.SkyPassNode );
+
+      this.SkySpherePassNode = new SceneNodes();
+      this.RootNode.AddChild( this.SkySpherePassNode );
+
+      this.LightPassNode = new SceneNodes();
+      this.RootNode.AddChild( this.LightPassNode );
+      
       this.CameraNode = new CameraNode();
       //this.AddSceneNode( this.CameraNode );
       }
@@ -28,8 +34,12 @@
          this.DeferredPassNodes.AddChild( sceneNode );
          }
       else if( pass == 1 )
+         {     
+         this.LightPassNode.AddChild( sceneNode );
+         }
+      else if( pass == 2 )
          {
-         this.SkyPassNode.AddChild( sceneNode );
+         this.SkySpherePassNode.AddChild( sceneNode );
          }
       
       }
@@ -48,7 +58,8 @@
          gSSAODrawer.DrawSSAO();
          gSSAODrawer.DrawBlur();
          gDeferredDrawer.FinalRender();
-         this.SkyPassNode.RenderChildren();
+         this.LightPassNode.RenderChildren();
+         this.SkySpherePassNode.RenderChildren();
          ouputBuffer();
          //gl.bindFramebuffer( gl.READ_FRAMEBUFFER, gDeferredDrawer.GeometryFrameBuffer.Context );
          //gl.bindFramebuffer( gl.DRAW_FRAMEBUFFER, null ); 
