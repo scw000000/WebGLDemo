@@ -328,7 +328,7 @@ function webGLStart()
    forwardShader = new ForwardShaderResource();
    forwardShader.Load( "shader-vs", "shader-fs" );
 
-   meshNode = new MeshSceneNode( forwardShader, meshRes, textureRes );
+   meshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureRes );
    meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
    meshNode.Shininess = 10.0;
    meshNode.MaterialAmbient= vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
