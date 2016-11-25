@@ -181,7 +181,7 @@ void main(void)
 
  <script id="deferredLightShader-fs" type="x-shader/x-fragment">
     precision mediump float;
-
+    const int MAXIMUM_LIGHT_SUPPORTED = 50;
     varying vec2 vVertexUV;
 
     uniform sampler2D uPositionTex_CameraSpace; 
@@ -190,11 +190,12 @@ void main(void)
     uniform sampler2D uMaterialDiffuseTex; 
     uniform sampler2D uBlurTex; 
 
-    uniform vec3 uLightPos_CameraSpace;
+    uniform int uLightNum;
 
-    uniform vec4 uLightAmbient; 
-    uniform vec4 uLightDiffuse; 
-    uniform vec4 uLightSpecular;
+    uniform vec3 uLightPos_CameraSpace[ MAXIMUM_LIGHT_SUPPORTED ];
+    uniform vec4 uLightAmbient[ MAXIMUM_LIGHT_SUPPORTED ]; 
+    uniform vec4 uLightDiffuse[ MAXIMUM_LIGHT_SUPPORTED ]; 
+    uniform vec4 uLightSpecular[ MAXIMUM_LIGHT_SUPPORTED ];
 
     uniform int uUseSSAO;
 
@@ -216,24 +217,50 @@ void main(void)
     temp = texture2D( uMaterialDiffuseTex, vVertexUV );
     vec4 materialDiffuse = vec4( temp.xyz, 1 ); 
     materialSpecular.z = temp.w;
-     
-    vec3 lightVec = normalize( uLightPos_CameraSpace - vertexPos_CameraSpace ); 
+    
+    gl_FragColor = vec4( 0.0 );
+    for( int i = 0; i < MAXIMUM_LIGHT_SUPPORTED; ++i )
+        {
+        if( i == uLightNum )
+            {
+            break;
+            }
+        vec3 lightVec = normalize( uLightPos_CameraSpace[ i ] - vertexPos_CameraSpace ); 
 
-    vec3 eyeVec = normalize( -vertexPos_CameraSpace );
+        vec3 eyeVec = normalize( -vertexPos_CameraSpace );
       
-    float ndotl = max( dot( vertexNormal_CameraSpace, lightVec ), 0.0 ); 
+        float ndotl = max( dot( vertexNormal_CameraSpace, lightVec ), 0.0 ); 
 
-    vec4 diffuse = uLightDiffuse * ndotl;
+        vec4 diffuse = uLightDiffuse[ i ] * ndotl;
 
-    vec3 reflectVec = normalize( 2.0 * ndotl * vertexNormal_CameraSpace - lightVec );
+        vec3 reflectVec = normalize( 2.0 * ndotl * vertexNormal_CameraSpace - lightVec );
         
-    float rdotv = max( dot( reflectVec, eyeVec ), 0.0 );
+        float rdotv = max( dot( reflectVec, eyeVec ), 0.0 );
 
-    vec4 specular = vec4( 0, 0, 0, 1); 
-    if ( ndotl > 0.0 ) 
-        specular = uLightSpecular * pow( rdotv, shininess ); 
+        vec4 specular = vec4( 0, 0, 0, 1); 
+        if ( ndotl > 0.0 ) 
+            specular = uLightSpecular[ i ] * pow( rdotv, shininess ); 
 
-    gl_FragColor = albedo * uLightAmbient + diffuse * materialDiffuse + specular * materialSpecular; 
+        gl_FragColor += albedo * uLightAmbient[ i ] + diffuse * materialDiffuse + specular * materialSpecular; 
+        }
+
+   // vec3 lightVec = normalize( uLightPos_CameraSpace - vertexPos_CameraSpace ); 
+
+ //   vec3 eyeVec = normalize( -vertexPos_CameraSpace );
+      
+  //  float ndotl = max( dot( vertexNormal_CameraSpace, lightVec ), 0.0 ); 
+
+  //  vec4 diffuse = uLightDiffuse * ndotl;
+
+  //  vec3 reflectVec = normalize( 2.0 * ndotl * vertexNormal_CameraSpace - lightVec );
+        
+ //   float rdotv = max( dot( reflectVec, eyeVec ), 0.0 );
+
+  //  vec4 specular = vec4( 0, 0, 0, 1); 
+  //  if ( ndotl > 0.0 ) 
+ //       specular = uLightSpecular * pow( rdotv, shininess ); 
+
+  //  gl_FragColor = albedo * uLightAmbient + diffuse * materialDiffuse + specular * materialSpecular; 
     gl_FragColor.a = 1.0;
     
    // gl_FragColor = materialSpecular;
@@ -427,6 +454,7 @@ precision mediump float;
 <script type="text/javascript" src="scripts\Transform.js"></script>
 <script type="text/javascript" src="scripts\TransformStack.js"></script>
 <script type="text/javascript" src="scripts\Scene.js"></script>
+<script type="text/javascript" src="scripts\LightManager.js"></script>
 
 <script type="text/javascript" src="scripts\SceneNodes\SceneNodes.js"></script>
 <script type="text/javascript" src="scripts\SceneNodes\CameraNode.js"></script>

@@ -241,16 +241,37 @@ gDeferredDrawer.FinalRender = function()
 	gl.bindTexture( gl.TEXTURE_2D, gSSAODrawer.BlurTexture.Context );  
 	gl.uniform1i( gDeferredDrawer.LightShaderResource.BlurTextureUni.Context, 4 );  
 
-   // Uniforms for lights
-   var lightGlobalTransform = globalLight.GetGlobalTransform();
-   var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
-   var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
-    
-   gl.uniform3f( gDeferredDrawer.LightShaderResource.LightPositionUni.Context, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );   
+   ///// Lights
 
-   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightAmbientUni.Context, globalLight.Ambient[ 0 ], globalLight.Ambient[ 1 ], globalLight.Ambient[ 2 ], globalLight.Ambient[ 3 ] );
-   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, globalLight.Diffuse[ 0 ], globalLight.Diffuse[ 1 ], globalLight.Diffuse[ 2 ], globalLight.Diffuse[ 3 ] );
-   gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni.Context, globalLight.Specular[ 0 ], globalLight.Specular[ 1 ], globalLight.Specular[ 2 ], globalLight.Specular[ 3 ] );
+   // Uniforms for lights
+   //var lightGlobalTransform = gLightManager.LightNodes[ 0 ].GetGlobalTransform();
+   //var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
+   //var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
+    
+   //gl.uniform3f( gDeferredDrawer.LightShaderResource.LightPositionUni.Context, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );   
+
+   //gl.uniform4f( gDeferredDrawer.LightShaderResource.LightAmbientUni.Context, gLightManager.LightNodes[ 0 ].Ambient[ 0 ], gLightManager.LightNodes[ 0 ].Ambient[ 1 ], gLightManager.LightNodes[ 0 ].Ambient[ 2 ], gLightManager.LightNodes[ 0 ].Ambient[ 3 ] );
+   //gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni.Context, gLightManager.LightNodes[ 0 ].Diffuse[ 0 ], gLightManager.LightNodes[ 0 ].Diffuse[ 1 ], gLightManager.LightNodes[ 0 ].Diffuse[ 2 ], gLightManager.LightNodes[ 0 ].Diffuse[ 3 ] );
+   //gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni.Context, gLightManager.LightNodes[ 0 ].Specular[ 0 ], gLightManager.LightNodes[ 0 ].Specular[ 1 ], gLightManager.LightNodes[ 0 ].Specular[ 2 ], gLightManager.LightNodes[ 0 ].Specular[ 3 ] );
+
+   var readLightNum = Math.min( gLightManager.MaximumLightSupported, gLightManager.LightNodes.length );
+   for( var i = 0; i < readLightNum; ++i )
+      {
+      var lightGlobalTransform = gLightManager.LightNodes[ i ].GetGlobalTransform();
+      var lightPositionWorld = mat4.getTranslation( vec3.create(), lightGlobalTransform );
+      var lightPositionCamera = vec3.transformMat4( vec3.create(), lightPositionWorld, globalScene.CameraNode.VMatrix );
+    
+      gl.uniform3f( gDeferredDrawer.LightShaderResource.LightPositionUni[ i ].Context, lightPositionCamera[ 0 ], lightPositionCamera[ 1 ], lightPositionCamera[ 2 ] );   
+
+      gl.uniform4f( gDeferredDrawer.LightShaderResource.LightAmbientUni[ i ].Context, gLightManager.LightNodes[ i ].Ambient[ 0 ], gLightManager.LightNodes[ i ].Ambient[ 1 ], gLightManager.LightNodes[ i ].Ambient[ 2 ], gLightManager.LightNodes[ i ].Ambient[ 3 ] );
+      gl.uniform4f( gDeferredDrawer.LightShaderResource.LightDiffuseUni[ i ].Context, gLightManager.LightNodes[ i ].Diffuse[ 0 ], gLightManager.LightNodes[ i ].Diffuse[ 1 ], gLightManager.LightNodes[ i ].Diffuse[ 2 ], gLightManager.LightNodes[ i ].Diffuse[ 3 ] );
+      gl.uniform4f( gDeferredDrawer.LightShaderResource.LightSpecularUni[ i ].Context, gLightManager.LightNodes[ i ].Specular[ 0 ], gLightManager.LightNodes[ i ].Specular[ 1 ], gLightManager.LightNodes[ i ].Specular[ 2 ], gLightManager.LightNodes[ i ].Specular[ 3 ] );
+      }
+
+   gl.uniform1i( gDeferredDrawer.LightShaderResource.LightNumUni.Context, readLightNum );
+
+   //gLightManager
+
 
    gl.uniform1i( gDeferredDrawer.LightShaderResource.UseSSAOUni.Context, gDeferredDrawer.UseSSAO );
 

@@ -36,6 +36,7 @@
       else if( pass == 1 )
          {     
          this.LightPassNode.AddChild( sceneNode );
+         gLightManager.AddLight( sceneNode );
          }
       else if( pass == 2 )
          {

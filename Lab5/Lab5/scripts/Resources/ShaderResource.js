@@ -49,19 +49,19 @@ class ForwardShaderResource extends ShaderResource
       this.ShininessUni = {};
       this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
 
-      this.MaterialAmbientUni = {};
-      this.MaterialAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
-      this.MaterialDiffuseUni = {};
-      this.MaterialDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
-      this.MaterialSpecularUni = {};
-      this.MaterialSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
-
       this.LightAmbientUni = {};
-      this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialAmbient" );
+      this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
       this.LightDiffuseUni = {};
-      this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuse" );
+      this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
       this.LightSpecularUni = {};
-      this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialSpecular" );
+      this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
+
+      this.MaterialAmbientUni = {};
+      this.MaterialAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialAmbient" );
+      this.MaterialDiffuseUni = {};
+      this.MaterialDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialDiffuse" );
+      this.MaterialSpecularUni = {};
+      this.MaterialSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uMaterialSpecular" );
 
       this.MeshTextureUni = {};
       this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
@@ -164,18 +164,40 @@ class DeferredLightShaderResource extends ShaderResource
       this.BlurTextureUni = {};
       this.BlurTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uBlurTex" );
 
-      this.LightPositionUni = {};
-      this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );
+      //this.LightPositionUni = {};
+      //this.LightPositionUni.Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace" );
 
       this.ShininessUni = {};
       this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );
 
-      this.LightAmbientUni = {};
-      this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
-      this.LightDiffuseUni = {};
-      this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
-      this.LightSpecularUni = {};
-      this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
+      this.LightPositionUni = [];
+      this.LightAmbientUni = [];
+      this.LightDiffuseUni = [];
+      this.LightSpecularUni = [];
+      for( var i = 0; i < gLightManager.MaximumLightSupported; ++i )
+         { 
+         this.LightPositionUni[ i ] = {};
+         this.LightPositionUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uLightPos_CameraSpace[" + i + "]" );
+
+         this.LightAmbientUni[ i ] = {};
+         this.LightAmbientUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient[" + i + "]" );
+         
+         this.LightDiffuseUni[ i ] = {};
+         this.LightDiffuseUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse[" + i + "]" );
+         
+         this.LightSpecularUni[ i ] = {};
+         this.LightSpecularUni[ i ].Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular[" + i + "]" );
+         }
+
+      this.LightNumUni = {};
+      this.LightNumUni.Context = gl.getUniformLocation( this.Program.Context, "uLightNum" );
+
+      //this.LightAmbientUni = {};
+      //this.LightAmbientUni.Context = gl.getUniformLocation( this.Program.Context, "uLightAmbient" );
+      //this.LightDiffuseUni = {};
+      //this.LightDiffuseUni.Context = gl.getUniformLocation( this.Program.Context, "uLightDiffuse" );
+      //this.LightSpecularUni = {};
+      //this.LightSpecularUni.Context = gl.getUniformLocation( this.Program.Context, "uLightSpecular" );
 
       this.UseSSAOUni = {};
       this.UseSSAOUni.Context = gl.getUniformLocation( this.Program.Context, "uUseSSAO" );

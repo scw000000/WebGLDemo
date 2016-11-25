@@ -310,6 +310,7 @@ function webGLStart()
 
    globalScene = new Scene();
    
+   gLightManager.Init();
    gQuadResource.Init();
    gCubeResource.Init();
    gTextureDrawer.Init();
@@ -371,10 +372,20 @@ function webGLStart()
    lightCubeShader = new LightCubeShaderResource( );
    lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
 
+   var dummyNode = new SceneNodes();
+   dummyNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 10, 0 ) );
 
    globalLight = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
-   globalScene.AddSceneNode( globalLight, 1 );
+   dummyNode.AddChild( globalLight );
+   //globalScene.AddSceneNode( globalLight, 1 );
+
+   var light = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 0.0, 0.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
+   light.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 50 ) );
+   dummyNode.AddChild( light )
+   //globalScene.AddSceneNode( light, 1 );
+
+   globalScene.AddSceneNode( dummyNode, 1 );
 
    controllingNode = globalLight;
    
