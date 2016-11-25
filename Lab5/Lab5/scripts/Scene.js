@@ -4,18 +4,34 @@
       {
       this.TransformStack = new TransformStack();
       // construct a empty dummy node
+      this.DeferredPassNodes = new SceneNodes();
+      this.SkyPassNode = new SceneNodes();
       this.RootNode = new SceneNodes();
+      this.RootNode.AddChild( this.DeferredPassNodes );
+      this.RootNode.AddChild( this.SkyPassNode );
       this.CameraNode = new CameraNode();
       //this.AddSceneNode( this.CameraNode );
       }
 
-   AddSceneNode( sceneNode )
+   AddSceneNode( sceneNode, pass )
       {
       if( sceneNode == null )
          {
          return;
          }
-      this.RootNode.AddChild( sceneNode );
+      if( pass == null )
+         {
+         this.RootNode.AddChild( sceneNode );
+         }
+      else if( pass == 0 )
+         {
+         this.DeferredPassNodes.AddChild( sceneNode );
+         }
+      else if( pass == 1 )
+         {
+         this.SkyPassNode.AddChild( sceneNode );
+         }
+      
       }
 
    OnRestore()
@@ -28,7 +44,9 @@
       this.CameraNode.SetVPMatrix();
       if( this.RootNode != null && this.CameraNode != null )
          {
-         this.RootNode.RenderChildren();
+         this.DeferredPassNodes.RenderChildren();
+
+         this.SkyPassNode.RenderChildren();
          }
       else
          {

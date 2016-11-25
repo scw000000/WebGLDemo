@@ -333,7 +333,7 @@ function webGLStart()
    meshNode.Shininess = 10.0;
    meshNode.MaterialAmbient= vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
   // meshNode.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
-   globalScene.AddSceneNode( meshNode );
+   globalScene.AddSceneNode( meshNode, 0 );
 
    skySphereRes = new MeshResource();
    skySphereRes.Load( "skySphere.json" );
@@ -346,7 +346,7 @@ function webGLStart()
    skySphereNode = new SkySphereSceneNode( skySphereShader, skySphereRes, skyMapRes );
    skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
    
-   globalScene.AddSceneNode( skySphereNode );
+   globalScene.AddSceneNode( skySphereNode, 1 );
  //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
 //   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
  //  meshNode2.Shininess = 1.0;
@@ -359,7 +359,7 @@ function webGLStart()
 
    globalLight = new PointLightSceneNode( vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ), vec4.fromValues( 1, 1, 1, 1.0 ) );
    globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
-   globalScene.AddSceneNode( globalLight );
+   globalScene.AddSceneNode( globalLight, 0 );
 
    controllingNode = globalLight;
    
