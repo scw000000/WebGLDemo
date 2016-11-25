@@ -210,13 +210,8 @@ void main(void)
     vec4 materialSpecular = vec4( temp.w, 0, 0, 1 );
 
     temp = texture2D( uAlbedoTex, vVertexUV );  
-    vec4 albedo = vec4( temp.xyz, 1 );
+    vec4 albedo = vec4( temp.xyz, 1 ) * ( uUseSSAO == 1 ? texture2D( uBlurTex, vVertexUV ).x: 1.0 );
     materialSpecular.y = temp.w;
-
-    if( uUseSSAO == 1 )
-        {
-        albedo *= texture2D( uBlurTex, vVertexUV );
-        }
 
     temp = texture2D( uMaterialDiffuseTex, vVertexUV );
     vec4 materialDiffuse = vec4( temp.xyz, 1 ); 
@@ -310,11 +305,7 @@ void main(void)
             projectPoint = texture2D( uPositionTex_CameraSpace, projectPoint.xy ).xyz;
  
             // sample point is behind the projected point -> occolued
-            if( -projectPoint.z < -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= uSampleRadius )
-                {
-                occlusion += abs( 1.0 );
-                }
-            
+            occlusion += ( -projectPoint.z <= -samplePoint.z && abs( projectPoint.z - samplePoint.z ) <= uSampleRadius ) ? 1.0: 0.0;
             }
      
         // inverse the occlusion value, higher occlusion means darker
@@ -419,6 +410,7 @@ precision mediump float;
 <script type="text/javascript" src="scripts\SceneNodes\CameraNode.js"></script>
 <script type="text/javascript" src="scripts\SceneNodes\GeometrySceneNodes.js"></script>
 <script type="text/javascript" src="scripts\SceneNodes\MeshSceneNodes.js"></script>
+<script type="text/javascript" src="scripts\SceneNodes\SkySphereSceneNode.js"></script>
 <script type="text/javascript" src="scripts\SceneNodes\PointLightSceneNode.js"></script>
 
 <script type="text/javascript" src="scripts\shaders_setup.js"></script>

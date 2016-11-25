@@ -26,16 +26,14 @@ class TextureResource extends Resource
 
    Load( fileName )
       {
-      console.log("loading texture....");
+      console.log("loading texture " + fileName );
       this.image = new Image();
       this.image.onload = this.Onloaded.bind( this );
       this.image.src = fileName;      
-      console.log("loading texture....!");
       }
 
    Onloaded()
       {
-      console.log("loaded");
       gl.bindTexture(gl.TEXTURE_2D, this.Context );
       gl.pixelStorei( gl.UNPACK_ALIGNMENT, 1 );
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.image);
@@ -43,7 +41,7 @@ class TextureResource extends Resource
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
       gl.bindTexture(gl.TEXTURE_2D, null);
       super.OnLoaded();
-      console.log("loading complete!!");
+      console.log("texture loading complete!!");
       }
    }
 
@@ -61,7 +59,7 @@ class MeshResource extends Resource
 
    Load( fileName )
       {
-      console.log("loading mesh....");
+      console.log("loading mesh " + fileName );
       var request = new  XMLHttpRequest();
       request.open( "GET", fileName );    
       var self = this;
@@ -132,7 +130,7 @@ class MeshResource extends Resource
       console.log("*****zmin = "+zmin + "zmax = "+zmax);       
 
       super.OnLoaded();
-      console.log("loading complete!!");
+      console.log("Mesh loading complete!!");
       }
    }
 

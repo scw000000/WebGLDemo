@@ -106,6 +106,7 @@ gSSAODrawer.Init = function()
    for( var i = 0; i < gSSAODrawer.SampleNum.Max; ++i )
       {
       var randomVec = vec3.fromValues(( Math.random() - 0.5 ) * 2.0, ( Math.random() - 0.5 ) * 2.0, Math.random() );
+      //var randomVec = vec3.fromValues(( Math.random() - 0.5 ) * 2.0, ( Math.random() - 0.5 ) * 2.0, ( Math.random() - 0.5 ) * 2.0 );
       vec3.normalize( randomVec, randomVec );
       //var scale = i / gSSAODrawer.SamplePoints.Num;
       var scale = Math.random();

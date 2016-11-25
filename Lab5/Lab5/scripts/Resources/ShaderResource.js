@@ -258,3 +258,26 @@ class BlurShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class SkySphereShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      this.mvpMatrixUni = {};
+      this.mvpMatrixUni.Context = gl.getUniformLocation( this.Program.Context, "uMVPMatrix" );
+
+      this.MeshTextureUni = {};
+      this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
+      
+      this.OnLoaded();
+      }
+   }

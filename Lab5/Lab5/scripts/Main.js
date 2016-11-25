@@ -289,9 +289,12 @@ var globalLight;
 var sphereNode;
 var meshNode;
 var forwardShader;
+var skySphereShader;
 var textureRes = {};
 var meshRes = {};
-
+var skySphereRes = {};
+var skyMapRes = {};
+var skySphereNode;
 function webGLStart() 
    {
    canvas = document.getElementById("WebGL-canvas");
@@ -332,6 +335,16 @@ function webGLStart()
   // meshNode.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
    globalScene.AddSceneNode( meshNode );
 
+   skySphereRes = new MeshResource();
+   skySphereRes.Load( "skySphere.json" );
+
+   skyMapRes = new TextureResource();
+   skyMapRes.Load( "skyMap.png" );
+
+   skySphereShader = new SkySphereShaderResource( );
+   skySphereShader.Load( "skyShader-vs", "skyShader-fs" );
+   skySphereNode = new SkySphereSceneNode( skySphereShader, skySphereRes, skyMapRes );
+   globalScene.AddSceneNode( skySphereNode );
  //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
 //   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
  //  meshNode2.Shininess = 1.0;
