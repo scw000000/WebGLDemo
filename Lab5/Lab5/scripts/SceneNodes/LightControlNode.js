@@ -247,7 +247,7 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode.GammaScalar = {};
    gLightBrightnessControlNode.GammaScalar.Min = 0.1
    gLightBrightnessControlNode.GammaScalar.Max = 20.0;
-   gLightBrightnessControlNode.GammaScalar.Value = 9;
+   gLightBrightnessControlNode.GammaScalar.Value = 8.5;
    gLightBrightnessControlNode.Smoothness = 0.2;
    var invRadius = 1 / gLightBrightnessControlNode.Radius;
    gLightBrightnessControlNode.Nomalizer = vec3.fromValues( invRadius, invRadius, invRadius );

@@ -284,7 +284,7 @@ class BlurShaderResource extends ShaderResource
       }
    }
 
-class SkySphereShaderResource extends ShaderResource
+class TextureMeshShaderResource extends ShaderResource
    {
    InitAttrbutesAndUniforms()
       {

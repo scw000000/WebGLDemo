@@ -65,6 +65,25 @@ gCubeResource.Init = function()
    gCubeResource.VertexPosBuffer.ItemSize = 3;
    gCubeResource.VertexPosBuffer.NumItems = vertexPos.length / gCubeResource.VertexPosBuffer.ItemSize; 
 
+   var uvs = [
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+             0.0, 0.0,
+             0.0, 1.0,
+             1.0, 1.0,
+            1.0, 0.0
+      ];
+
+   gCubeResource.VertexUVBuffer = {};
+   gCubeResource.VertexUVBuffer.Context = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexUVBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( uvs ), gl.STATIC_DRAW );
+   gCubeResource.VertexUVBuffer.ItemSize = 2;
+   gCubeResource.VertexUVBuffer.NumItems = uvs.length / gCubeResource.VertexUVBuffer.ItemSize; 
+
    var indices = [
             0, 1, 2,   0, 2, 3,    // Front face
             4, 5, 6,   4, 6, 7,    // Back face
@@ -82,4 +101,6 @@ gCubeResource.Init = function()
    gCubeResource.VertexIndexBuffer.NumItems = indices.length;
 
 
+
+  
    }

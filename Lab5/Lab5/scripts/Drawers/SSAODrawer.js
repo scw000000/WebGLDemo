@@ -12,7 +12,7 @@ gSSAODrawer.Init = function()
    gSSAODrawer.SampleRadius = {};
    gSSAODrawer.SampleRadius.Min = 0.3;
    gSSAODrawer.SampleRadius.Max = 30.0;
-   gSSAODrawer.SampleRadius.Value = 3.0;
+   gSSAODrawer.SampleRadius.Value = 14;
 
    gSSAODrawer.SampleNum = {};
    gSSAODrawer.SampleNum.Min = 10;
@@ -22,7 +22,7 @@ gSSAODrawer.Init = function()
    gSSAODrawer.SSAOPower = {};
    gSSAODrawer.SSAOPower.Min = 0.3;
    gSSAODrawer.SSAOPower.Max = 20.0;
-   gSSAODrawer.SSAOPower.Value = 2.0;
+   gSSAODrawer.SSAOPower.Value = 9.5;
 
    gSSAODrawer.SSAOShaderResource = new SSAOShaderResource();
    gSSAODrawer.SSAOShaderResource.Load( "SSAOShader-vs", "SSAOShader-fs" );

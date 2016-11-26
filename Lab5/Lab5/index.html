@@ -230,7 +230,7 @@ void main(void)
         vec3 distanceVec = uLightPos_CameraSpace[ i ] - vertexPos_CameraSpace;
         if( dot( distanceVec, distanceVec ) > uLightRadiusSqr )
             {
-            gl_FragColor += albedo * uLightAmbient[ i ];
+           // gl_FragColor += albedo * uLightAmbient[ i ];
             continue;
             }
         vec3 lightVec = normalize( distanceVec ); 
@@ -373,7 +373,7 @@ void main(void)
 </script>
 
 
-<script id="skyShader-vs" type="x-shader/x-vertex">
+<script id="textureMeshShader-vs" type="x-shader/x-vertex">
 precision mediump float;
     attribute vec3 aVertexPosition;
     attribute vec2 aVertexUV;
@@ -388,7 +388,7 @@ precision mediump float;
     }
 </script>
 
-<script id="skyShader-fs" type="x-shader/x-fragment">
+<script id="textureMeshShader-fs" type="x-shader/x-fragment">
 precision mediump float;
     varying vec2 vVertexUV;
 

@@ -293,7 +293,7 @@ function CreateLightControlButtons()
    }
 
 var globalLight;
-var skySphereShader;
+var textureMeshShader;
 var lightCubeShader;
 var textureRes = {};
 var meshRes = {};
@@ -343,9 +343,9 @@ function webGLStart()
    skyMapRes = new TextureResource();
    skyMapRes.Load( "skyMap.png" );
 
-   skySphereShader = new SkySphereShaderResource( );
-   skySphereShader.Load( "skyShader-vs", "skyShader-fs" );
-   skySphereNode = new SkySphereSceneNode( skySphereShader, skySphereRes, skyMapRes );
+   textureMeshShader = new TextureMeshShaderResource( );
+   textureMeshShader.Load( "textureMeshShader-vs", "textureMeshShader-fs" );
+   skySphereNode = new SkySphereSceneNode( textureMeshShader, skySphereRes, skyMapRes );
    skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
    
    globalScene.AddSceneNode( skySphereNode, 2 );
