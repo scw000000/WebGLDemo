@@ -83,7 +83,7 @@ function UpdateLights()
       gLightControlNode.AudioResource.audio.loop = true;
       }
 
-   gLightControlNode.LocalTransform.RotateToWorldRad( 0.01, g_Up3v );
+   
    
    if( !gLightControlNode.AudioResource.audio.paused )
       {
@@ -91,94 +91,112 @@ function UpdateLights()
       
       for( var i in gLightControlNode.ChildNodes )
          {
-         var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightControlNode.ChildNodes.length );
+         //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightControlNode.ChildNodes.length );
+         //var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+         //var lightPos = gLightControlNode.ChildNodes[ i ].LocalTransform.GetToWorldPosition();
+         //lightPos[ 1 ] += gLightControlNode.Smoothness * ( normalizedFreq * gLightControlNode.LightMaxHeight - lightPos[ 1 ] );
+         //gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
+         var lightPos = gLightControlNode.ChildNodes[ i ].GlobalTransform.GetToWorldPosition();
+         var cos = lightPos[ 0 ] / gLightControlNode.Radius;
+       //  var rightVec = vec3.fromValues( lightPos[ 2 ] / gLightControlNode.Radius, 0, lightPos[ 0 ] / gLightControlNode.Radius );
+         var leftCos = lightPos[ 2 ] / gLightControlNode.Radius;
+         var freqIdxRatio = ( cos + 1 ) * 0.25;
+         if( leftCos < 0 )
+            {
+            freqIdxRatio = 1 - freqIdxRatio;
+            }
+
+         var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * freqIdxRatio );
+         freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
          var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
-         var lightPos = gLightControlNode.ChildNodes[ i ].LocalTransform.GetToWorldPosition();
+         
          lightPos[ 1 ] += gLightControlNode.Smoothness * ( normalizedFreq * gLightControlNode.LightMaxHeight - lightPos[ 1 ] );
+         vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transthis point to local space
          gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
          }
       }
+   gLightControlNode.LocalTransform.RotateToWorldRad( 0.01, g_Up3v );
       
    }
 
-var gSecondLightControlNode;
+//var gSecondLightControlNode;
 
-function InitSecondLightControlNode()
-   {
-   gSecondLightControlNode = new SceneNodes();
-   gSecondLightControlNode.LightNum = 40;
-   gSecondLightControlNode.Radius = 75;
-   gSecondLightControlNode.LightMaxHeight = 60;
-   gSecondLightControlNode.Smoothness = 0.1;
+//function InitSecondLightControlNode()
+//   {
+//   gSecondLightControlNode = new SceneNodes();
+//   gSecondLightControlNode.LightNum = 40;
+//   gSecondLightControlNode.Radius = 75;
+//   gSecondLightControlNode.LightMaxHeight = 60;
+//   gSecondLightControlNode.Smoothness = 0.1;
 
-   gSecondLightControlNode.LightsPerCycle = 17;
-   gSecondLightControlNode.HeightPerCycle = 75;
-   gSecondLightControlNode.SpiralScalar = Math.PI * 2 / gSecondLightControlNode.LightsPerCycle;
-   gSecondLightControlNode.yOffset = -gSecondLightControlNode.HeightPerCycle * ( gSecondLightControlNode.LightNum / gSecondLightControlNode.LightsPerCycle ) / 2;
-   gSecondLightControlNode.SampleShift = 0;
-   gSecondLightControlNode.SampleShiftSpeed = 0.001;
+//   gSecondLightControlNode.LightsPerCycle = 17;
+//   gSecondLightControlNode.HeightPerCycle = 75;
+//   gSecondLightControlNode.SpiralScalar = Math.PI * 2 / gSecondLightControlNode.LightsPerCycle;
+//   gSecondLightControlNode.yOffset = -gSecondLightControlNode.HeightPerCycle * ( gSecondLightControlNode.LightNum / gSecondLightControlNode.LightsPerCycle ) / 2;
+//   gSecondLightControlNode.SampleShift = 0;
+//   gSecondLightControlNode.SampleShiftSpeed = 0.001;
 
-   var scalar = gSecondLightControlNode.SpiralScalar;
-   var yOffset = gSecondLightControlNode.yOffset;
-   for( var i = 0; i < gSecondLightControlNode.LightNum; ++i )
-      {
-      var lightPos = vec3.fromValues( 
-         gSecondLightControlNode.Radius * Math.cos( scalar * i ), 
-         gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset, 
-         gSecondLightControlNode.Radius * Math.sin( scalar * i )
-         );
-      var lightColor = GetRandomColor();;
+//   var scalar = gSecondLightControlNode.SpiralScalar;
+//   var yOffset = gSecondLightControlNode.yOffset;
+//   for( var i = 0; i < gSecondLightControlNode.LightNum; ++i )
+//      {
+//      var lightPos = vec3.fromValues( 
+//         gSecondLightControlNode.Radius * Math.cos( scalar * i ), 
+//         gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset, 
+//         gSecondLightControlNode.Radius * Math.sin( scalar * i )
+//         );
+//      var lightColor = GetRandomColor();;
 
-      var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
-      light.LocalTransform.SetToWorldPosition( lightPos );
-      gSecondLightControlNode.AddChild( light );
+//      var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
+//      light.LocalTransform.SetToWorldPosition( lightPos );
+//      gSecondLightControlNode.AddChild( light );
 
-      }
+//      }
 
-   globalScene.AddSceneNode( gSecondLightControlNode, 1 );
+//   globalScene.AddSceneNode( gSecondLightControlNode, 1 );
 
-   gSecondLightControlNode.OnUpdate =  UpdateSecondLights;
-   }
+//   gSecondLightControlNode.OnUpdate =  UpdateSecondLights;
+//   }
 
-Math.fmod = function (a,b) { return Number((a - (Math.floor(a / b) * b)).toPrecision(8)); };
+//Math.fmod = function (a,b) { return Number((a - (Math.floor(a / b) * b)).toPrecision(8)); };
 
-function UpdateSecondLights()
-   {
-   if( !gLightControlNode.AudioResource.IsLoaded )
-      {
-      return;
-      }
+//function UpdateSecondLights()
+//   {
+//   if( !gLightControlNode.AudioResource.IsLoaded )
+//      {
+//      return;
+//      }
 
-   gSecondLightControlNode.LocalTransform.RotateToWorldRad( -0.01, g_Up3v );
+//   gSecondLightControlNode.LocalTransform.RotateToWorldRad( -0.01, g_Up3v );
 
-   if( !gLightControlNode.AudioResource.audio.paused )
-      {
-      gSecondLightControlNode.SampleShift += gSecondLightControlNode.SampleShiftSpeed;
-      while( gSecondLightControlNode.SampleShift >= 1.0 )
-         {
-         gSecondLightControlNode.SampleShift -= 1.0;
-         }
-      //console.log( gSecondLightControlNode.SampleShift );
-      var scalar = gSecondLightControlNode.SpiralScalar;
-      var yOffset = gSecondLightControlNode.yOffset;
+//   if( !gLightControlNode.AudioResource.audio.paused )
+//      {
+//      gSecondLightControlNode.SampleShift += gSecondLightControlNode.SampleShiftSpeed;
+//      while( gSecondLightControlNode.SampleShift >= 1.0 )
+//         {
+//         gSecondLightControlNode.SampleShift -= 1.0;
+//         }
+//      //console.log( gSecondLightControlNode.SampleShift );
+//      var scalar = gSecondLightControlNode.SpiralScalar;
+//      var yOffset = gSecondLightControlNode.yOffset;
 
-      for( var i in gSecondLightControlNode.ChildNodes )
-         {
-         var sampleIdxRatio = i / gSecondLightControlNode.ChildNodes.length + gSecondLightControlNode.SampleShift;
-         if( sampleIdxRatio >= 1 )
-            {
-            sampleIdxRatio -= 1;
-            }
-         var freqIdx = Math.min( Math.ceil( gLightControlNode.AudioResource.frequencyData.length * sampleIdxRatio ), gLightControlNode.AudioResource.frequencyData.length - 1 );
+//      for( var i in gSecondLightControlNode.ChildNodes )
+//         {
+//         var sampleIdxRatio = i / gSecondLightControlNode.ChildNodes.length + gSecondLightControlNode.SampleShift;
+//         if( sampleIdxRatio >= 1 )
+//            {
+//            sampleIdxRatio -= 1;
+//            }
+//         var freqIdx = Math.min( Math.ceil( gLightControlNode.AudioResource.frequencyData.length * sampleIdxRatio ), gLightControlNode.AudioResource.frequencyData.length - 1 );
 
-         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+//         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
 
-         var lightPos = gSecondLightControlNode.ChildNodes[ i ].LocalTransform.GetToWorldPosition();
-         var baseY = gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset;
-         var targetY = baseY + normalizedFreq * gSecondLightControlNode.LightMaxHeight;
-         lightPos[ 1 ] += gSecondLightControlNode.Smoothness * ( targetY - lightPos[ 1 ] );
-         gSecondLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
-         }
-      }
+//         var lightPos = gSecondLightControlNode.ChildNodes[ i ].LocalTransform.GetToWorldPosition();
+//         var baseY = gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset;
+//         var targetY = baseY + normalizedFreq * gSecondLightControlNode.LightMaxHeight;
+//         lightPos[ 1 ] += gSecondLightControlNode.Smoothness * ( targetY - lightPos[ 1 ] );
+//         gSecondLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
+//         }
+//      }
       
-   }
+//   }

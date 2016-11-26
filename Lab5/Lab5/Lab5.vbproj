@@ -123,6 +123,8 @@
     <Content Include="index.html" />
     <Content Include="scripts\CameraController.js" />
     <Content Include="scripts\Drawers\SSAODrawer.js" />
+    <Content Include="scripts\SceneNodes\LightControlNode.js" />
+    <Content Include="scripts\LightManager.js" />
     <Content Include="scripts\SceneNodes\CameraNode.js" />
     <Content Include="scripts\Controller.js" />
     <Content Include="scripts\Drawers\DeferredDrawer.js" />
@@ -147,6 +149,7 @@
     <Content Include="scripts\SceneNodes\SceneNodes.js" />
     <Content Include="scripts\Resources\ShaderResource.js" />
     <Content Include="scripts\SceneNodes\SkySphereSceneNode.js" />
+    <Content Include="scripts\SceneNodes\TeapotControlNode.js" />
     <Content Include="scripts\shaders_setup.js" />
     <Content Include="scripts\Drawers\TextureDrawer.js" />
     <Content Include="scripts\Transform.js" />
