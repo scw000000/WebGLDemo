@@ -392,6 +392,7 @@ function webGLStart()
    InitLightControlNode( audioRes );
    //InitSecondLightControlNode();
    InitLightBrightnessControlNode();
+   InitLightScaleControlNode();
    InitTeapotControlNode();
 
    controllingNode = globalLight;

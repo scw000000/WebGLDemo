@@ -313,3 +313,84 @@ function UpdateLightsBrightness()
    gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
       
    }
+
+
+var gLightScaleControlNode;
+
+function InitLightScaleControlNode()
+   {
+   gLightScaleControlNode = new SceneNodes();
+   gLightScaleControlNode.LightNum = 40;
+   gLightScaleControlNode.Radius = 150;
+   gLightScaleControlNode.LightScale = {};
+   gLightScaleControlNode.LightScale.Min = 1;
+   gLightScaleControlNode.LightScale.Max = 40.0;
+
+   gLightScaleControlNode.Smoothness = 0.2;
+   var invRadius = 1 / gLightScaleControlNode.Radius;
+   gLightScaleControlNode.Nomalizer = vec3.fromValues( invRadius, invRadius, invRadius );
+
+   var deltaRad = Math.PI * 2 / gLightScaleControlNode.LightNum;
+   var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightScaleControlNode.Radius );
+
+   var red = vec4.fromValues( 1, 0, 0, 1 );
+   var green = vec4.fromValues( 0, 1, 0, 1 );
+   var blue = vec4.fromValues( 0, 0, 1, 1 );
+   for( var i = 0; i < gLightScaleControlNode.LightNum; ++i )
+      {
+      var idxRatio = i / gLightScaleControlNode.LightNum;
+      var lightColor = GetRandomColor();
+
+      var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
+      light.LocalTransform.SetToWorldPosition( lightPos );
+      light.Scale = 1;
+      gLightScaleControlNode.AddChild( light );
+      vec3.rotateY( lightPos, lightPos, g_Zero3v, deltaRad );
+      }
+   gLightScaleControlNode.LocalTransform.RotateFromWorldRad( -Math.PI / 4, g_Forward3v );
+
+   gLightScaleControlNode.FixedForwardVec = gLightScaleControlNode.LocalTransform.GetForwardVector();
+   gLightScaleControlNode.FixedLeftVec = gLightScaleControlNode.LocalTransform.GetLeftVector();
+   globalScene.AddSceneNode( gLightScaleControlNode, 1 );
+
+   gLightScaleControlNode.OnUpdate =  UpdateLightsScale;
+   }
+
+function UpdateLightsScale()
+   {
+   if( !gLightControlNode.AudioResource.IsLoaded )
+      {
+      return;
+      }
+   
+   if( !gLightControlNode.AudioResource.audio.paused )
+      {
+      for( var i in gLightScaleControlNode.ChildNodes )
+         {
+         var light = gLightScaleControlNode.ChildNodes[ i ];
+         var lightVec = light.GlobalTransform.GetToWorldPosition();
+         // normalize
+         vec3.multiply( lightVec, lightVec, gLightScaleControlNode.Nomalizer );
+         var cos = vec3.dot( lightVec, gLightScaleControlNode.FixedForwardVec );
+         var leftCos = vec3.dot( lightVec, gLightScaleControlNode.FixedLeftVec );
+         var freqIdxRatio = ( cos + 1 ) * 0.25;
+         if( leftCos < 0 )
+            {
+            freqIdxRatio = 1 - freqIdxRatio;
+            }
+
+         var normalizedFreq = gLightControlNode.GetNormalizedFreq( i / gLightScaleControlNode.ChildNodes.length );
+
+         var prevScale = light.Scale;
+         var newScale = prevScale + gLightScaleControlNode.Smoothness * ( normalizedFreq * gLightScaleControlNode.LightScale.Max - prevScale );       
+         newScale = Math.max( newScale, gLightScaleControlNode.LightScale.Min );
+         var scalar = newScale / prevScale;
+
+         mat4.scale( light.LocalTransform.GetToWorld(), light.LocalTransform.GetToWorld(), vec3.fromValues( 1, scalar, 1 ) );
+         //ScaleColor( light.Ambient ,colorScalar, light.OrigColor );
+         light.Scale = newScale;
+         }
+      }
+   gLightScaleControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
+      
+   }
