@@ -90,6 +90,11 @@ class Transform
       return this.GetToWorldVector( g_Up3v );
       }
 
+   GetLeftVector()
+      {
+      return this.GetToWorldVector( g_Left3v );
+      }
+
    RotateToWorldRad( rad, axis )
       {
       this.GetFromWorld();

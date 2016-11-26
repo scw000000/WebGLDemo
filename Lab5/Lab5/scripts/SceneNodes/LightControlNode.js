@@ -61,6 +61,13 @@ function InitLightControlNode( audioRes )
       vec3.rotateY( lightPos, lightPos, g_Zero3v, deltaRad );
       }
 
+   gLightControlNode.GetNormalizedFreq = function( scalar )
+      {
+      var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * scalar );
+      freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
+      return gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+      }
+
    globalScene.AddSceneNode( gLightControlNode, 1 );
 
    gLightControlNode.OnUpdate =  UpdateLights;
@@ -112,10 +119,10 @@ function UpdateLights()
             freqIdxRatio = 1 - freqIdxRatio;
             }
 
-         var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * freqIdxRatio );
-         freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
-         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
-         
+         //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * freqIdxRatio );
+         //freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
+         //var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+         var normalizedFreq = gLightControlNode.GetNormalizedFreq( freqIdxRatio );
          lightPos[ 1 ] += gLightControlNode.Smoothness * ( normalizedFreq * gLightControlNode.LightMaxHeight - lightPos[ 1 ] );
          vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transform this point to local space
          gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
@@ -214,8 +221,8 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode = new SceneNodes();
    gLightBrightnessControlNode.LightNum = 40;
    gLightBrightnessControlNode.Radius = 75;
-   gLightBrightnessControlNode.LightBrightMaxScalar = 1.5;
-   gLightBrightnessControlNode.LightBrightMinScalar = 0.3;
+   gLightBrightnessControlNode.LightBrightMaxScalar = 2.0;
+   gLightBrightnessControlNode.LightBrightMinScalar = 0.4;
    gLightBrightnessControlNode.Smoothness = 0.3;
 
    var deltaRad = Math.PI * 2 / gLightBrightnessControlNode.LightNum;
@@ -247,8 +254,10 @@ function InitLightBrightnessControlNode()
       gLightBrightnessControlNode.AddChild( light );
       vec3.rotateY( lightPos, lightPos, g_Zero3v, deltaRad );
       }
-   gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( Math.PI / 4, g_Forward3v );
+  // gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( Math.PI / 4, g_Forward3v );
 
+   gLightControlNode.FixedForwardVec = gLightControlNode.LocalTransform.GetForwardVector();
+   gLightControlNode.FixedLeftVec = gLightControlNode.LocalTransform.GetLeftVector();
    globalScene.AddSceneNode( gLightBrightnessControlNode, 1 );
 
    gLightBrightnessControlNode.OnUpdate =  UpdateLightsBrightness;
@@ -261,24 +270,50 @@ function UpdateLightsBrightness()
       return;
       }
    
+   
+
    if( !gLightControlNode.AudioResource.audio.paused )
       {
+      var invRadius = 1 / gLightBrightnessControlNode.Radius;
+      var nomalizer = vec3.fromValues( invRadius, invRadius, invRadius );
       for( var i in gLightBrightnessControlNode.ChildNodes )
          {
+        // var light = gLightBrightnessControlNode.ChildNodes[ i ];
+        // var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightBrightnessControlNode.ChildNodes.length );
+        // var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+        // var prevBrightness = light.Brightness;
+        // var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );; 
+        // newBirhgtness = Math.max( newBirhgtness, gLightBrightnessControlNode.LightBrightMinScalar );
+        // var colorScalar = newBirhgtness / prevBrightness;
+        // ScaleColor( colorScalar, light.Ambient );
+        //// ScaleColor( colorScalar, light.Diffuse );
+        // //ScaleColor( colorScalar, light.Specular );
+        // light.Brightness = newBirhgtness;
+
+
          var light = gLightBrightnessControlNode.ChildNodes[ i ];
-         var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightBrightnessControlNode.ChildNodes.length );
-         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+         var lightVec = light.GlobalTransform.GetToWorldPosition();
+         // normalize
+         vec3.multiply( lightVec, lightVec, nomalizer );
+         var cos = vec3.dot( lightVec, gLightControlNode.FixedForwardVec );
+         var leftCos = vec3.dot( lightVec, gLightControlNode.FixedLeftVec );
+         var freqIdxRatio = ( cos + 1 ) * 0.25;
+         if( leftCos < 0 )
+            {
+            freqIdxRatio = 1 - freqIdxRatio;
+            }
+
+         //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * freqIdxRatio );
+         //freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
+         //var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+         var normalizedFreq = gLightControlNode.GetNormalizedFreq( freqIdxRatio );
+
          var prevBrightness = light.Brightness;
          var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );; 
          newBirhgtness = Math.max( newBirhgtness, gLightBrightnessControlNode.LightBrightMinScalar );
          var colorScalar = newBirhgtness / prevBrightness;
          ScaleColor( colorScalar, light.Ambient );
-        // ScaleColor( colorScalar, light.Diffuse );
-         //ScaleColor( colorScalar, light.Specular );
          light.Brightness = newBirhgtness;
-         //var lightPos = light.LocalTransform.GetToWorldPosition();
-         //lightPos[ 1 ] += gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightMaxHeight - lightPos[ 1 ] );
-         //light.LocalTransform.SetToWorldPosition( lightPos );
          }
       }
    gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
