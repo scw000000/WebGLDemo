@@ -9,7 +9,7 @@ gLightManager.Init = function()
    gLightManager.LightRadiusSqr = {};
    gLightManager.LightRadiusSqr.Min = 1.0;
    gLightManager.LightRadiusSqr.Max = 400;
-   gLightManager.LightRadiusSqr.Value = 6000;
+   gLightManager.LightRadiusSqr.Value = 8100;
 
    gLightManager.AddLight = function( lightSceneNode )
       {
