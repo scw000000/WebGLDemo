@@ -1,4 +1,4 @@
-﻿class SkySphereSceneNode extends SceneNodes
+﻿class TextureMeshSceneNode extends SceneNodes
    {
    constructor( shaderResource, meshResource, meshTextureResource )
       {

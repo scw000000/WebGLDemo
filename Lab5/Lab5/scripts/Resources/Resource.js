@@ -79,8 +79,6 @@ class MeshResource extends Resource
 
    Onloaded()
       {
-      console.log(" in hand LoadedTeapot"); 
-
       this.VertexPosBuffer.Context = gl.createBuffer();
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexPosBuffer.Context );
       gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( this.MeshData.vertexPositions ), gl.STATIC_DRAW );

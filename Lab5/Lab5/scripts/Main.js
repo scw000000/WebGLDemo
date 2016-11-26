@@ -300,6 +300,7 @@ var meshRes = {};
 var skySphereRes = {};
 var skyMapRes = {};
 var skySphereNode;
+var crateImgRes;
 function webGLStart() 
    {
    canvas = document.getElementById("WebGL-canvas");
@@ -345,10 +346,24 @@ function webGLStart()
 
    textureMeshShader = new TextureMeshShaderResource( );
    textureMeshShader.Load( "textureMeshShader-vs", "textureMeshShader-fs" );
-   skySphereNode = new SkySphereSceneNode( textureMeshShader, skySphereRes, skyMapRes );
+
+   crateImgRes = new TextureResource();
+   crateImgRes.Load( "crate.png" );
+   var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
+   crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
+   crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -8.37, 0 ) );
+   crateMeshNode.Shininess = 1.0;
+   crateMeshNode.MaterialAmbient= vec4.fromValues( 0.1, 0.01, 0.01, 1.0 );
+   crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
+   crateMeshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
+   globalScene.AddSceneNode( crateMeshNode, 0 );
+
+   skySphereNode = new TextureMeshSceneNode( textureMeshShader, skySphereRes, skyMapRes );
    skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
-   
+
    globalScene.AddSceneNode( skySphereNode, 2 );
+
+
  //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
 //   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
  //  meshNode2.Shininess = 1.0;

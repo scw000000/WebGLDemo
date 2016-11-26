@@ -46,17 +46,41 @@ gCubeResource.Init = function()
    {
    var vertexPos = [
             // Front face
-            -1.0, -1.0, 1.0,
-             1.0, -1.0, 1.0,
-             1.0, 1.0, 1.0,
-            -1.0, 1.0, 1.0,
+            -1.0, -1.0,  1.0,
+             1.0, -1.0,  1.0,
+             1.0,  1.0,  1.0,
+            -1.0,  1.0,  1.0,
 
             // Back face
             -1.0, -1.0, -1.0,
-            -1.0, 1.0, -1.0,
-             1.0, 1.0, -1.0,
-             1.0, -1.0, -1.0
-         ];
+            -1.0,  1.0, -1.0,
+             1.0,  1.0, -1.0,
+             1.0, -1.0, -1.0,
+
+            // Top face
+            -1.0,  1.0, -1.0,
+            -1.0,  1.0,  1.0,
+             1.0,  1.0,  1.0,
+             1.0,  1.0, -1.0,
+
+            // Bottom face
+            -1.0, -1.0, -1.0,
+             1.0, -1.0, -1.0,
+             1.0, -1.0,  1.0,
+            -1.0, -1.0,  1.0,
+
+            // Right face
+             1.0, -1.0, -1.0,
+             1.0,  1.0, -1.0,
+             1.0,  1.0,  1.0,
+             1.0, -1.0,  1.0,
+
+            // Left face
+            -1.0, -1.0, -1.0,
+            -1.0, -1.0,  1.0,
+            -1.0,  1.0,  1.0,
+            -1.0,  1.0, -1.0,
+        ];
 
    gCubeResource.VertexPosBuffer = {};
    gCubeResource.VertexPosBuffer.Context = gl.createBuffer();
@@ -65,17 +89,88 @@ gCubeResource.Init = function()
    gCubeResource.VertexPosBuffer.ItemSize = 3;
    gCubeResource.VertexPosBuffer.NumItems = vertexPos.length / gCubeResource.VertexPosBuffer.ItemSize; 
 
+   var normals = [
+            // Front face
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+
+            // Back face
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+             0.0,  0.0, -1.0,
+
+            // Top face
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+
+            // Bottom face
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+             0.0, -1.0,  0.0,
+
+            // Right face
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+
+            // Left face
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0,
+            -1.0,  0.0,  0.0
+        ];
+
+   gCubeResource.VertexNormalBuffer = {};
+   gCubeResource.VertexNormalBuffer.Context = gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexNormalBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( normals ), gl.STATIC_DRAW );
+   gCubeResource.VertexNormalBuffer.ItemSize = 3;
+   gCubeResource.VertexNormalBuffer.NumItems = normals.length / gCubeResource.VertexNormalBuffer.ItemSize;
+
    var uvs = [
+            // Front face
             0.0, 0.0,
             1.0, 0.0,
             1.0, 1.0,
             0.0, 1.0,
 
-             0.0, 0.0,
-             0.0, 1.0,
-             1.0, 1.0,
-            1.0, 0.0
-      ];
+            // Back face
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+
+            // Top face
+            0.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+
+            // Bottom face
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+
+            // Right face
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+
+            // Left face
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0
+        ];
 
    gCubeResource.VertexUVBuffer = {};
    gCubeResource.VertexUVBuffer.Context = gl.createBuffer();
@@ -85,12 +180,12 @@ gCubeResource.Init = function()
    gCubeResource.VertexUVBuffer.NumItems = uvs.length / gCubeResource.VertexUVBuffer.ItemSize; 
 
    var indices = [
-            0, 1, 2,   0, 2, 3,    // Front face
-            4, 5, 6,   4, 6, 7,    // Back face
-            5, 3, 2,   5, 2, 6,  // Top face
-            4, 7, 1,   4, 1, 0, // Bottom face
-            7, 6, 2,   7, 2, 1, // Right face
-            4, 0, 3,   4, 3, 5  // Left face
+            0, 1, 2,      0, 2, 3,    // Front face
+            4, 5, 6,      4, 6, 7,    // Back face
+            8, 9, 10,     8, 10, 11,  // Top face
+            12, 13, 14,   12, 14, 15, // Bottom face
+            16, 17, 18,   16, 18, 19, // Right face
+            20, 21, 22,   20, 22, 23  // Left face
         ];
 
    gCubeResource.VertexIndexBuffer = {};
@@ -101,6 +196,6 @@ gCubeResource.Init = function()
    gCubeResource.VertexIndexBuffer.NumItems = indices.length;
 
 
-
+   gCubeResource.IsLoaded = true;
   
    }
