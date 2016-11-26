@@ -6,7 +6,7 @@ gDeferredDrawer.Init = function()
    if( !texFloatLinearExt ) 
       { 
       alert( "error" );
-     // return; 
+      return; 
       }
 
    gDeferredDrawer.GeometryShaderResource = new DeferredGemotryShaderResource();
@@ -42,7 +42,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
    // Position Buffer
    gDeferredDrawer.PositionTexture = {};
@@ -61,7 +62,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
    // Normal Buffer
    gDeferredDrawer.NormalTexture = {};
@@ -80,7 +82,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
    // Albedo Buffer
    gDeferredDrawer.AlbedoTexture = {};
@@ -99,7 +102,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
    // Dissuse Buffer
    gDeferredDrawer.DiffuseTexture = {};
@@ -118,7 +122,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
    var drawBuffers = [];
    drawBuffers[ 0 ] = gl.COLOR_ATTACHMENT0;
@@ -131,7 +136,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
 
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
@@ -179,7 +185,8 @@ gDeferredDrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
 
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );

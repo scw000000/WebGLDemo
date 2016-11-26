@@ -24,7 +24,7 @@ function initGL()
       {}
    if (!gl) 
       {
-      alert("Could not initialise WebGL, sorry :-(");
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.3. Find the field WebGL 2.0 Prototype and enable it.");
       }
    }
 

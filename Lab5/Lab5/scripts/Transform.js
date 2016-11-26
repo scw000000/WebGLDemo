@@ -109,4 +109,12 @@ class Transform
       this.SetIsFromWorldDirty( true );
       }
 
+   RotateFromOriginRad( rad, axis )
+      {
+      
+      mat4.mul( this.ToWorld, mat4.fromRotation( mat4.create(), rad, axis ), this.ToWorld ); 
+     // mat4.rotate( this.ToWorld, this.ToWorld, rad, axis );
+      this.SetIsFromWorldDirty( true );
+      }
+
    }

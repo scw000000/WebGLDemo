@@ -46,7 +46,8 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
 
    ///////////////////////////////////////////////////////////////
@@ -128,7 +129,8 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
 
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
@@ -137,6 +139,7 @@ gSSAODrawer.Init = function()
    if( fboCheckCode != gl.FRAMEBUFFER_COMPLETE )
       {
       alert( "Frame Buffer error" );
+      return;
       }
 
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
@@ -161,7 +164,8 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;
       }
 
    ///////////////////////////////////////////////////////////////
@@ -187,7 +191,8 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert( "WebGL error" );
+      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      return;   
       }
 
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
