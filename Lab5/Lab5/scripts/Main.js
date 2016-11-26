@@ -354,7 +354,8 @@ function webGLStart()
    var audioRes = new AudioResource();
    audioRes.Load( "Music.mp3" );
    InitLightControlNode( audioRes );
-   InitSecondLightControlNode();
+   //InitSecondLightControlNode();
+   InitLightBrightnessControlNode();
    InitTeapotControlNode();
 
    controllingNode = globalLight;

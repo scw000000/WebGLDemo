@@ -14,6 +14,13 @@ function GetRandomColor()
    return vec4.fromValues( Math.random(), Math.random(), Math.random(), 1.0 );
    }
 
+function ScaleColor( scalar, color )
+   {
+   color[ 0 ] *= scalar;
+   color[ 1 ] *= scalar;
+   color[ 2 ] *= scalar;
+   }
+
 function InitLightControlNode( audioRes )
    {
    gLightControlNode = new SceneNodes();
@@ -98,7 +105,6 @@ function UpdateLights()
          //gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
          var lightPos = gLightControlNode.ChildNodes[ i ].GlobalTransform.GetToWorldPosition();
          var cos = lightPos[ 0 ] / gLightControlNode.Radius;
-       //  var rightVec = vec3.fromValues( lightPos[ 2 ] / gLightControlNode.Radius, 0, lightPos[ 0 ] / gLightControlNode.Radius );
          var leftCos = lightPos[ 2 ] / gLightControlNode.Radius;
          var freqIdxRatio = ( cos + 1 ) * 0.25;
          if( leftCos < 0 )
@@ -111,7 +117,7 @@ function UpdateLights()
          var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
          
          lightPos[ 1 ] += gLightControlNode.Smoothness * ( normalizedFreq * gLightControlNode.LightMaxHeight - lightPos[ 1 ] );
-         vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transthis point to local space
+         vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transform this point to local space
          gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
          }
       }
@@ -200,3 +206,81 @@ function UpdateLights()
 //      }
       
 //   }
+
+var gLightBrightnessControlNode;
+
+function InitLightBrightnessControlNode()
+   {
+   gLightBrightnessControlNode = new SceneNodes();
+   gLightBrightnessControlNode.LightNum = 40;
+   gLightBrightnessControlNode.Radius = 75;
+   gLightBrightnessControlNode.LightBrightMaxScalar = 1.5;
+   gLightBrightnessControlNode.LightBrightMinScalar = 0.3;
+   gLightBrightnessControlNode.Smoothness = 0.3;
+
+   var deltaRad = Math.PI * 2 / gLightBrightnessControlNode.LightNum;
+   var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightBrightnessControlNode.Radius );
+
+   var red = vec4.fromValues( 1, 0, 0, 1 );
+   var green = vec4.fromValues( 0, 1, 0, 1 );
+   var blue = vec4.fromValues( 0, 0, 1, 1 );
+   for( var i = 0; i < gLightBrightnessControlNode.LightNum; ++i )
+      {
+      var idxRatio = i / gLightBrightnessControlNode.LightNum;
+      var lightColor;
+      if( idxRatio <= 0.33 ) // red lerp with green
+         { 
+         lightColor = colorLerp( idxRatio / 0.33, red, green );
+         }
+      else if( idxRatio <= 0.66 )
+         {
+         lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
+         }
+      else
+         {
+         lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
+         }
+
+      var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
+      light.LocalTransform.SetToWorldPosition( lightPos );
+      light.Brightness = 1;
+      gLightBrightnessControlNode.AddChild( light );
+      vec3.rotateY( lightPos, lightPos, g_Zero3v, deltaRad );
+      }
+   gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( Math.PI / 4, g_Forward3v );
+
+   globalScene.AddSceneNode( gLightBrightnessControlNode, 1 );
+
+   gLightBrightnessControlNode.OnUpdate =  UpdateLightsBrightness;
+   }
+
+function UpdateLightsBrightness()
+   {
+   if( !gLightControlNode.AudioResource.IsLoaded )
+      {
+      return;
+      }
+   
+   if( !gLightControlNode.AudioResource.audio.paused )
+      {
+      for( var i in gLightBrightnessControlNode.ChildNodes )
+         {
+         var light = gLightBrightnessControlNode.ChildNodes[ i ];
+         var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightBrightnessControlNode.ChildNodes.length );
+         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+         var prevBrightness = light.Brightness;
+         var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );; 
+         newBirhgtness = Math.max( newBirhgtness, gLightBrightnessControlNode.LightBrightMinScalar );
+         var colorScalar = newBirhgtness / prevBrightness;
+         ScaleColor( colorScalar, light.Ambient );
+        // ScaleColor( colorScalar, light.Diffuse );
+         //ScaleColor( colorScalar, light.Specular );
+         light.Brightness = newBirhgtness;
+         //var lightPos = light.LocalTransform.GetToWorldPosition();
+         //lightPos[ 1 ] += gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightMaxHeight - lightPos[ 1 ] );
+         //light.LocalTransform.SetToWorldPosition( lightPos );
+         }
+      }
+   gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
+      
+   }
