@@ -27,7 +27,6 @@ function InitLightControlNode( audioRes )
    gLightControlNode.LightNum = 80;
    gLightControlNode.Radius = 200;
    gLightControlNode.AudioResource = audioRes;
-   gLightControlNode.AudioResource.ShouldPlay = true;
    gLightControlNode.LightMaxHeight = 100;
    gLightControlNode.Smoothness = 0.3;
 
@@ -68,6 +67,31 @@ function InitLightControlNode( audioRes )
       return gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
       }
 
+   gLightControlNode.PauseMusic = function()
+      {
+      gLightControlNode.AudioResource.audio.pause();
+      }
+
+   gLightControlNode.PlayMusic = function()
+      {
+      if( gLightControlNode.AudioResource.context == null )
+         {
+         gLightControlNode.AudioResource.context = new AudioContext();
+         gLightControlNode.AudioResource.analyser = gLightControlNode.AudioResource.context.createAnalyser();
+      
+         gLightControlNode.AudioResource.audioSrc = gLightControlNode.AudioResource.context.createMediaElementSource( gLightControlNode.AudioResource.audio );
+
+         gLightControlNode.AudioResource.audioSrc.connect( gLightControlNode.AudioResource.analyser );
+         gLightControlNode.AudioResource.audioSrc.connect( gLightControlNode.AudioResource.context.destination );
+
+         gLightControlNode.AudioResource.analyser.connect( gLightControlNode.AudioResource.context.destination );
+
+         gLightControlNode.AudioResource.frequencyData = new Uint8Array( gLightControlNode.AudioResource.analyser.frequencyBinCount);
+         }
+      gLightControlNode.AudioResource.audio.play();
+      gLightControlNode.AudioResource.audio.loop = true;
+      }
+
    globalScene.AddSceneNode( gLightControlNode, 1 );
 
    gLightControlNode.OnUpdate =  UpdateLights;
@@ -79,25 +103,6 @@ function UpdateLights()
       {
       return;
       }
-   if( gLightControlNode.AudioResource.ShouldPlay && gLightControlNode.AudioResource.audio.paused )
-      {
-      gLightControlNode.AudioResource.context = new AudioContext();
-      gLightControlNode.AudioResource.analyser = gLightControlNode.AudioResource.context.createAnalyser();
-      
-      gLightControlNode.AudioResource.audioSrc = gLightControlNode.AudioResource.context.createMediaElementSource( gLightControlNode.AudioResource.audio );
-
-      gLightControlNode.AudioResource.audioSrc.connect( gLightControlNode.AudioResource.analyser );
-      gLightControlNode.AudioResource.audioSrc.connect( gLightControlNode.AudioResource.context.destination );
-
-      gLightControlNode.AudioResource.analyser.connect( gLightControlNode.AudioResource.context.destination );
-
-      gLightControlNode.AudioResource.frequencyData = new Uint8Array( gLightControlNode.AudioResource.analyser.frequencyBinCount);
-      
-      gLightControlNode.AudioResource.audio.play();
-      gLightControlNode.AudioResource.audio.loop = true;
-      }
-
-   
    
    if( !gLightControlNode.AudioResource.audio.paused )
       {
@@ -127,9 +132,8 @@ function UpdateLights()
          vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transform this point to local space
          gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
          }
+      gLightControlNode.LocalTransform.RotateToWorldRad( 0.01, g_Up3v );
       }
-   gLightControlNode.LocalTransform.RotateToWorldRad( 0.01, g_Up3v );
-      
    }
 
 //var gSecondLightControlNode;
@@ -309,9 +313,8 @@ function UpdateLightsBrightness()
          ScaleColor( light.Ambient ,colorScalar, light.OrigColor );
          light.Brightness = newBirhgtness;
          }
+      gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
       }
-   gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
-      
    }
 
 
@@ -390,7 +393,6 @@ function UpdateLightsScale()
          //ScaleColor( light.Ambient ,colorScalar, light.OrigColor );
          light.Scale = newScale;
          }
+      gLightScaleControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
       }
-   gLightScaleControlNode.LocalTransform.RotateFromWorldRad( 0.01, g_Up3v );
-      
    }

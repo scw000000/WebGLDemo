@@ -102,6 +102,7 @@ uniform sampler2D uTexture;
 void main(void) 
     {
     gl_FragColor = texture2D( uTexture, vVertexUV ); 
+    gl_FragColor.a = 1.0;
     //vec4 color = texture2D( uTexture, vVertexUV ); 
     //gl_FragColor = vec4( color.x, color.x, color.x, 1 );
     }
@@ -472,6 +473,8 @@ precision mediump float;
     <h4 id="RenderControlOption">- Control Render Output</br> </br> </h4> 
 
     <h4 id="SSAOControlOption">- Control SSAO parameters</br> </br> </h4> 
+
+    <h4 id="MusicControlOption">- Control Music</br> </br> </h4> 
 
     <h4 id="LightControlOption">- Control Light parameters</br> </br> </h4> 
 

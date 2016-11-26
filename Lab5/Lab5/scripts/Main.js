@@ -134,22 +134,6 @@ function CreateSSAOControlButtons()
    container.appendChild( sampleNumRange );
 
    container.appendChild( sampleNumLabel );
-   //generateColorInput( container, "#FFFFFF", "Ambient", setAmbient );
-   //generateColorInput( container, "#FFFFFF", "Diffuse", setDiffuse );
-   //generateColorInput( container, "#FFFFFF", "Specular", setSpecular );
-
-   //text = document.createElement( "input" );
-   //text.type = "text";
-   //text.value = "3.0";
-   //container.appendChild( text );
-
-   //button = document.createElement( "input" );
-   //button.type = "button";
-   //button.value = "Set Shininess";
-   //button.onclick = function(){
-   //   gDeferredDrawer.UseSSAO = gDeferredDrawer.UseSSAO == 1 ? 0: 1;
-   //};
-   //container.appendChild( button );
    }
 
 function hexStrToColor( hexStr )
@@ -172,6 +156,25 @@ function generateColorInput( container, defaultColor, labelText, changeFunction 
 
    container.appendChild( colorSelect );
    container.appendChild( label );
+   }
+
+function CreateMusicontrolButtons()
+   {
+   var container = document.getElementById( 'MusicControlOption' );
+
+
+   var cb = document.createElement( "input" );
+   cb.type = "checkbox";
+   cb.onchange = function(){ 
+      cb.checked ? gLightControlNode.PlayMusic(): gLightControlNode.PauseMusic()
+      };
+   cb.checked  = false;
+   container.appendChild( cb );
+
+   var cbLabel = document.createElement('label')
+   cbLabel.appendChild( document.createTextNode( "   Enable Music" ) );
+   container.appendChild( cbLabel );
+
    }
 
 function CreateRenderingControlButtons()
@@ -290,9 +293,6 @@ function CreateLightControlButtons()
    }
 
 var globalLight;
-var sphereNode;
-var meshNode;
-var forwardShader;
 var skySphereShader;
 var lightCubeShader;
 var textureRes = {};
@@ -336,16 +336,6 @@ function webGLStart()
    textureRes.Load( "gray.jpg" );
    meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
-   forwardShader = new ForwardShaderResource();
-   forwardShader.Load( "shader-vs", "shader-fs" );
-
-  // meshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureRes );
-  // meshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
-  // meshNode.Shininess = 10.0;
-  // meshNode.MaterialAmbient= vec4.fromValues( 0.01, 0.01, 0.01, 1.0 );
- //  meshNode.MaterialDiffuse = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
-  // meshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
-  // globalScene.AddSceneNode( meshNode, 0 );
 
    skySphereRes = new MeshResource();
    skySphereRes.Load( "skySphere.json" );
@@ -400,6 +390,7 @@ function webGLStart()
    CreateRenderingControlButtons();
    CreateSSAOControlButtons();
    CreateLightControlButtons();
+   CreateMusicontrolButtons();
 
    globalScene.OnRestore();
 
