@@ -3,7 +3,7 @@
    DelegateUpdate()
       {
       // W and F: camera forward
-      if ( this.KeyPressed[ 87 ] || this.KeyPressed[ 70 ]) 
+      if ( this.KeyPressed[ 87 ] ) 
          {
          globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0, 0.5 ) );
          }
@@ -27,7 +27,7 @@
          }
 
       // Space: part move upward
-      if ( this.KeyPressed[ 32 ] ) 
+      if ( this.KeyPressed[ 32 ] || this.KeyPressed[ 70 ] ) 
          {
           globalScene.CameraNode.LocalTransform.AddFromWorldPosition( vec3.fromValues( 0, 0.5, 0 ) );
          }

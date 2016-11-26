@@ -353,7 +353,7 @@ function webGLStart()
    crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
    crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -8.37, 0 ) );
    crateMeshNode.Shininess = 1.0;
-   crateMeshNode.MaterialAmbient= vec4.fromValues( 0.1, 0.01, 0.01, 1.0 );
+   crateMeshNode.MaterialAmbient= vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
    crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    crateMeshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
    globalScene.AddSceneNode( crateMeshNode, 0 );
