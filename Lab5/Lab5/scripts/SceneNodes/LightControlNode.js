@@ -14,11 +14,11 @@ function GetRandomColor()
    return vec4.fromValues( Math.random(), Math.random(), Math.random(), 1.0 );
    }
 
-function ScaleColor( scalar, color )
+function ScaleColor( out, scalar, color )
    {
-   color[ 0 ] *= scalar;
-   color[ 1 ] *= scalar;
-   color[ 2 ] *= scalar;
+   out[ 0 ] = color[ 0 ] * scalar;
+   out[ 1 ] = color[ 1 ] * scalar;
+   out[ 2 ] = color[ 2 ] * scalar;
    }
 
 function InitLightControlNode( audioRes )
@@ -221,9 +221,19 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode = new SceneNodes();
    gLightBrightnessControlNode.LightNum = 40;
    gLightBrightnessControlNode.Radius = 75;
-   gLightBrightnessControlNode.LightBrightMaxScalar = 2.0;
-   gLightBrightnessControlNode.LightBrightMinScalar = 0.4;
-   gLightBrightnessControlNode.Smoothness = 0.3;
+   gLightBrightnessControlNode.LightBrightMaxScalar = 1.0;
+   gLightBrightnessControlNode.LightBrightMinScalar = 0.2;
+   gLightBrightnessControlNode.GammaPower = {};
+   gLightBrightnessControlNode.GammaPower.Min = 0.1
+   gLightBrightnessControlNode.GammaPower.Max = 5.0;
+   gLightBrightnessControlNode.GammaPower.Value = 2.2;
+   gLightBrightnessControlNode.GammaScalar = {};
+   gLightBrightnessControlNode.GammaScalar.Min = 0.1
+   gLightBrightnessControlNode.GammaScalar.Max = 15.0;
+   gLightBrightnessControlNode.GammaScalar.Value = 6.2;
+   gLightBrightnessControlNode.Smoothness = 0.2;
+   var invRadius = 1 / gLightBrightnessControlNode.Radius;
+   gLightBrightnessControlNode.Nomalizer = vec3.fromValues( invRadius, invRadius, invRadius );
 
    var deltaRad = Math.PI * 2 / gLightBrightnessControlNode.LightNum;
    var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightBrightnessControlNode.Radius );
@@ -251,13 +261,14 @@ function InitLightBrightnessControlNode()
       var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
       light.LocalTransform.SetToWorldPosition( lightPos );
       light.Brightness = 1;
+      light.OrigColor = vec4.clone( lightColor );
       gLightBrightnessControlNode.AddChild( light );
       vec3.rotateY( lightPos, lightPos, g_Zero3v, deltaRad );
       }
-  // gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( Math.PI / 4, g_Forward3v );
+   gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( Math.PI / 4, g_Forward3v );
 
-   gLightControlNode.FixedForwardVec = gLightControlNode.LocalTransform.GetForwardVector();
-   gLightControlNode.FixedLeftVec = gLightControlNode.LocalTransform.GetLeftVector();
+   gLightBrightnessControlNode.FixedForwardVec = gLightBrightnessControlNode.LocalTransform.GetForwardVector();
+   gLightBrightnessControlNode.FixedLeftVec = gLightBrightnessControlNode.LocalTransform.GetLeftVector();
    globalScene.AddSceneNode( gLightBrightnessControlNode, 1 );
 
    gLightBrightnessControlNode.OnUpdate =  UpdateLightsBrightness;
@@ -274,45 +285,28 @@ function UpdateLightsBrightness()
 
    if( !gLightControlNode.AudioResource.audio.paused )
       {
-      var invRadius = 1 / gLightBrightnessControlNode.Radius;
-      var nomalizer = vec3.fromValues( invRadius, invRadius, invRadius );
       for( var i in gLightBrightnessControlNode.ChildNodes )
          {
-        // var light = gLightBrightnessControlNode.ChildNodes[ i ];
-        // var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * i / gLightBrightnessControlNode.ChildNodes.length );
-        // var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
-        // var prevBrightness = light.Brightness;
-        // var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );; 
-        // newBirhgtness = Math.max( newBirhgtness, gLightBrightnessControlNode.LightBrightMinScalar );
-        // var colorScalar = newBirhgtness / prevBrightness;
-        // ScaleColor( colorScalar, light.Ambient );
-        //// ScaleColor( colorScalar, light.Diffuse );
-        // //ScaleColor( colorScalar, light.Specular );
-        // light.Brightness = newBirhgtness;
-
-
          var light = gLightBrightnessControlNode.ChildNodes[ i ];
          var lightVec = light.GlobalTransform.GetToWorldPosition();
          // normalize
-         vec3.multiply( lightVec, lightVec, nomalizer );
-         var cos = vec3.dot( lightVec, gLightControlNode.FixedForwardVec );
-         var leftCos = vec3.dot( lightVec, gLightControlNode.FixedLeftVec );
+         vec3.multiply( lightVec, lightVec, gLightBrightnessControlNode.Nomalizer );
+         var cos = vec3.dot( lightVec, gLightBrightnessControlNode.FixedForwardVec );
+         var leftCos = vec3.dot( lightVec, gLightBrightnessControlNode.FixedLeftVec );
          var freqIdxRatio = ( cos + 1 ) * 0.25;
          if( leftCos < 0 )
             {
             freqIdxRatio = 1 - freqIdxRatio;
             }
 
-         //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * freqIdxRatio );
-         //freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
-         //var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
          var normalizedFreq = gLightControlNode.GetNormalizedFreq( freqIdxRatio );
 
          var prevBrightness = light.Brightness;
-         var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );; 
+         var newBirhgtness = prevBrightness + gLightBrightnessControlNode.Smoothness * ( normalizedFreq * gLightBrightnessControlNode.LightBrightMaxScalar - prevBrightness );       
          newBirhgtness = Math.max( newBirhgtness, gLightBrightnessControlNode.LightBrightMinScalar );
-         var colorScalar = newBirhgtness / prevBrightness;
-         ScaleColor( colorScalar, light.Ambient );
+         var colorScalar = gLightBrightnessControlNode.GammaScalar.Value * Math.pow( newBirhgtness, gLightBrightnessControlNode.GammaPower.Value );
+        // var colorScalar = newBirhgtness;
+         ScaleColor( light.Ambient ,colorScalar, light.OrigColor );
          light.Brightness = newBirhgtness;
          }
       }

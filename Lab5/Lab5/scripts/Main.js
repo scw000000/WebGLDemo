@@ -80,13 +80,13 @@ function CreateSSAOControlButtons()
    container.appendChild( cb );
 
    var cbLabel = document.createElement('label')
-   cbLabel.appendChild( document.createTextNode( "Enable SSAO" ) );
+   cbLabel.appendChild( document.createTextNode( "   Enable SSAO" ) );
    container.appendChild( cbLabel );
 
    ////////////// SSAO radius
 
    var radLabel = document.createElement('label')
-   radLabel.appendChild( document.createTextNode( "SSAO Radius: " ) );
+   radLabel.appendChild( document.createTextNode( "   SSAO Radius: " ) );
    var radTextNode = document.createTextNode( gSSAODrawer.SampleRadius.Value.toString() );
    radLabel.appendChild( radTextNode );
 
@@ -103,7 +103,7 @@ function CreateSSAOControlButtons()
 
    ////////////// SSAO power
    var powerLabel = document.createElement('label')
-   powerLabel.appendChild( document.createTextNode( "SSAO Power: " ) );
+   powerLabel.appendChild( document.createTextNode( "   SSAO Power: " ) );
    var powerTextNode = document.createTextNode( gSSAODrawer.SSAOPower.Value.toString() );
    powerLabel.appendChild( powerTextNode );
 
@@ -120,7 +120,7 @@ function CreateSSAOControlButtons()
 
    ////////////// Sample Num
    var sampleNumLabel = document.createElement('label')
-   sampleNumLabel.appendChild( document.createTextNode( "Sample Num: " ) );
+   sampleNumLabel.appendChild( document.createTextNode( "   Sample Num: " ) );
    var sampleNumTextNode = document.createTextNode( gSSAODrawer.SampleNum.Value.toString() );
    sampleNumLabel.appendChild( sampleNumTextNode );
 
@@ -236,8 +236,10 @@ function CreateRenderingControlButtons()
 function CreateLightControlButtons()
    {
    var container = document.getElementById( 'LightControlOption' );
+   
+   // Radius
    var radLabel = document.createElement('label')
-   radLabel.appendChild( document.createTextNode( "Light Radius: " ) );
+   radLabel.appendChild( document.createTextNode( "     Light Radius: " ) );
    var radTextNode = document.createTextNode( Math.sqrt( gLightManager.LightRadiusSqr.Value ).toString() );
    radLabel.appendChild( radTextNode );
 
@@ -251,6 +253,40 @@ function CreateLightControlButtons()
    container.appendChild( radRange );
 
    container.appendChild( radLabel );
+
+   // Gamma
+   var gammaPowerLabel = document.createElement('label')
+   gammaPowerLabel.appendChild( document.createTextNode( "     Gamma Power: " ) );
+   var gammaPowerNode = document.createTextNode( gLightBrightnessControlNode.GammaPower.Value.toString() );
+   gammaPowerLabel.appendChild( gammaPowerNode );
+
+   var gammaPowerRange = document.createElement( "input" );
+   gammaPowerRange.type = "range";
+   gammaPowerRange.min = gLightBrightnessControlNode.GammaPower.Min;
+   gammaPowerRange.max = gLightBrightnessControlNode.GammaPower.Max;
+   gammaPowerRange.step = 0.1;
+   gammaPowerRange.value = gLightBrightnessControlNode.GammaPower.Value;
+   gammaPowerRange.oninput = function(){ gLightBrightnessControlNode.GammaPower.Value = gammaPowerRange.value; gammaPowerNode.textContent = gammaPowerRange.value; };
+   container.appendChild( gammaPowerRange );
+
+   container.appendChild( gammaPowerLabel );
+
+   // Gamma scalar
+   var gammaScalarLabel = document.createElement('label')
+   gammaScalarLabel.appendChild( document.createTextNode( "     Gamma Scalar: " ) );
+   var gammaScalarNode = document.createTextNode( gLightBrightnessControlNode.GammaScalar.Value.toString() );
+   gammaScalarLabel.appendChild( gammaScalarNode );
+
+   var gammaScalarRange = document.createElement( "input" );
+   gammaScalarRange.type = "range";
+   gammaScalarRange.min = gLightBrightnessControlNode.GammaScalar.Min;
+   gammaScalarRange.max = gLightBrightnessControlNode.GammaScalar.Max;
+   gammaScalarRange.step = 0.1;
+   gammaScalarRange.value = gLightBrightnessControlNode.GammaScalar.Value;
+   gammaScalarRange.oninput = function(){ gLightBrightnessControlNode.GammaScalar.Value = gammaScalarRange.value; gammaScalarNode.textContent = gammaScalarRange.value; };
+   container.appendChild( gammaScalarRange );
+
+   container.appendChild( gammaScalarLabel );
    }
 
 var globalLight;
