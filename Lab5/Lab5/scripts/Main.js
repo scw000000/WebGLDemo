@@ -14,7 +14,11 @@ function initGL()
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
       gl.viewport( 0, 0, gl.viewportWidth, gl.viewportHeight );
-      gl.enable( gl.DEPTH_TEST );
+      gl.clearColor( 1.0, 1.0, 1.0, 1.0);
+      gl.enable( gl.CULL_FACE );
+      gl.cullFace( gl.BACK );
+      gl.enable(gl.DEPTH_TEST);
+      gl.depthFunc(gl.LESS);
       } 
    catch (e) 
       {}
@@ -347,8 +351,10 @@ function webGLStart()
    //globalScene.AddSceneNode( dummyNode, 1 );
    globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 20, 20, -20 ) );
          
-
-   InitLightControlNode();
+   var audioRes = new AudioResource();
+   audioRes.Load( "Music.mp3" );
+   InitLightControlNode( audioRes );
+   InitSecondLightControlNode();
    InitTeapotControlNode();
 
    controllingNode = globalLight;
@@ -356,15 +362,8 @@ function webGLStart()
    CreateRenderingControlButtons();
    CreateSSAOControlButtons();
    CreateLightControlButtons();
-   //initTextures( textureRes, "earth.png" );
 
    globalScene.OnRestore();
-
-   gl.clearColor( 1.0, 1.0, 1.0, 1.0);
-   gl.enable( gl.CULL_FACE );
-   gl.cullFace( gl.BACK );
-   gl.enable(gl.DEPTH_TEST);
-   gl.depthFunc(gl.LESS);
 
    tick();
    }

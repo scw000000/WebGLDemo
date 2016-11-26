@@ -134,23 +134,24 @@ class MeshResource extends Resource
       }
    }
 
+class AudioResource extends Resource
+   {
+   constructor()
+      {
+      super();
+      }
 
-function initTextures( resource, fileName ) {
-    resource.Context = gl.createTexture();
-    resource.image = new Image();
-    resource.image.onload = function() { handleTextureLoaded( resource ); }
-    resource.image.src = fileName;
-    resource.IsLoaded = false;
-    console.log("loading texture....");
-}
+   Load( fileName )
+      {
+      console.log("loading audio " + fileName );
+      this.audio = new Audio();
+      this.audio.oncanplaythrough = this.Onloaded.bind( this );
+      this.audio.src = fileName;      
+      }
 
-function handleTextureLoaded( resource ) {
-    gl.bindTexture(gl.TEXTURE_2D, resource.Context );
-    gl.pixelStorei( gl.UNPACK_ALIGNMENT, 1 );
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, resource.image);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.bindTexture(gl.TEXTURE_2D, null);
-    resource.IsLoaded = true;
-    console.log("loading complete");
-}
+   Onloaded()
+      {
+      super.OnLoaded();
+      console.log("audio loading complete!!");
+      }
+   }

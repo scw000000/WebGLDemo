@@ -229,7 +229,6 @@ void main(void)
         vec3 distanceVec = uLightPos_CameraSpace[ i ] - vertexPos_CameraSpace;
         if( dot( distanceVec, distanceVec ) > uLightRadiusSqr )
             {
-            gl_FragColor += albedo * uLightAmbient[ i ];
             continue;
             }
         vec3 lightVec = normalize( distanceVec ); 
@@ -481,7 +480,6 @@ precision mediump float;
              2. Enter about:flags in address bar.</br>
              3. Find the field "WebGL 2.0 Prototype" and enable it.
         </h4> 
-
 </body>
 
 
