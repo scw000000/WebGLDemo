@@ -5,13 +5,13 @@ gSSAODrawer.Init = function()
    var texFloatLinearExt = gl.getExtension( "OES_texture_float_linear" );
    if( !texFloatLinearExt ) 
       { 
-      alert( "error" );
+      alert( "WebGL init extension error" );
       return; 
       }
    var texFloatExt = gl.getExtension( "OES_texture_float" );
    if( !texFloatExt ) 
       { 
-      alert( "error" );
+      alert( "WebGL init extension error" );
       return; 
       }
    gSSAODrawer.SampleRadius = {};
@@ -51,7 +51,7 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      alert("SSAO render buffer init error" );
       return;
       }
 
@@ -134,7 +134,7 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      alert("SSAO frame buffer init error" );
       return;
       }
 
@@ -169,7 +169,7 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      alert("SSAO blur fbo error" );
       return;
       }
 
@@ -196,7 +196,7 @@ gSSAODrawer.Init = function()
 
    if( errCode != 0 )
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      alert("SSAO blur FBO error" );
       return;   
       }
 

@@ -45,13 +45,13 @@
 
    // I want to accumulate the mouse shift and process them altogether before rendering
    //, so I use 2 variables to hold current mouse position
-   OnUpdate()
+   OnUpdate( deltaTime )
       {
       vec2.copy( this.PrevMousePos, this.CurrMousePos );
       vec2.copy( this.CurrMousePos, this.RealCurrMousePos );
       vec2.sub( this.DeltaMousePos, this.CurrMousePos, this.PrevMousePos );
 
-      this.DelegateUpdate();
+      this.DelegateUpdate( deltaTime );
       //console.log( this.DeltaMousePos[ 0 ] + "  " + this.DeltaMousePos[ 1 ] );
       }
 
@@ -67,7 +67,7 @@
          }
       }
 
-   DelegateUpdate(){}
+   DelegateUpdate( deltaTime ){}
 
    }
 

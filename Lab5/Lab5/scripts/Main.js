@@ -9,7 +9,7 @@ function initGL()
    {
    try 
       {
-      gl = canvas.getContext("experimental-webgl");
+      gl = canvas.getContext("webgl");
       //gl = canvas.getContext("experimental-webgl");
       gl.viewportWidth = canvas.width;
       gl.viewportHeight = canvas.height;
@@ -24,7 +24,7 @@ function initGL()
       {}
    if (!gl) 
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.3. Find the field WebGL 2.0 Prototype and enable it.");
+      alert("WebGL init error");
       }
    }
 
@@ -53,7 +53,7 @@ function tick()
    lastCalledTime = Date.now();
 
    requestAnimFrame( tick );
-   controller.OnUpdate();
+   controller.OnUpdate( deltaTime );
    globalScene.OnUpdate( deltaTime );
    gDeferredDrawer.PreRender();
    drawScene();
@@ -310,7 +310,10 @@ function webGLStart()
    canvas = document.getElementById("WebGL-canvas");
    canvasDimension = vec2.fromValues( canvas.width, canvas.height );
    initGL();
-
+   if( !gl )
+      {
+      return;
+      }
    globalScene = new Scene();
    
    gLightManager.Init();

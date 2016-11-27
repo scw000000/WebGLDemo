@@ -27,6 +27,33 @@ function GenerateLightNode( lightColor, ambientScalar, diffuseScalar, specularSc
    return new LightCubeSceneNode( lightCubeShader, ScaleColor( vec4.create(), ambientScalar, lightColor ), ScaleColor( vec4.create(), diffuseScalar, lightColor ), ScaleColor( vec4.create(), specularScalar, lightColor ) );
    }
 
+var grayCode = [
+      vec4.fromValues( 0, 0, 1, 1 ),
+      vec4.fromValues( 0, 1, 1, 1 ),
+      vec4.fromValues( 0, 1, 0, 1 ),
+      vec4.fromValues( 1, 1, 0, 1 ),
+      vec4.fromValues( 1, 1, 1, 1 ),
+      vec4.fromValues( 1, 0, 1, 1 ),
+      vec4.fromValues( 1, 0, 0, 1 ),
+      vec4.fromValues( 0, 0, 1, 1 )
+      ];
+
+var grayCodeRatios = [ 1 / 7, 2 / 7, 3 / 7, 4 / 7, 5 / 7, 6 / 7, 1 ];
+
+function GetLerpedGrayCodeColor( scalar )
+   {
+   var left = 0;
+   for( var i = 0; i < grayCodeRatios.length; ++i )
+      {
+      if( scalar < grayCodeRatios[ i ] )
+         {
+         left = i;
+         break;
+         }
+      }
+   return colorLerp( ( scalar - grayCodeRatios[ left ] + 1 / 7 ) / ( 1 / 7 ), grayCode[ left ], grayCode[ left + 1 ] );
+   }
+
 function InitLightControlNode( audioRes )
    {
    gLightControlNode = new SceneNodes();
@@ -36,7 +63,7 @@ function InitLightControlNode( audioRes )
    gLightControlNode.LightMaxHeight = 100;
    gLightControlNode.Smoothness = 0.3;
    gLightControlNode.AmbientScalar = 0.01;
-   gLightControlNode.DiffuseScalar = 0.1;
+   gLightControlNode.DiffuseScalar = 0.05;
    gLightControlNode.SpecularScalar = 1;
    gLightControlNode.Speed = 0.3;
    gLightControlNode.TargetSpeed = 0.3;
@@ -50,22 +77,25 @@ function InitLightControlNode( audioRes )
    var red = vec4.fromValues( 1, 0, 0, 1 );
    var green = vec4.fromValues( 0, 1, 0, 1 );
    var blue = vec4.fromValues( 0, 0, 1, 1 );
+   
    for( var i = 0; i < gLightControlNode.LightNum; ++i )
       {
       var idxRatio = i / gLightControlNode.LightNum;
-      var lightColor;
-      if( idxRatio <= 0.33 ) // red lerp with green
-         { 
-         lightColor = colorLerp( idxRatio / 0.33, red, green );
-         }
-      else if( idxRatio <= 0.66 )
-         {
-         lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
-         }
-      else
-         {
-         lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
-         }
+      var lightColor = GetLerpedGrayCodeColor( idxRatio );
+      
+
+      //if( idxRatio <= 0.33 ) // red lerp with green
+      //   { 
+      //   lightColor = colorLerp( idxRatio / 0.33, red, green );
+      //   }
+      //else if( idxRatio <= 0.66 )
+      //   {
+      //   lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
+      //   }
+      //else
+      //   {
+      //   lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
+      //   }
      // var light = new LightCubeSceneNode( lightCubeShader, lightColor, vec4.clone( lightColor ), vec4.clone( lightColor ) );
       var light = GenerateLightNode( lightColor, gLightControlNode.AmbientScalar, gLightControlNode.DiffuseScalar, gLightControlNode.SpecularScalar );
       light.LocalTransform.SetToWorldPosition( lightPos );
@@ -273,19 +303,19 @@ function InitLightBrightnessControlNode()
    for( var i = 0; i < gLightBrightnessControlNode.LightNum; ++i )
       {
       var idxRatio = i / gLightBrightnessControlNode.LightNum;
-      var lightColor;
-      if( idxRatio <= 0.33 ) // red lerp with green
-         { 
-         lightColor = colorLerp( idxRatio / 0.33, red, green );
-         }
-      else if( idxRatio <= 0.66 )
-         {
-         lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
-         }
-      else
-         {
-         lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
-         }
+      var lightColor = GetLerpedGrayCodeColor( idxRatio );
+      //if( idxRatio <= 0.33 ) // red lerp with green
+      //   { 
+      //   lightColor = colorLerp( idxRatio / 0.33, red, green );
+      //   }
+      //else if( idxRatio <= 0.66 )
+      //   {
+      //   lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
+      //   }
+      //else
+      //   {
+      //   lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
+      //   }
       //var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
       var light = GenerateLightNode( lightColor, gLightBrightnessControlNode.AmbientScalar, gLightBrightnessControlNode.DiffuseScalar, gLightBrightnessControlNode.SpecularScalar ); 
       light.LocalTransform.SetToWorldPosition( lightPos );
@@ -356,7 +386,7 @@ function InitLightScaleControlNode()
    gLightScaleControlNode.LightNum = 40;
    gLightScaleControlNode.Radius = 120;
    gLightScaleControlNode.AmbientScalar = 0.1;
-   gLightScaleControlNode.DiffuseScalar = 0.15;
+   gLightScaleControlNode.DiffuseScalar = 0.1;
    gLightScaleControlNode.SpecularScalar = 1.0;
 
    gLightScaleControlNode.LightScale = {};
