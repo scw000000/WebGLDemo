@@ -31,18 +31,18 @@ function InitLightControlNode( audioRes )
    {
    gLightControlNode = new SceneNodes();
    gLightControlNode.LightNum = 130;
-   gLightControlNode.Radius = 200;
+   gLightControlNode.Radius = 150;
    gLightControlNode.AudioResource = audioRes;
    gLightControlNode.LightMaxHeight = 100;
    gLightControlNode.Smoothness = 0.3;
    gLightControlNode.AmbientScalar = 0.01;
-   gLightControlNode.DiffuseScalar = 0.2;
+   gLightControlNode.DiffuseScalar = 0.1;
    gLightControlNode.SpecularScalar = 1;
    gLightControlNode.Speed = 0.3;
    gLightControlNode.TargetSpeed = 0.3;
    gLightControlNode.CurrentTime = 0;
    gLightControlNode.TimeTick = 0.01;
-   gLightControlNode.NextChangeTime = 10;
+   gLightControlNode.NextChangeTime = 20;
 
    var deltaRad = Math.PI * 2 / gLightControlNode.LightNum;
    var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightControlNode.Radius );
@@ -150,7 +150,7 @@ function UpdateLights( deltaTime )
       if( gLightControlNode.CurrentTime >= gLightControlNode.NextChangeTime )
          {
          gLightControlNode.NextChangeTime -= gLightControlNode.CurrentTime;
-         gLightControlNode.NextChangeTime += Math.random() * 4 + 8;
+         gLightControlNode.NextChangeTime += Math.random() * 4 + 18;
          gLightControlNode.CurrentTime = 0;
          gLightControlNode.TargetSpeed = ( Math.random() * 0.15 + 0.2 )* Math.sign( gLightControlNode.TargetSpeed ) * -1;
          }
@@ -247,13 +247,13 @@ function InitLightBrightnessControlNode()
    {
    gLightBrightnessControlNode = new SceneNodes();
    gLightBrightnessControlNode.LightNum = 70;
-   gLightBrightnessControlNode.Radius = 75;
-   gLightBrightnessControlNode.AmbientScalar = 0.3;
+   gLightBrightnessControlNode.Radius = 80;
+   gLightBrightnessControlNode.AmbientScalar = 0.2;
    gLightBrightnessControlNode.DiffuseScalar = 0.2;
    gLightBrightnessControlNode.SpecularScalar = 1.0;
 
    gLightBrightnessControlNode.LightBrightMaxScalar = 1.0;
-   gLightBrightnessControlNode.LightBrightMinScalar = 0.2;
+   gLightBrightnessControlNode.LightBrightMinScalar = 0.1;
    gLightBrightnessControlNode.GammaPower = {};
    gLightBrightnessControlNode.GammaPower.Min = 0.1
    gLightBrightnessControlNode.GammaPower.Max = 5.0;
@@ -354,9 +354,9 @@ function InitLightScaleControlNode()
    {
    gLightScaleControlNode = new SceneNodes();
    gLightScaleControlNode.LightNum = 40;
-   gLightScaleControlNode.Radius = 150;
+   gLightScaleControlNode.Radius = 120;
    gLightScaleControlNode.AmbientScalar = 0.1;
-   gLightScaleControlNode.DiffuseScalar = 0.5;
+   gLightScaleControlNode.DiffuseScalar = 0.15;
    gLightScaleControlNode.SpecularScalar = 1.0;
 
    gLightScaleControlNode.LightScale = {};

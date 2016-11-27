@@ -15,7 +15,7 @@ function InitTeapotControlNode()
          teapot.LocalTransform.SetToWorldPosition( vec3.fromValues( offSet + row *gTeapotControlNode.TeapotDistance, 0, offSet + col *gTeapotControlNode.TeapotDistance ) );
          teapot.LocalTransform.RotateToWorldRad( Math.PI / 4.0, g_Up3v );
          teapot.Shininess = 10.0;
-         teapot.MaterialAmbient= vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
+         teapot.MaterialAmbient= vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
          teapot.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
          teapot.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
          gTeapotControlNode.AddChild( teapot );
