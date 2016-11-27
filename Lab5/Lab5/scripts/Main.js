@@ -55,7 +55,6 @@ function tick()
    }
 
 var controller;
-var controllingNode;
 
 function CreateButton( node, btnText )
    {
@@ -352,7 +351,7 @@ function webGLStart()
    var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
    crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
    crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -8.37, 0 ) );
-   crateMeshNode.Shininess = 1.0;
+   crateMeshNode.Shininess = 10.0;
    crateMeshNode.MaterialAmbient= vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
    crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    crateMeshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
@@ -363,39 +362,15 @@ function webGLStart()
 
    globalScene.AddSceneNode( skySphereNode, 2 );
 
-
- //  var meshNode2 = new MeshSceneNode( forwardShader, meshRes, textureRes );
-//   meshNode2.LocalTransform.SetToWorldPosition( vec3.fromValues( -5, 0, 20 ) );
- //  meshNode2.Shininess = 1.0;
-  // meshNode2.MaterialSpecular = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
- //  meshNode2.MaterialDiffuse = vec4.fromValues( 0.5, 0.5, 0.5, 1.0 );
-   //globalScene.AddSceneNode( meshNode2 );
-   //sphereNode = new SphereSceneNode( 3, 20, 20, vec4.fromValues( 1.0, 0.0, 0.0 ) );
-   //phereNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 20 ) );
-   //globalScene.AddSceneNode( sphereNode );
    lightCubeShader = new LightCubeShaderResource( );
    lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
 
-   //var dummyNode = new SceneNodes();
-   //dummyNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 10, 0 ) );
-
-   //globalLight = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
-   //globalLight.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, -10 ) );
-   //dummyNode.AddChild( globalLight );
-   ////globalScene.AddSceneNode( globalLight, 1 );
-
-   //var light = new LightCubeSceneNode( lightCubeShader, vec4.fromValues( 0.5, 0.5, 0.5, 1.0 ), vec4.fromValues( 1.0, 0.0, 0.0, 1.0 ), vec4.fromValues( 1.0, 1.0, 1.0, 1.0 ) );
-   //light.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 50 ) );
-   //dummyNode.AddChild( light )
-   ////globalScene.AddSceneNode( light, 1 );
-
-   //globalScene.AddSceneNode( dummyNode, 1 );
    globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 20, 20, -20 ) );
          
    var audioRes = new AudioResource();
    audioRes.Load( "Music.mp3" );
+
    InitLightControlNode( audioRes );
-   //InitSecondLightControlNode();
    InitLightBrightnessControlNode();
    InitLightScaleControlNode();
    InitTeapotControlNode();

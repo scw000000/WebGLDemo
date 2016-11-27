@@ -148,7 +148,7 @@
     <Content Include="scripts\Scene.js" />
     <Content Include="scripts\SceneNodes\SceneNodes.js" />
     <Content Include="scripts\Resources\ShaderResource.js" />
-    <Content Include="scripts\SceneNodes\SkySphereSceneNode.js" />
+    <Content Include="scripts\SceneNodes\TextureMeshSceneNode.js" />
     <Content Include="scripts\SceneNodes\TeapotControlNode.js" />
     <Content Include="scripts\shaders_setup.js" />
     <Content Include="scripts\Drawers\TextureDrawer.js" />
@@ -199,7 +199,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
