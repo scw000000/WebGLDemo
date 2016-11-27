@@ -346,7 +346,12 @@ function webGLStart()
    skySphereRes.Load( "skySphere.json" );
 
    skyMapRes = new TextureResource();
-   skyMapRes.Load( "skyMap.png" );
+ //  skyMapRes.Load( "skyMap.png" );
+  // skyMapRes.Load( "star2.jpg" );
+   skyMapRes.Load( "moon.jpg" );
+   //skyMapRes.Load( "moon.jpg" );
+   //skyMapRes.Load( "nightSky.jpg" );
+  // skyMapRes.Load( "nightSky.png" );
 
    textureMeshShader = new TextureMeshShaderResource( );
    textureMeshShader.Load( "textureMeshShader-vs", "textureMeshShader-fs" );
@@ -359,7 +364,7 @@ function webGLStart()
    crateMeshNode.Shininess = 10.0;
    crateMeshNode.MaterialAmbient= vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
    crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
-   crateMeshNode.MaterialSpecular = vec4.fromValues( 0.1, 0.1, 0.1, 1.0 );
+   crateMeshNode.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    globalScene.AddSceneNode( crateMeshNode, 0 );
 
    skySphereNode = new TextureMeshSceneNode( textureMeshShader, skySphereRes, skyMapRes );

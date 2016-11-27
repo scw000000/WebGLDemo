@@ -30,7 +30,7 @@ function GenerateLightNode( lightColor, ambientScalar, diffuseScalar, specularSc
 function InitLightControlNode( audioRes )
    {
    gLightControlNode = new SceneNodes();
-   gLightControlNode.LightNum = 80;
+   gLightControlNode.LightNum = 130;
    gLightControlNode.Radius = 200;
    gLightControlNode.AudioResource = audioRes;
    gLightControlNode.LightMaxHeight = 100;
@@ -246,10 +246,10 @@ var gLightBrightnessControlNode;
 function InitLightBrightnessControlNode()
    {
    gLightBrightnessControlNode = new SceneNodes();
-   gLightBrightnessControlNode.LightNum = 40;
+   gLightBrightnessControlNode.LightNum = 70;
    gLightBrightnessControlNode.Radius = 75;
    gLightBrightnessControlNode.AmbientScalar = 0.3;
-   gLightBrightnessControlNode.DiffuseScalar = 1.0;
+   gLightBrightnessControlNode.DiffuseScalar = 0.2;
    gLightBrightnessControlNode.SpecularScalar = 1.0;
 
    gLightBrightnessControlNode.LightBrightMaxScalar = 1.0;

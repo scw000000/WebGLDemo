@@ -4,7 +4,7 @@ gLightManager.Init = function()
    {
    gLightManager.LightNodes = [];
    gLightManager.LightNum = {};
-   gLightManager.LightNum.Max = 200;
+   gLightManager.LightNum.Max = 250;
    gLightManager.LightNum.Value = 0;
    gLightManager.LightRadiusSqr = {};
    gLightManager.LightRadiusSqr.Min = 1.0;
