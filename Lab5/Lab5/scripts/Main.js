@@ -45,11 +45,16 @@ function ouputBuffer()
    gRenderFunction();
    }
 
+var lastCalledTime = Date.now();
+
 function tick() 
    {
+   deltaTime = (Date.now() - lastCalledTime)/1000;
+   lastCalledTime = Date.now();
+
    requestAnimFrame( tick );
    controller.OnUpdate();
-   globalScene.OnUpdate();
+   globalScene.OnUpdate( deltaTime );
    gDeferredDrawer.PreRender();
    drawScene();
    }
@@ -365,8 +370,8 @@ function webGLStart()
    lightCubeShader = new LightCubeShaderResource( );
    lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
 
-   globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 20, 20, -20 ) );
-         
+   globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 50, 20, -130 ) );
+   globalScene.CameraNode.LocalTransform.RotateToWorldRad( -Math.PI / 10, g_Up3v );
    var audioRes = new AudioResource();
    audioRes.Load( "Music.mp3" );
 

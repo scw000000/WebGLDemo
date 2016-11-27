@@ -49,15 +49,15 @@
          }
       }
 
-   OnUpdate(){}
+   OnUpdate( deltaTime ){}
 
    UpdateChildren()
       {
       for( var i in this.ChildNodes )
          {
-         this.ChildNodes[ i ].OnUpdate();
+         this.ChildNodes[ i ].OnUpdate( deltaTime );
          this.ChildNodes[ i ].UpdateGlobalTransform();
-         this.ChildNodes[ i ].UpdateChildren();
+         this.ChildNodes[ i ].UpdateChildren( deltaTime );
          }
       }
 

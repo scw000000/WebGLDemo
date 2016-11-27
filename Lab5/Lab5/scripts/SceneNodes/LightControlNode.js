@@ -38,11 +38,11 @@ function InitLightControlNode( audioRes )
    gLightControlNode.AmbientScalar = 0.01;
    gLightControlNode.DiffuseScalar = 0.2;
    gLightControlNode.SpecularScalar = 1;
-   gLightControlNode.Speed = 1.0;
-   gLightControlNode.TargetSpeed = 1.0;
+   gLightControlNode.Speed = 0.3;
+   gLightControlNode.TargetSpeed = 0.3;
    gLightControlNode.CurrentTime = 0;
    gLightControlNode.TimeTick = 0.01;
-   gLightControlNode.NextChangeTime = 1.0;
+   gLightControlNode.NextChangeTime = 10;
 
    var deltaRad = Math.PI * 2 / gLightControlNode.LightNum;
    var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightControlNode.Radius );
@@ -111,7 +111,7 @@ function InitLightControlNode( audioRes )
    gLightControlNode.OnUpdate =  UpdateLights;
    }
 
-function UpdateLights()
+function UpdateLights( deltaTime )
    {
    if( !gLightControlNode.AudioResource.IsLoaded )
       {
@@ -146,17 +146,16 @@ function UpdateLights()
          vec3.transformMat4( lightPos, lightPos,gLightControlNode.LocalTransform.GetFromWorld() ); // Transform this point to local space
          gLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
          }
-      gLightControlNode.CurrentTime += gLightControlNode.TimeTick;
+      gLightControlNode.CurrentTime += deltaTime;
       if( gLightControlNode.CurrentTime >= gLightControlNode.NextChangeTime )
          {
          gLightControlNode.NextChangeTime -= gLightControlNode.CurrentTime;
-         gLightControlNode.NextChangeTime += Math.random() + 4;
+         gLightControlNode.NextChangeTime += Math.random() * 4 + 8;
          gLightControlNode.CurrentTime = 0;
-         gLightControlNode.TargetSpeed = ( Math.random() * 0.7 + 0.6 )* Math.sign( gLightControlNode.TargetSpeed ) * -1;
+         gLightControlNode.TargetSpeed = ( Math.random() * 0.15 + 0.2 )* Math.sign( gLightControlNode.TargetSpeed ) * -1;
          }
-     
       gLightControlNode.Speed += 0.03 * ( gLightControlNode.TargetSpeed -  gLightControlNode.Speed );
-      gLightControlNode.LocalTransform.RotateToWorldRad( gLightControlNode.Speed * 0.01, g_Up3v );
+      gLightControlNode.LocalTransform.RotateToWorldRad( gLightControlNode.Speed * deltaTime, g_Up3v );
       }
    }
 
@@ -258,7 +257,7 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode.GammaPower = {};
    gLightBrightnessControlNode.GammaPower.Min = 0.1
    gLightBrightnessControlNode.GammaPower.Max = 5.0;
-   gLightBrightnessControlNode.GammaPower.Value = 2.2;
+   gLightBrightnessControlNode.GammaPower.Value = 1.7;
    gLightBrightnessControlNode.GammaScalar = {};
    gLightBrightnessControlNode.GammaScalar.Min = 0.1
    gLightBrightnessControlNode.GammaScalar.Max = 20.0;
@@ -304,7 +303,7 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode.OnUpdate =  UpdateLightsBrightness;
    }
 
-function UpdateLightsBrightness()
+function UpdateLightsBrightness( deltaTime )
    {
    if( !gLightControlNode.AudioResource.IsLoaded )
       {
@@ -341,10 +340,10 @@ function UpdateLightsBrightness()
          ScaleColor( light.Specular, colorScalar, light.OrigSpecular );
 
          light.Brightness = newBirhgtness;
-         gLightBrightnessControlNode.ChildNodes[ i ].LocalTransform.RotateFromOriginRad( gLightControlNode.Speed * 0.01, g_Left3v );
+         gLightBrightnessControlNode.ChildNodes[ i ].LocalTransform.RotateFromOriginRad( gLightControlNode.Speed * deltaTime, g_Left3v );
          
          }
-      gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( gLightControlNode.Speed * 0.02, g_Up3v );
+      gLightBrightnessControlNode.LocalTransform.RotateFromWorldRad( gLightControlNode.Speed * deltaTime, g_Up3v );
       }
    }
 
@@ -416,9 +415,9 @@ function UpdateLightsScale()
          mat4.scale( light.LocalTransform.GetToWorld(), light.LocalTransform.GetToWorld(), vec3.fromValues( 1, scalar, 1 ) );
          //ScaleColor( light.Ambient ,colorScalar, light.OrigColor );
          light.Scale = newScale;
-         gLightScaleControlNode.ChildNodes[ i ].LocalTransform.RotateFromOriginRad( gLightControlNode.Speed * -0.01, g_Left3v );
+         gLightScaleControlNode.ChildNodes[ i ].LocalTransform.RotateFromOriginRad( gLightControlNode.Speed * -deltaTime, g_Left3v );
          
          }
-      gLightScaleControlNode.LocalTransform.RotateFromWorldRad( gLightControlNode.Speed * -0.02, g_Up3v );
+      gLightScaleControlNode.LocalTransform.RotateFromWorldRad( gLightControlNode.Speed * -deltaTime * 2, g_Up3v );
       }
    }
