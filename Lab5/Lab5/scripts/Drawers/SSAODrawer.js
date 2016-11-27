@@ -8,7 +8,12 @@ gSSAODrawer.Init = function()
       alert( "error" );
       return; 
       }
-
+   var texFloatExt = gl.getExtension( "OES_texture_float" );
+   if( !texFloatExt ) 
+      { 
+      alert( "error" );
+      return; 
+      }
    gSSAODrawer.SampleRadius = {};
    gSSAODrawer.SampleRadius.Min = 0.3;
    gSSAODrawer.SampleRadius.Max = 30.0;

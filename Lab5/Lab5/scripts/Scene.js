@@ -50,9 +50,9 @@
       this.RootNode.OnRestore();
       }
 
-   OnUpdate()
+   OnUpdate( deltaTime )
       {
-      this.RootNode.UpdateChildren()
+      this.RootNode.UpdateChildren( deltaTime )
       }
 
    OnRender()

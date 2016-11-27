@@ -108,19 +108,19 @@ void main(void)
     }
 </script>
 
-<script id="deferredGeometryShader-vs" type="x-shader/x-vertex">#version 300 es
+<script id="deferredGeometryShader-vs" type="x-shader/x-vertex">
     precision mediump float;
-    layout (location = 0) in vec3 aVertexPosition;
-    layout (location = 1) in vec3 aVertexNormal;
-    layout (location = 2) in vec2 aVertexUV;
+    attribute vec3 aVertexPosition;
+    attribute vec3 aVertexNormal;
+    attribute vec2 aVertexUV;
 
     uniform mat4 uMVPMatrix;
     uniform mat4 uMVMatrix;
     uniform mat4 uNMatrix;
 
-    out vec4 vPosition_CameraSpace;
-    out vec4 vNormal_CameraSpace;
-    out vec2 vVertexUV;
+    varying vec4 vPosition_CameraSpace;
+    varying vec4 vNormal_CameraSpace;
+    varying vec2 vVertexUV;
 
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
@@ -130,12 +130,13 @@ void main(void)
     }
 </script>
 
- <script id="deferredGeometryShader-fs" type="x-shader/x-fragment">#version 300 es
+ <script id="deferredGeometryShader-fs" type="x-shader/x-fragment">
+#extension GL_EXT_draw_buffers : require
     precision mediump float;
 
-    in vec4 vPosition_CameraSpace;
-    in vec4 vNormal_CameraSpace;
-    in vec2 vVertexUV;
+    varying vec4 vPosition_CameraSpace;
+    varying vec4 vNormal_CameraSpace;
+    varying vec2 vVertexUV;
 
     uniform sampler2D uMeshTexture; 
     uniform float uShininess;
@@ -143,26 +144,22 @@ void main(void)
     uniform vec4 uMaterialDiffuse;
     uniform vec4 uMaterialSpecular;
     
-     layout (location = 0) out vec4 oPosition;
-     layout (location = 1) out vec4 oNormal;
-     layout (location = 2) out vec4 oAlbedo;
-     layout (location = 3) out vec4 oDiffuse;
-
 void main(void) 
     {
-    vec4 textureColor = texture( uMeshTexture, vec2( vVertexUV ) );
-      oPosition = vPosition_CameraSpace; 
-      oPosition.a = uShininess;
+    vec4 textureColor = texture2D( uMeshTexture, vVertexUV );
+    
+       gl_FragData[ 0 ] = vPosition_CameraSpace; 
+     gl_FragData[ 0 ].a = uShininess;
     
     // Warning: do NOT normalize vec4!
-      oNormal.xyz = normalize( vNormal_CameraSpace.xyz ); 
-      oNormal.a = uMaterialSpecular.x;
+    gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
+    gl_FragData[ 1 ].a = uMaterialSpecular.x;
 
-      oAlbedo = textureColor * uMaterialAmbient; 
-      oAlbedo.a = uMaterialSpecular.y;
+    gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
+    gl_FragData[ 2 ].a = uMaterialSpecular.y;
 
-      oDiffuse = textureColor * uMaterialDiffuse; 
-      oDiffuse.a = uMaterialSpecular.z;
+    gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
+    gl_FragData[ 3 ].a = uMaterialSpecular.z;
     }
 </script>
 
@@ -467,7 +464,7 @@ precision mediump float;
 
 <body onload="webGLStart();">
 
-    <canvas id="WebGL-canvas" style="border: none;" width="800" height="600"></canvas>
+    <canvas id="WebGL-canvas" style="border: none;" width="1024" height="512"></canvas>
 
     <br/>
 
@@ -479,11 +476,11 @@ precision mediump float;
 
     <h4 id="LightControlOption">- Control Light parameters</br> </br> </h4> 
 
-    <h4 id="Instruction">- How to execute on your browser:</h4> 
+    <!--<h4 id="Instruction">- How to execute on your browser:</h4> 
     <h4>     1. Currently it will only support Google Chrome</br>
              2. Enter about:flags in address bar.</br>
              3. Find the field "WebGL 2.0 Prototype" and enable it.
-        </h4> 
+        </h4> -->
 </body>
 
 
