@@ -122,6 +122,7 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="scripts\CameraController.js" />
+    <Content Include="scripts\Drawers\BloomDrawer.js" />
     <Content Include="scripts\Drawers\SSAODrawer.js" />
     <Content Include="scripts\SceneNodes\LightControlNode.js" />
     <Content Include="scripts\LightManager.js" />

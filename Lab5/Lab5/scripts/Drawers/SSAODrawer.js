@@ -41,11 +41,12 @@ gSSAODrawer.Init = function()
    gl.bindFramebuffer( gl.FRAMEBUFFER, gSSAODrawer.SSAOFrameBuffer.Context );
 
    // Create the render buffer
-   gSSAODrawer.SSAORenderBuffer = {};
-   gSSAODrawer.SSAORenderBuffer.Context = gl.createRenderbuffer();
-   gl.bindRenderbuffer( gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
-   gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
-   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
+   //gSSAODrawer.SSAORenderBuffer = {};
+   //gSSAODrawer.SSAORenderBuffer.Context = gl.createRenderbuffer();
+   //gl.bindRenderbuffer( gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
+   //gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
+   //gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, null );
 
    var errCode = gl.getError();
 
@@ -163,7 +164,8 @@ gSSAODrawer.Init = function()
   // gSSAODrawer.BlurRenderBuffer.Context = gl.createRenderbuffer();
  //  gl.bindRenderbuffer( gl.RENDERBUFFER, gSSAODrawer.BlurRenderBuffer.Context );
  //  gl.renderbufferStorage( gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.viewportWidth, gl.viewportHeight );
-   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
+  // gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gSSAODrawer.SSAORenderBuffer.Context );
+   gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, null );
 
    var errCode = gl.getError();
 

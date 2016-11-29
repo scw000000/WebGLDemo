@@ -334,3 +334,29 @@ class LightCubeShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class GaussianBlurShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      this.ReferenceTextureUni = {};
+      this.ReferenceTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uReferenceTexture" );
+      
+      this.DirectionUni = {};
+      this.DirectionUni.Context = gl.getUniformLocation( this.Program.Context, "uDirection" );
+      
+      this.InvTextureSizeUni = {};
+      this.InvTextureSizeUni.Context = gl.getUniformLocation( this.Program.Context, "uInvTexureSize" );
+
+      this.OnLoaded();
+      }
+   }

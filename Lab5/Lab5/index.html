@@ -456,6 +456,83 @@ precision mediump float;
         }
         }
 </script>
+
+<script id="gaussianBlurShader-vs" type="x-shader/x-vertex">
+    precision mediump float;
+    attribute vec2 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = vec4( aVertexPosition, 0, 1 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+<script id="gaussianBlurShader-fs" type="x-shader/x-fragment">
+precision mediump float;
+    
+    varying vec2 vVertexUV;
+
+    // const array is not supported
+    const float GAUSSIAN_WEIGHTS_0 = 0.2270270270;
+    const float GAUSSIAN_WEIGHTS_1 = 0.1945945946;
+    const float GAUSSIAN_WEIGHTS_2 = 0.1216216216;
+    const float GAUSSIAN_WEIGHTS_3 = 0.0540540541;
+    const float GAUSSIAN_WEIGHTS_4 = 0.0162162162;
+
+    uniform sampler2D uReferenceTexture; 
+    uniform int uDirection;
+    uniform vec2 uInvTexureSize;
+
+    void main(void) 
+        {
+        gl_FragColor = texture2D( uReferenceTexture, vVertexUV ) * GAUSSIAN_WEIGHTS_0; 
+        if( ( uDirection == 0 ) )
+            {    
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 1, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_1; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 1, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_1; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 2, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_2; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 2, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_2; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 3, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_3; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 3, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_3; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 4, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 4, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
+                
+     //       for( int i = 1; i < 5; ++i )
+         //       {
+      //          gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( i, 0 ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
+     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( i, 0 ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
+    //            }
+            }
+        else
+            {
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, 1 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_1; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, 1 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_1; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, 2 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_2; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, 2 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_2; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, 3 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_3; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, 3 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_3; 
+                
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, 4 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
+            gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, 4 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
+             
+       //     for( int i = 1; i < 5; ++i )
+      //          {
+     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, i ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
+     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, i ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
+     //           }
+            }
+        gl_FragColor.a = 1.0;
+        }
+</script>
+
 <script type="text/javascript" src="scripts\gl-matrix\common.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2.js"></script>
 <script type="text/javascript" src="scripts\gl-matrix\mat2d.js"></script>

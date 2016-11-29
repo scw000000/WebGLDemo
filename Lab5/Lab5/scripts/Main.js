@@ -388,6 +388,7 @@ function webGLStart()
    gDeferredDrawer.Init();
    gSSAODrawer.Init();
    gSecondPassFrameBuffer.Init();
+   gBloomDrawer.Init();
 
    gRenderFunction = function()
       { 
