@@ -24,6 +24,14 @@ gDeferredDrawer.Init = function()
      // return; 
       }
 
+   //var halfFloatExt = gl.getExtension("OES_texture_half_float");
+   //if( !halfFloatExt )
+   //   {
+   //   alert( "WebGL init extension OES_texture_half_float error" );
+   //   return; 
+   //  // return; 
+   //   }
+
    gDeferredDrawer.GeometryShaderResource = new DeferredGemotryShaderResource();
    gDeferredDrawer.GeometryShaderResource.Load( "deferredGeometryShader-vs", "deferredGeometryShader-fs" );
 
@@ -180,16 +188,28 @@ gDeferredDrawer.Init = function()
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
    gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
    gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
-   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT0_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
    gDeferredDrawer.OutputTexture.IsLoaded = true;
 
-  // gl.drawBuffers( [ gl.COLOR_ATTACHMENT0 ] );
+   // Output Buffer
+   gDeferredDrawer.LightTexture = {};
+   gDeferredDrawer.LightTexture.IsLoaded = false;
+   gDeferredDrawer.LightTexture.Context = gl.createTexture();
+   gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.LightTexture.Context );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+   gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST );
+   gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.viewportWidth, gl.viewportHeight, 0, gl.RGBA, gl.FLOAT, null);
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT1_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.LightTexture.Context, 0 );
+   gDeferredDrawer.LightTexture.IsLoaded = true;
+
+
+   mrtExt.drawBuffersWEBGL( [ mrtExt.COLOR_ATTACHMENT0_WEBGL, mrtExt.COLOR_ATTACHMENT1_WEBGL ] );
 
    var errCode = gl.getError();
 
    if( errCode != 0 )
       {
-      alert("- How to execute on your browser:\n1. Currently it will only support Google Chrome\n2. Enter about:flags in address bar.\n3. Find the field WebGL 2.0 Prototype and enable it.)" );
+      alert("Error in light texture" );
       return;
       }
 

@@ -50,13 +50,26 @@ gSecondPassFrameBuffer = {};
 
 gSecondPassFrameBuffer.Init = function()
    {
+   var mrtExt = gl.getExtension( "WEBGL_draw_buffers" );
+   if( !mrtExt )
+      {
+      alert( "WebGL init extension error" );
+      return; 
+     // return; 
+      }
+
    gSecondPassFrameBuffer.Context = gl.createFramebuffer();
    gl.bindFramebuffer( gl.FRAMEBUFFER, gSecondPassFrameBuffer.Context );
    // Use the depth buffer in geometry pass
    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, gDeferredDrawer.GeometryDepthBuffer.Context );
 
    // Output Buffer
-   gl.framebufferTexture2D( gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT0_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context, 0 );
+   
+   gl.framebufferTexture2D( gl.FRAMEBUFFER, mrtExt.COLOR_ATTACHMENT1_WEBGL, gl.TEXTURE_2D, gDeferredDrawer.LightTexture.Context, 0 );
+   
+   mrtExt.drawBuffersWEBGL( [ mrtExt.COLOR_ATTACHMENT0_WEBGL, mrtExt.COLOR_ATTACHMENT1_WEBGL ] );
+
    var fboCheckCode = gl.checkFramebufferStatus( gl.FRAMEBUFFER );
    if( fboCheckCode != gl.FRAMEBUFFER_COMPLETE )
       {

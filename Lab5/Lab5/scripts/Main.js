@@ -238,6 +238,13 @@ function CreateRenderingControlButtons()
    button.value = "SSAO Blur";
    button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gSSAODrawer.BlurTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
+
+   button = document.createElement( "input" );
+   button.type = "button";
+   button.value = "Light";
+   button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.LightTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
+   container.appendChild( button );
+
    }
 
 function CreateLightControlButtons()
