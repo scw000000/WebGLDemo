@@ -35,7 +35,7 @@ class LightCubeSceneNode extends PointLightSceneNode
       /////// Uniforms
       gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
 
-      gl.uniform4f( this.ShaderResource.LightColorUni.Context, this.Specular[ 0 ], this.Specular[ 1 ], this.Specular[ 2 ], this.Specular[ 3 ] );
+      gl.uniform4f( this.ShaderResource.LightColorUni.Context, this.ScreenColor[ 0 ], this.ScreenColor[ 1 ], this.ScreenColor[ 2 ], this.ScreenColor[ 3 ] );
 
       gl.uniform1f( this.ShaderResource.BrightnessThresholdUni.Context, gLightControlNode.BrightnessThreshold.Value );
 

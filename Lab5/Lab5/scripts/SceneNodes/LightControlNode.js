@@ -24,7 +24,9 @@ function ScaleColor( out, scalar, color )
 
 function GenerateLightNode( lightColor, ambientScalar, diffuseScalar, specularScalar )
    {
-   return new LightCubeSceneNode( lightCubeShader, ScaleColor( vec4.create(), ambientScalar, lightColor ), ScaleColor( vec4.create(), diffuseScalar, lightColor ), ScaleColor( vec4.create(), specularScalar, lightColor ) );
+   var lightNode = new LightCubeSceneNode( lightCubeShader, ScaleColor( vec4.create(), ambientScalar, lightColor ), ScaleColor( vec4.create(), diffuseScalar, lightColor ), ScaleColor( vec4.create(), specularScalar, lightColor ) );
+   lightNode.ScreenColor = vec4.clone( lightColor );
+   return lightNode;
    }
 
 var grayCode = [
@@ -64,7 +66,7 @@ function InitLightControlNode( audioRes )
    gLightControlNode.Smoothness = 0.3;
    gLightControlNode.AmbientScalar = 0.01;
    gLightControlNode.DiffuseScalar = 0.05;
-   gLightControlNode.SpecularScalar = 1;
+   gLightControlNode.SpecularScalar = 0.1;
    gLightControlNode.Speed = 0.3;
    gLightControlNode.TargetSpeed = 0.3;
    gLightControlNode.CurrentTime = 0;
@@ -88,20 +90,6 @@ function InitLightControlNode( audioRes )
       var idxRatio = i / gLightControlNode.LightNum;
       var lightColor = GetLerpedGrayCodeColor( idxRatio );
       
-
-      //if( idxRatio <= 0.33 ) // red lerp with green
-      //   { 
-      //   lightColor = colorLerp( idxRatio / 0.33, red, green );
-      //   }
-      //else if( idxRatio <= 0.66 )
-      //   {
-      //   lightColor = colorLerp( ( idxRatio - 0.33 ) / 0.33, green, blue );
-      //   }
-      //else
-      //   {
-      //   lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
-      //   }
-     // var light = new LightCubeSceneNode( lightCubeShader, lightColor, vec4.clone( lightColor ), vec4.clone( lightColor ) );
       var light = GenerateLightNode( lightColor, gLightControlNode.AmbientScalar, gLightControlNode.DiffuseScalar, gLightControlNode.SpecularScalar );
       light.LocalTransform.SetToWorldPosition( lightPos );
       gLightControlNode.AddChild( light );
@@ -285,7 +273,7 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode.Radius = 80;
    gLightBrightnessControlNode.AmbientScalar = 0.2;
    gLightBrightnessControlNode.DiffuseScalar = 0.2;
-   gLightBrightnessControlNode.SpecularScalar = 1.0;
+   gLightBrightnessControlNode.SpecularScalar = 0.5;
 
    gLightBrightnessControlNode.LightBrightMaxScalar = 1.0;
    gLightBrightnessControlNode.LightBrightMinScalar = 0.1;
@@ -373,6 +361,7 @@ function UpdateLightsBrightness( deltaTime )
          ScaleColor( light.Ambient, colorScalar, light.OrigAmbient );
          ScaleColor( light.Diffuse, colorScalar, light.OrigDiffuse );
          ScaleColor( light.Specular, colorScalar, light.OrigSpecular );
+         ScaleColor( light.ScreenColor, colorScalar, light.OrigSpecular );
 
          light.Brightness = newBirhgtness;
          gLightBrightnessControlNode.ChildNodes[ i ].LocalTransform.RotateFromOriginRad( gLightControlNode.Speed * deltaTime, g_Left3v );
@@ -392,7 +381,7 @@ function InitLightScaleControlNode()
    gLightScaleControlNode.Radius = 120;
    gLightScaleControlNode.AmbientScalar = 0.1;
    gLightScaleControlNode.DiffuseScalar = 0.1;
-   gLightScaleControlNode.SpecularScalar = 1.0;
+   gLightScaleControlNode.SpecularScalar = 0.1;
 
    gLightScaleControlNode.LightScale = {};
    gLightScaleControlNode.LightScale.Min = 1;
