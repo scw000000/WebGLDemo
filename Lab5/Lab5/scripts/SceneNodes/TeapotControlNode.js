@@ -5,6 +5,10 @@ function InitTeapotControlNode()
    gTeapotControlNode = new SceneNodes();
    gTeapotControlNode.TeapotPerLine = 5;  
    gTeapotControlNode.TeapotDistance = 20;  
+   gTeapotControlNode.BrightnessThreshold = {};
+   gTeapotControlNode.BrightnessThreshold.Min = 0.01;
+   gTeapotControlNode.BrightnessThreshold.Value = 0.7;
+   gTeapotControlNode.BrightnessThreshold.Max = 1.0;
 
    var offSet = ( gTeapotControlNode.TeapotPerLine - 1 ) * gTeapotControlNode.TeapotDistance / -2;
    for( var row = 0; row < gTeapotControlNode.TeapotPerLine; ++row )

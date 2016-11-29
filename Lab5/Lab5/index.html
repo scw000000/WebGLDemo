@@ -208,6 +208,8 @@ void main(void)
 
     uniform int uUseSSAO;
 
+    uniform float uBrightnessThreshold;
+
 void main(void) 
     {
      // This texture stores position + shininess 
@@ -262,13 +264,13 @@ void main(void)
         }
     gl_FragData[ 0 ].a = 1.0;
     
-    if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) >= 0.07 ) // convert to gray scale
+    if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) >= uBrightnessThreshold ) // convert to gray scale
         {
         gl_FragData[ 1 ] = gl_FragData[ 0 ];
         }
      else
         {
-        gl_FragData[ 1 ] = vec4( 0, 0, 0, 1 );
+        //gl_FragData[ 1 ] = vec4( 0, 0, 0, 1 );
         }
    //  gl_FragData[ 1 ] = vec4( 0, 1, 0, 1 );
     }
@@ -410,11 +412,11 @@ precision mediump float;
     varying vec2 vVertexUV;
 
     uniform sampler2D uMeshTexture; 
-
+    uniform float uBrightnessThreshold;
     void main(void) 
         {
         gl_FragData[ 0 ] = texture2D( uMeshTexture, vVertexUV ); 
-      if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) >= 0.7 ) // convert to gray scale
+      if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) > uBrightnessThreshold ) // convert to gray scale
         {
         gl_FragData[ 1 ] = gl_FragData[ 0 ];
         }
@@ -440,11 +442,11 @@ precision mediump float;
 #extension GL_EXT_draw_buffers : require
 precision mediump float;
     uniform vec4 uLightColor; 
-
+    uniform float uBrightnessThreshold;
     void main(void) 
         {
         gl_FragData[ 0 ] = uLightColor; 
-    if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) >= 0.07 ) // convert to gray scale
+    if( dot( gl_FragData[ 0 ].xyz, vec3(0.2126, 0.7152, 0.0722) ) >= uBrightnessThreshold ) // convert to gray scale
         {
         gl_FragData[ 1 ] = gl_FragData[ 0 ];
         }
@@ -515,6 +517,8 @@ precision mediump float;
     <h4 id="MusicControlOption">- Control Music</br> </br> </h4> 
 
     <h4 id="LightControlOption">- Control Light parameters</br> </br> </h4> 
+
+    <h4 id="BloomControlOption">- Control Bloom parameters</br> </br> </h4> 
 
     <!--<h4 id="Instruction">- How to execute on your browser:</h4> 
     <h4>     1. Currently it will only support Google Chrome</br>

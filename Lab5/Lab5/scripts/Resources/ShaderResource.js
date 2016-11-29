@@ -205,6 +205,9 @@ class DeferredLightShaderResource extends ShaderResource
       this.UseSSAOUni = {};
       this.UseSSAOUni.Context = gl.getUniformLocation( this.Program.Context, "uUseSSAO" );
 
+      this.BrightnessThresholdUni = {};
+      this.BrightnessThresholdUni.Context = gl.getUniformLocation( this.Program.Context, "uBrightnessThreshold" );
+
       this.OnLoaded();
       }
    }
@@ -303,6 +306,9 @@ class TextureMeshShaderResource extends ShaderResource
       this.MeshTextureUni = {};
       this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
       
+      this.BrightnessThresholdUni = {};
+      this.BrightnessThresholdUni.Context = gl.getUniformLocation( this.Program.Context, "uBrightnessThreshold" );
+
       this.OnLoaded();
       }
    }
@@ -322,6 +328,9 @@ class LightCubeShaderResource extends ShaderResource
       this.LightColorUni = {};
       this.LightColorUni.Context = gl.getUniformLocation( this.Program.Context, "uLightColor" );
       
+      this.BrightnessThresholdUni = {};
+      this.BrightnessThresholdUni.Context = gl.getUniformLocation( this.Program.Context, "uBrightnessThreshold" );
+
       this.OnLoaded();
       }
    }

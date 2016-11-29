@@ -72,6 +72,64 @@ function CreateButton( node, btnText )
    container.appendChild( button );
    }
 
+function CreateBloomControlButtons()
+   {
+   var container = document.getElementById( 'BloomControlOption' );
+
+   
+   var lightLabel = document.createElement('label')
+   lightLabel.appendChild( document.createTextNode( "   Light Cube Brightness Threshold: " ) );
+   var lightTextNode = document.createTextNode( gLightControlNode.BrightnessThreshold.Value.toString() );
+   lightLabel.appendChild( lightTextNode );
+
+   var lightRange = document.createElement( "input" );
+   lightRange.type = "range";
+   lightRange.min = gLightControlNode.BrightnessThreshold.Min;
+   lightRange.max = gLightControlNode.BrightnessThreshold.Max;
+   lightRange.step = 0.01;
+   lightRange.value = gLightControlNode.BrightnessThreshold.Value;
+   lightRange.oninput = function(){ gLightControlNode.BrightnessThreshold.Value = lightRange.value; lightTextNode.textContent = lightRange.value; };
+   container.appendChild( lightRange );
+
+   container.appendChild( lightLabel );
+
+   // For sky sphere
+
+   var skyLabel = document.createElement('label')
+   skyLabel.appendChild( document.createTextNode( "   Sky Sphere Brightness Threshold: " ) );
+   var skyTextNode = document.createTextNode( skySphereNode.BrightnessThreshold.Value.toString() );
+   skyLabel.appendChild( skyTextNode );
+
+   var skyRange = document.createElement( "input" );
+   skyRange.type = "range";
+   skyRange.min = skySphereNode.BrightnessThreshold.Min;
+   skyRange.max = skySphereNode.BrightnessThreshold.Max;
+   skyRange.step = 0.01;
+   skyRange.value = skySphereNode.BrightnessThreshold.Value;
+   skyRange.oninput = function(){ skySphereNode.BrightnessThreshold.Value = skyRange.value; skyTextNode.textContent = skyRange.value; };
+   container.appendChild( skyRange );
+
+   container.appendChild( skyLabel );
+
+   // For teapots and floor 
+
+   var teapotLabel = document.createElement('label')
+   teapotLabel.appendChild( document.createTextNode( "   Teapots Brightness Threshold: " ) );
+   var teapotTextNode = document.createTextNode( gTeapotControlNode.BrightnessThreshold.Value.toString() );
+   teapotLabel.appendChild( teapotTextNode );
+
+   var teapotRange = document.createElement( "input" );
+   teapotRange.type = "range";
+   teapotRange.min = gTeapotControlNode.BrightnessThreshold.Min;
+   teapotRange.max = gTeapotControlNode.BrightnessThreshold.Max;
+   teapotRange.step = 0.01;
+   teapotRange.value = gTeapotControlNode.BrightnessThreshold.Value;
+   teapotRange.oninput = function(){ gTeapotControlNode.BrightnessThreshold.Value = teapotRange.value; teapotTextNode.textContent = teapotRange.value; };
+   container.appendChild( teapotRange );
+
+   container.appendChild( teapotLabel );
+   }
+
 function CreateSSAOControlButtons()
    {
    var container = document.getElementById( 'SSAOControlOption' );
@@ -401,6 +459,7 @@ function webGLStart()
    CreateSSAOControlButtons();
    CreateLightControlButtons();
    CreateMusicontrolButtons();
+   CreateBloomControlButtons();
 
    globalScene.OnRestore();
 

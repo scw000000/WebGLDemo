@@ -71,6 +71,11 @@ function InitLightControlNode( audioRes )
    gLightControlNode.TimeTick = 0.01;
    gLightControlNode.NextChangeTime = 20;
 
+   gLightControlNode.BrightnessThreshold = {};
+   gLightControlNode.BrightnessThreshold.Min = 0.01;
+   gLightControlNode.BrightnessThreshold.Value = 0.7;
+   gLightControlNode.BrightnessThreshold.Max = 1.0;
+
    var deltaRad = Math.PI * 2 / gLightControlNode.LightNum;
    var lightPos = vec3.scale( vec3.create(), g_Left3v, gLightControlNode.Radius );
 

@@ -304,6 +304,8 @@ gDeferredDrawer.FinalRender = function()
 
    gl.uniform1i( gDeferredDrawer.LightShaderResource.UseSSAOUni.Context, gDeferredDrawer.UseSSAO );
 
+   gl.uniform1f( gDeferredDrawer.LightShaderResource.BrightnessThresholdUni.Context, gTeapotControlNode.BrightnessThreshold.Value );
+
    gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
 
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );

@@ -37,6 +37,8 @@ class LightCubeSceneNode extends PointLightSceneNode
 
       gl.uniform4f( this.ShaderResource.LightColorUni.Context, this.Specular[ 0 ], this.Specular[ 1 ], this.Specular[ 2 ], this.Specular[ 3 ] );
 
+      gl.uniform1f( this.ShaderResource.BrightnessThresholdUni.Context, gLightControlNode.BrightnessThreshold.Value );
+
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gCubeResource.VertexIndexBuffer.Context );
 
       gl.drawElements( gl.TRIANGLES, gCubeResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
