@@ -8,7 +8,7 @@
       this.MeshTextureResource = meshTextureResource;
       this.BrightnessThreshold = {};
       this.BrightnessThreshold.Min = 0.01;
-      this.BrightnessThreshold.Value = 0.7;
+      this.BrightnessThreshold.Value = 0.5;
       this.BrightnessThreshold.Max = 1.0;
       }
 

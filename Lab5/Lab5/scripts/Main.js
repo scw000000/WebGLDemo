@@ -469,8 +469,8 @@ function webGLStart()
    crateImgRes.Load( "crate.png" );
    var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
    crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
-   crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, -8.37, 0 ) );
-   crateMeshNode.Shininess = 10.0;
+   crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 0 ) );
+   crateMeshNode.Shininess = 20.0;
    crateMeshNode.MaterialAmbient= vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    crateMeshNode.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
