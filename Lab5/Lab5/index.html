@@ -292,7 +292,7 @@ void main(void)
 
  <script id="SSAOShader-fs" type="x-shader/x-fragment">
     precision mediump float;
-    const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 300;
+    const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 150;
     varying vec2 vVertexUV;
 
     uniform sampler2D uPositionTex_CameraSpace; 
@@ -503,11 +503,6 @@ precision mediump float;
             gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 4, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
             gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 4, 0 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
                 
-     //       for( int i = 1; i < 5; ++i )
-         //       {
-      //          gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( i, 0 ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
-     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( i, 0 ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
-    //            }
             }
         else
             {
@@ -523,12 +518,37 @@ precision mediump float;
             gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, 4 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
             gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, 4 ) * uInvTexureSize ) * GAUSSIAN_WEIGHTS_4; 
              
-       //     for( int i = 1; i < 5; ++i )
-      //          {
-     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV + vec2( 0, i ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
-     //           gl_FragColor += texture2D( uReferenceTexture, vVertexUV - vec2( 0, i ) * uInvTexureSize ) * GAUSSION_WEIGHTS[ i ]; 
-     //           }
             }
+        gl_FragColor.a = 1.0;
+        }
+</script>
+
+<script id="lightCombineShader-vs" type="x-shader/x-vertex">
+    precision mediump float;
+    attribute vec2 aVertexPosition;
+    attribute vec2 aVertexUV;
+
+    varying vec2 vVertexUV;
+
+    void main(void) {
+        gl_Position = vec4( aVertexPosition, 0, 1 );
+        vVertexUV = aVertexUV;
+    }
+</script>
+
+<script id="lightCombineShader-fs" type="x-shader/x-fragment">
+precision mediump float;
+    
+    varying vec2 vVertexUV;
+
+    uniform sampler2D uLightTexture; 
+    uniform sampler2D uSceneTexture; 
+
+    void main(void) 
+        {
+        vec4 lightColor = texture2D( uLightTexture, vVertexUV ); 
+        vec4 sceneColor = texture2D( uSceneTexture, vVertexUV ); 
+        gl_FragColor = lightColor + sceneColor;
         gl_FragColor.a = 1.0;
         }
 </script>

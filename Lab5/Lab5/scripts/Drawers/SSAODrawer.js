@@ -21,8 +21,8 @@ gSSAODrawer.Init = function()
 
    gSSAODrawer.SampleNum = {};
    gSSAODrawer.SampleNum.Min = 10;
-   gSSAODrawer.SampleNum.Max = 300;
-   gSSAODrawer.SampleNum.Value = 64;
+   gSSAODrawer.SampleNum.Max = 150;
+   gSSAODrawer.SampleNum.Value = 32;
 
    gSSAODrawer.SSAOPower = {};
    gSSAODrawer.SSAOPower.Min = 0.3;

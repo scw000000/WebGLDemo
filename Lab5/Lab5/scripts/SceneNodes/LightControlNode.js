@@ -73,7 +73,7 @@ function InitLightControlNode( audioRes )
 
    gLightControlNode.BrightnessThreshold = {};
    gLightControlNode.BrightnessThreshold.Min = 0.01;
-   gLightControlNode.BrightnessThreshold.Value = 0.7;
+   gLightControlNode.BrightnessThreshold.Value = 0.07;
    gLightControlNode.BrightnessThreshold.Max = 1.0;
 
    var deltaRad = Math.PI * 2 / gLightControlNode.LightNum;

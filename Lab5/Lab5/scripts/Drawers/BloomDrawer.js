@@ -20,8 +20,11 @@ gBloomDrawer.Init = function()
    gBloomDrawer.IterateNum.Max = 20;
    gBloomDrawer.IterateNum.Value = 6;
 
-   gBloomDrawer.ShaderResource = new GaussianBlurShaderResource();
-   gBloomDrawer.ShaderResource.Load( "gaussianBlurShader-vs", "gaussianBlurShader-fs" );
+   gBloomDrawer.BlurShaderResource = new GaussianBlurShaderResource();
+   gBloomDrawer.BlurShaderResource.Load( "gaussianBlurShader-vs", "gaussianBlurShader-fs" );
+
+   gBloomDrawer.LightCombineShaderResource = new LightCombineShaderResource();
+   gBloomDrawer.LightCombineShaderResource.Load( "lightCombineShader-vs", "lightCombineShader-fs" );
    
    gBloomDrawer.PingPongFBO = [];
    gBloomDrawer.PingPongTexture = [];
@@ -69,41 +72,43 @@ gBloomDrawer.Init = function()
    //   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    }
 
-gBloomDrawer.DrawGussionBlur = function()
+gBloomDrawer.DrawGussianBlur = function()
    {
    gl.bindFramebuffer( gl.FRAMEBUFFER, gBloomDrawer.PingPongFBO[ 0 ].Context );
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
    gl.bindFramebuffer( gl.FRAMEBUFFER, gBloomDrawer.PingPongFBO[ 1 ].Context );
    gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
+   gl.disableVertexAttribArray( 2 );
+   gl.disableVertexAttribArray( 3 ); 
+
+   gl.useProgram( gBloomDrawer.BlurShaderResource.Program.Context );
+
    for( var i = 0; i < gBloomDrawer.IterateNum.Value; ++i )
       {
-      gl.bindFramebuffer( gl.FRAMEBUFFER, gBloomDrawer.PingPongFBO[ i ].Context );
+      gl.bindFramebuffer( gl.FRAMEBUFFER, gBloomDrawer.PingPongFBO[ i % 2 ].Context );
       var referenceTexture = gDeferredDrawer.LightTexture;
       if( i != 0 )
          {
-         referenceTexture = gBloomDrawer.PingPongTexture[ !( i % 2 ) ];
+         referenceTexture = gBloomDrawer.PingPongTexture[ 1 - ( i % 2 ) ];
          }
-
-      gl.useProgram( gBloomDrawer.GussionBlurShaderResource.Program.Context );
-
-      gl.enableVertexAttribArray( gBloomDrawer.GussionBlurShaderResource.VertexPosAttr.Context );
+      gl.enableVertexAttribArray( gBloomDrawer.BlurShaderResource.VertexPosAttr.Context );
       gl.bindBuffer( gl.ARRAY_BUFFER, gQuadResource.VertexPosBuffer.Context );
-      gl.vertexAttribPointer( gBloomDrawer.GussionBlurShaderResource.VertexPosAttr.Context, gQuadResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+      gl.vertexAttribPointer( gBloomDrawer.BlurShaderResource.VertexPosAttr.Context, gQuadResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
-      gl.enableVertexAttribArray( gBloomDrawer.GussionBlurShaderResource.VertexUVAttr.Context );
+      gl.enableVertexAttribArray( gBloomDrawer.BlurShaderResource.VertexUVAttr.Context );
       gl.bindBuffer( gl.ARRAY_BUFFER, gQuadResource.VertexUVBuffer.Context );
-      gl.vertexAttribPointer( gBloomDrawer.GussionBlurShaderResource.VertexUVAttr.Context, gQuadResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+      gl.vertexAttribPointer( gBloomDrawer.BlurShaderResource.VertexUVAttr.Context, gQuadResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gQuadResource.VertexIndexBuffer.Context );
 
       gl.activeTexture( gl.TEXTURE0 );  
 	   gl.bindTexture( gl.TEXTURE_2D, referenceTexture.Context );  
-	   gl.uniform1i( gBloomDrawer.GussionBlurShaderResource.ReferenceTextureUni.Context, 0 );  
+	   gl.uniform1i( gBloomDrawer.BlurShaderResource.ReferenceTextureUni.Context, 0 );  
 
-      gl.uniform1i( gBloomDrawer.GussionBlurShaderResource.DirectionUni.Context, i % 2 );
+      gl.uniform1i( gBloomDrawer.BlurShaderResource.DirectionUni.Context, i % 2 );
 
-      gl.uniform2f( gSSAODrawer.BlurShaderResource.InvTextureSizeUni.Context, 1 / gl.viewportWidth, 1 / gl.viewportHeight );
+      gl.uniform2f( gBloomDrawer.BlurShaderResource.InvTextureSizeUni.Context, 1 / gl.viewportWidth, 1 / gl.viewportHeight );
 
       gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
 
@@ -111,16 +116,45 @@ gBloomDrawer.DrawGussionBlur = function()
 
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
 
-   if( i == 0 )
-      {
-      return gDeferredDrawer.LightTexture;
-      }
+   //if( i == 0 )
+   //   {
+   //   return gDeferredDrawer.LightTexture;
+   //   }
 
-   return gBloomDrawer.PingPongTexture[ !( gBloomDrawer.IterateNum.Value % 2 ) ];
+   //return gBloomDrawer.PingPongTexture[ !( gBloomDrawer.IterateNum.Value % 2 ) ];
    }
 
-gBloomDrawer.CombineLightAndOutput = function()
+gBloomDrawer.CombineLightAndScene = function()
    {
-   var combineTexture = gBloomDrawer.DrawGussionBlur();
+   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+   gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
+   gl.useProgram( gBloomDrawer.LightCombineShaderResource.Program.Context );
+
+   gl.activeTexture( gl.TEXTURE0 );  
+	gl.bindTexture( gl.TEXTURE_2D, gDeferredDrawer.OutputTexture.Context );  
+   gl.uniform1i( gBloomDrawer.LightCombineShaderResource.SceneTextureUni.Context, 0 ); 
+
+   var lightTexture = gDeferredDrawer.LightTexture;
+   if( gBloomDrawer.IterateNum.Value != 0 )
+      {
+      lightTexture = gBloomDrawer.PingPongTexture[ 1 - ( gBloomDrawer.IterateNum.Value % 2 ) ];
+      }
+
+   gl.activeTexture( gl.TEXTURE1 );  
+	gl.bindTexture( gl.TEXTURE_2D, lightTexture.Context );  
+	gl.uniform1i( gBloomDrawer.LightCombineShaderResource.LightTextureUni.Context, 1 ); 
+
+
+   gl.enableVertexAttribArray( gBloomDrawer.LightCombineShaderResource.VertexPosAttr.Context );
+   gl.bindBuffer( gl.ARRAY_BUFFER, gQuadResource.VertexPosBuffer.Context );
+   gl.vertexAttribPointer( gBloomDrawer.LightCombineShaderResource.VertexPosAttr.Context, gQuadResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+   gl.enableVertexAttribArray( gBloomDrawer.LightCombineShaderResource.VertexUVAttr.Context );
+   gl.bindBuffer( gl.ARRAY_BUFFER, gQuadResource.VertexUVBuffer.Context );
+   gl.vertexAttribPointer( gBloomDrawer.LightCombineShaderResource.VertexUVAttr.Context, gQuadResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+   gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gQuadResource.VertexIndexBuffer.Context );
+
+   gl.drawElements( gl.TRIANGLES, gQuadResource.VertexIndexBuffer.NumItems, gl.UNSIGNED_SHORT, 0 );
    }

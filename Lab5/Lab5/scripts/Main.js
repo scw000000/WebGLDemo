@@ -76,7 +76,23 @@ function CreateBloomControlButtons()
    {
    var container = document.getElementById( 'BloomControlOption' );
 
-   
+   var blurLabel = document.createElement('label')
+   blurLabel.appendChild( document.createTextNode( "   Gaussian Blur Iteration Num: " ) );
+   var blurTextNode = document.createTextNode( gBloomDrawer.IterateNum.Value.toString() );
+   blurLabel.appendChild( blurTextNode );
+
+   var blurRange = document.createElement( "input" );
+   blurRange.type = "range";
+   blurRange.min = gBloomDrawer.IterateNum.Min;
+   blurRange.max = gBloomDrawer.IterateNum.Max;
+   blurRange.step = 1;
+   blurRange.value = gBloomDrawer.IterateNum.Value;
+   blurRange.oninput = function(){ gBloomDrawer.IterateNum.Value = blurRange.value; blurTextNode.textContent = blurRange.value; };
+   container.appendChild( blurRange );
+
+   container.appendChild( blurLabel );
+
+   // Light brightness
    var lightLabel = document.createElement('label')
    lightLabel.appendChild( document.createTextNode( "   Light Cube Brightness Threshold: " ) );
    var lightTextNode = document.createTextNode( gLightControlNode.BrightnessThreshold.Value.toString() );
@@ -245,7 +261,19 @@ function CreateRenderingControlButtons()
 
    var button = document.createElement( "input" );
    button.type = "button";
-   button.value = "Default";
+   button.value = "Output";
+   button.onclick = function()
+      { 
+      gRenderFunction = function()
+            { 
+            gBloomDrawer.CombineLightAndScene();
+            }; 
+      };
+   container.appendChild( button );
+
+   button = document.createElement( "input" );
+   button.type = "button";
+   button.value = "Non bloomed";
    button.onclick = function()
       { 
       gRenderFunction = function()
@@ -303,6 +331,18 @@ function CreateRenderingControlButtons()
    button.onclick = function(){ gRenderFunction = function(){ gTextureDrawer.DrawTexture( gDeferredDrawer.LightTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); }; };
    container.appendChild( button );
 
+   button = document.createElement( "input" );
+   button.type = "button";
+   button.value = "Blur";
+   button.onclick = function(){ gRenderFunction = function(){ 
+      var outputTexture = gDeferredDrawer.LightTexture;
+   if( gBloomDrawer.IterateNum.Value != 0 )
+      {
+      outputTexture = gBloomDrawer.PingPongTexture[ 1 - ( gBloomDrawer.IterateNum.Value % 2 ) ];
+      }
+      gTextureDrawer.DrawTexture( outputTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); 
+   }; };
+   container.appendChild( button );
    }
 
 function CreateLightControlButtons()
@@ -392,7 +432,7 @@ function webGLStart()
 
    gRenderFunction = function()
       { 
-      gTextureDrawer.DrawTexture( gDeferredDrawer.OutputTexture, 0, 0, gl.viewportWidth, gl.viewportHeight ); 
+      gBloomDrawer.CombineLightAndScene();
       }; 
 
    controller = new RobotController();

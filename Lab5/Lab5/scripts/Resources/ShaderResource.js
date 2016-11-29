@@ -360,3 +360,26 @@ class GaussianBlurShaderResource extends ShaderResource
       this.OnLoaded();
       }
    }
+
+class LightCombineShaderResource extends ShaderResource
+   {
+   InitAttrbutesAndUniforms()
+      {
+
+      this.VertexPosAttr = {};
+      this.VertexPosAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexPosition" );
+      gl.enableVertexAttribArray( this.VertexPosAttr.Context );
+
+      this.VertexUVAttr = {};
+      this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
+      gl.enableVertexAttribArray( this.VertexUVAttr.Context );
+
+      this.LightTextureUni = {};
+      this.LightTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uLightTexture" );
+      
+      this.SceneTextureUni = {};
+      this.SceneTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uSceneTexture" );
+
+      this.OnLoaded();
+      }
+   }

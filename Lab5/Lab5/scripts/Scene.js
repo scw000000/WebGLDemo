@@ -66,6 +66,7 @@
          gDeferredDrawer.FinalRender();
          this.LightPassNode.RenderChildren();
          this.SkySpherePassNode.RenderChildren();
+         gBloomDrawer.DrawGussianBlur();
          ouputBuffer();
          }
       else
