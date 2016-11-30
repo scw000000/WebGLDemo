@@ -71,8 +71,8 @@
 	   gl.bindTexture( gl.TEXTURE_2D, textureRes.Context );    // bind the texture object to the texture unit 
 	   gl.uniform1i(this.Program.MeshTextureUni, 0);   // pass the texture unit to the shader 
 
-      gl.uniformMatrix4fv( this.Program.mvpMatrixUni, false, globalScene.GetMVPMatrix() );
-      var mvMat = globalScene.GetMVMatrix();
+      gl.uniformMatrix4fv( this.Program.mvpMatrixUni, false, this.GetMVPMatrix( globalScene ) );
+      var mvMat = this.GetMVMatrix( globalScene );
       gl.uniformMatrix4fv( this.Program.mvMatrixUni, false, mvMat );
       mat4.invert( mvMat, mvMat );
 	   mat4.transpose( mvMat, mvMat ); 

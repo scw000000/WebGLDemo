@@ -36,7 +36,7 @@
       gl.vertexAttribPointer( this.ShaderResource.VertexUVAttr.Context, this.MeshResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       /////// Uniforms
-      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
+      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, this.GetMVPMatrix( globalScene ) );
 
       gl.uniform1f( this.ShaderResource.BrightnessThresholdUni.Context, this.BrightnessThreshold.Value );
 

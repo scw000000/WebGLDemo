@@ -63,17 +63,17 @@
 
    PreRender()
       {
-      globalScene.PushTransform( this.LocalTransform.GetToWorld() );
+     // globalScene.PushTransform( this.LocalTransform.GetToWorld() );
       };
 
    OnRender() { }
 
    PostRender() 
       {
-      globalScene.PopTransform();
+    //  globalScene.PopTransform();
       }
 
-   RenderChildren()
+   RenderChildren( scene )
       {
       for( var i in this.ChildNodes )
          {
@@ -84,5 +84,15 @@
          }
       }
 
+   GetMVPMatrix( scene )
+      {
+      var vpMat = scene.CameraNode.GetVPMatrix();
+      return mat4.mul( mat4.create(), vpMat, this.GlobalTransform.GetToWorld() );
+      }
 
+   GetMVMatrix( scene )
+      {
+      var vMat = scene.CameraNode.GetVMatrix();
+      return mat4.mul( mat4.create(), vMat, this.GlobalTransform.GetToWorld() );
+      }
    }

@@ -47,8 +47,8 @@
 
       /////// Uniforms
 
-      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
-      var mvMat = globalScene.GetMVMatrix();
+      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, this.GetMVPMatrix( globalScene ) );
+      var mvMat = this.GetMVMatrix( globalScene );
       gl.uniformMatrix4fv( this.ShaderResource.mvMatrixUni.Context, false, mvMat );
       mat4.invert( mvMat, mvMat );
 	   mat4.transpose( mvMat, mvMat ); 

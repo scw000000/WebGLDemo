@@ -292,7 +292,7 @@ void main(void)
 
  <script id="SSAOShader-fs" type="x-shader/x-fragment">
     precision mediump float;
-    const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 150;
+    const int MAXIUM_SAMPLE_POINTS_SUPPORTED = 100;
     varying vec2 vVertexUV;
 
     uniform sampler2D uPositionTex_CameraSpace; 
@@ -572,9 +572,9 @@ precision mediump float;
 <script type="text/javascript" src="scripts\GlobalConstants.js"></script>
 <script type="text/javascript" src="scripts\Controller.js"></script>
 <script type="text/javascript" src="scripts\CameraController.js"></script>
-<script type="text/javascript" src="scripts\RobotController.js"></script>
+<script type="text/javascript" src="scripts\DemoController.js"></script>
 <script type="text/javascript" src="scripts\Transform.js"></script>
-<script type="text/javascript" src="scripts\TransformStack.js"></script>
+<!--<script type="text/javascript" src="scripts\TransformStack.js"></script>-->
 <script type="text/javascript" src="scripts\Scene.js"></script>
 <script type="text/javascript" src="scripts\LightManager.js"></script>
 
@@ -594,7 +594,9 @@ precision mediump float;
 <script type="text/javascript" src="scripts\Drawers\DeferredDrawer.js"></script>
 <script type="text/javascript" src="scripts\Drawers\SSAODrawer.js"></script>
 <script type="text/javascript" src="scripts\Drawers\BloomDrawer.js"></script>
-
+     <audio id="AudioFile">
+         <source src="When_There_Were_Trains.mp3" type="audio/mpeg">
+        </audio> 
 </head>
 
 
@@ -604,24 +606,21 @@ precision mediump float;
 
     <br/>
 
-    <h4 id="CameraControl">- Camera Control</h4> 
+    <h4 id="CameraControl">- Control Camera</h4> 
             <h4>*   W, S, A, D, F, C: Forwad, Backward, Left, Right, Up, Down</br> 
                 *   Arrow Keys: Rotation</br> </h4> 
+
+    <h4 id="MusicControlOption" value="Music.mp3">- Control Music,   Source : <a href=https://media.allaboutjazz.com/media.php?id=10533>"When There Were Trains" by Mike Holober</a> </br>
+        </br> </h4> 
+
     <h4 id="RenderControlOption">- Control Render Output</br> </br> </h4> 
 
-    <h4 id="SSAOControlOption">- Control SSAO parameters</br> </br> </h4> 
-
-    <h4 id="MusicControlOption">- Control Music</br> </br> </h4> 
+    <h4 id="SSAOControlOption">- Control SSAO parameters</br> </br> </h4>   
 
     <h4 id="LightControlOption">- Control Light parameters</br> </br> </h4> 
 
     <h4 id="BloomControlOption">- Control Bloom parameters</br> </br> </h4> 
 
-    <!--<h4 id="Instruction">- How to execute on your browser:</h4> 
-    <h4>     1. Currently it will only support Google Chrome</br>
-             2. Enter about:flags in address bar.</br>
-             3. Find the field "WebGL 2.0 Prototype" and enable it.
-        </h4> -->
 </body>
 
 

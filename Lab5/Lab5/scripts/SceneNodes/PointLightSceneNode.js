@@ -33,7 +33,7 @@ class LightCubeSceneNode extends PointLightSceneNode
       gl.vertexAttribPointer( this.ShaderResource.VertexPosAttr.Context, gCubeResource.VertexPosBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
       /////// Uniforms
-      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, globalScene.GetMVPMatrix() );
+      gl.uniformMatrix4fv( this.ShaderResource.mvpMatrixUni.Context, false, this.GetMVPMatrix( globalScene ) );
 
       gl.uniform4f( this.ShaderResource.LightColorUni.Context, this.ScreenColor[ 0 ], this.ScreenColor[ 1 ], this.ScreenColor[ 2 ], this.ScreenColor[ 3 ] );
 

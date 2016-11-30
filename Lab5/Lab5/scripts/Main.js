@@ -401,11 +401,8 @@ function CreateLightControlButtons()
    container.appendChild( gammaScalarLabel );
    }
 
-var globalLight;
 var textureMeshShader;
 var lightCubeShader;
-var textureRes = {};
-var meshRes = {};
 var skySphereRes = {};
 var skyMapRes = {};
 var skySphereNode;
@@ -445,12 +442,6 @@ function webGLStart()
 
    globalScene.AddSceneNode( globalScene.CameraNode );
    
-   textureRes = new TextureResource();
-   //textureRes.Load( "earth.png" );
-   textureRes.Load( "gray.jpg" );
-   meshRes = new MeshResource();
-   meshRes.Load( "teapot.json" );
-
    skySphereRes = new MeshResource();
    skySphereRes.Load( "skySphere.json" );
 
@@ -458,8 +449,6 @@ function webGLStart()
  //  skyMapRes.Load( "skyMap.png" );
   // skyMapRes.Load( "star2.jpg" );
    skyMapRes.Load( "moon.jpg" );
-   //skyMapRes.Load( "moon.jpg" );
-   //skyMapRes.Load( "nightSky.jpg" );
   // skyMapRes.Load( "nightSky.png" );
 
    textureMeshShader = new TextureMeshShaderResource( );
@@ -483,18 +472,17 @@ function webGLStart()
 
    lightCubeShader = new LightCubeShaderResource( );
    lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
-
+   
    globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 50, 20, -130 ) );
    globalScene.CameraNode.LocalTransform.RotateToWorldRad( -Math.PI / 10, g_Up3v );
    var audioRes = new AudioResource();
-   audioRes.Load( "Music.mp3" );
+   var container = document.getElementById( 'AudioFile' ).firstElementChild;
+   audioRes.Load( container.src );
 
    InitLightControlNode( audioRes );
    InitLightBrightnessControlNode();
    InitLightScaleControlNode();
    InitTeapotControlNode();
-
-   controllingNode = globalLight;
    
    CreateRenderingControlButtons();
    CreateSSAOControlButtons();

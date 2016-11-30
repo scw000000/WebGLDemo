@@ -2,7 +2,7 @@
    {
    constructor()
       {
-      this.TransformStack = new TransformStack();
+      //this.TransformStack = new TransformStack();
       // construct a empty dummy node
       this.RootNode = new SceneNodes();
 
@@ -75,39 +75,20 @@
          }
       }
 
-   PushTransform( matrix )
-      {
-      this.TransformStack.PushTransform( matrix );
-      }
+   //PushTransform( matrix )
+   //   {
+   //   this.TransformStack.PushTransform( matrix );
+   //   }
 
-   PopTransform()
-      {
-      this.TransformStack.PopTransform();
-      }
+   //PopTransform()
+   //   {
+   //   this.TransformStack.PopTransform();
+   //   }
 
-   GetTopTransform()
-      {
-      return this.TransformStack.GetTopTransform();
-      }
-
-   
-   GetMVPMatrix()
-      {
-      if( this.CameraNode == null )
-         {
-         throw "Null camera node!";
-         }
-      return this.CameraNode.GetMVPMatrix();
-      }
-
-   GetMVMatrix()
-      {
-      if( this.CameraNode == null )
-         {
-         throw "Null camera node!";
-         }
-      return this.CameraNode.GetMVMatrix();
-      }
+   //GetTopTransform()
+   //   {
+   //   return this.TransformStack.GetTopTransform();
+   //   }
 
    GetPMatrix()
       {

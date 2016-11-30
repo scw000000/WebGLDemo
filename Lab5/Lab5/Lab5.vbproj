@@ -120,7 +120,6 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
     <Content Include="scripts\CameraController.js" />
     <Content Include="scripts\Drawers\BloomDrawer.js" />
     <Content Include="scripts\Drawers\SSAODrawer.js" />
@@ -145,7 +144,7 @@
     <Content Include="scripts\SceneNodes\PointLightSceneNode.js" />
     <Content Include="scripts\Resources\QuadResource.js" />
     <Content Include="scripts\Resources\Resource.js" />
-    <Content Include="scripts\RobotController.js" />
+    <Content Include="scripts\DemoController.js" />
     <Content Include="scripts\Scene.js" />
     <Content Include="scripts\SceneNodes\SceneNodes.js" />
     <Content Include="scripts\Resources\ShaderResource.js" />
@@ -157,6 +156,7 @@
     <Content Include="scripts\TransformStack.js" />
     <Content Include="scripts\webgl-utils.js" />
     <Content Include="Web.config" />
+    <Content Include="WebGLDemo.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="My Project\AssemblyInfo.vb" />

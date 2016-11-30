@@ -28,16 +28,14 @@
       mat4.mul( this.VPMatrix, this.PMatrix, this.VMatrix );
       }
 
-   GetMVPMatrix()
+   GetVPMatrix()
       {
-      var ret = mat4.clone( globalScene.GetTopTransform() );
-      return mat4.mul( ret, this.VPMatrix, ret );
+      return this.VPMatrix;
       }
 
-   GetMVMatrix()
+   GetVMatrix()
       {
-      var ret = mat4.clone( globalScene.GetTopTransform() );
-      return mat4.mul( ret, this.VMatrix, ret );
+      return this.VMatrix;
       }
 
    GetPMatrix()

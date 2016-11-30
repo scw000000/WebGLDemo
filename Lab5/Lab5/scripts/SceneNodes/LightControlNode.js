@@ -99,9 +99,19 @@ function InitLightControlNode( audioRes )
 
    gLightControlNode.GetNormalizedFreq = function( scalar )
       {
-      var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * scalar );
-      freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
-      return gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+      
+      //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * scalar );
+      //freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
+      // discard other frequency which is always zero
+      var freqIdx = Math.ceil( 880 * scalar );
+      freqIdx = Math.max( 0, Math.min( freqIdx, 880 - 1 ) );
+      var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
+      //if( maxIdx < 0 || ( normalizedFreq > 0 && freqIdx > maxIdx ) )
+      //   {
+      //   maxIdx = freqIdx;
+      //   console.log( "Max: " + maxIdx );
+      //   }
+      return normalizedFreq;
       }
 
    gLightControlNode.PauseMusic = function()
@@ -284,7 +294,7 @@ function InitLightBrightnessControlNode()
    gLightBrightnessControlNode.GammaScalar = {};
    gLightBrightnessControlNode.GammaScalar.Min = 0.1
    gLightBrightnessControlNode.GammaScalar.Max = 20.0;
-   gLightBrightnessControlNode.GammaScalar.Value = 8.5;
+   gLightBrightnessControlNode.GammaScalar.Value = 7.6;
    gLightBrightnessControlNode.Smoothness = 0.2;
 
    var deltaRad = Math.PI * 2 / gLightBrightnessControlNode.LightNum;
