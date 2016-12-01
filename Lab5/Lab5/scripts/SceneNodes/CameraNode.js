@@ -6,7 +6,7 @@
       this.Fov = 45;
       this.Aspect = gl.viewportWidth / gl.viewportHeight;
       this.NearDist = 0.1;
-      this.FarDist = 1000.0;
+      this.FarDist = 500.0;
       this.VMatrix = mat4.create();
       this.PMatrix = mat4.create();
       this.VPMatrix = mat4.create();
