@@ -113,16 +113,16 @@ function CreateBloomControlButtons()
 
    var skyLabel = document.createElement('label')
    skyLabel.appendChild( document.createTextNode( "   Sky Sphere Brightness Threshold: " ) );
-   var skyTextNode = document.createTextNode( skySphereNode.BrightnessThreshold.Value.toString() );
+   var skyTextNode = document.createTextNode( gSkySphereNode.BrightnessThreshold.Value.toString() );
    skyLabel.appendChild( skyTextNode );
 
    var skyRange = document.createElement( "input" );
    skyRange.type = "range";
-   skyRange.min = skySphereNode.BrightnessThreshold.Min;
-   skyRange.max = skySphereNode.BrightnessThreshold.Max;
+   skyRange.min = gSkySphereNode.BrightnessThreshold.Min;
+   skyRange.max = gSkySphereNode.BrightnessThreshold.Max;
    skyRange.step = 0.01;
-   skyRange.value = skySphereNode.BrightnessThreshold.Value;
-   skyRange.oninput = function(){ skySphereNode.BrightnessThreshold.Value = skyRange.value; skyTextNode.textContent = skyRange.value; };
+   skyRange.value = gSkySphereNode.BrightnessThreshold.Value;
+   skyRange.oninput = function(){ gSkySphereNode.BrightnessThreshold.Value = skyRange.value; skyTextNode.textContent = skyRange.value; };
    container.appendChild( skyRange );
 
    container.appendChild( skyLabel );
@@ -401,12 +401,8 @@ function CreateLightControlButtons()
    container.appendChild( gammaScalarLabel );
    }
 
-var textureMeshShader;
-var lightCubeShader;
-var skySphereRes = {};
-var skyMapRes = {};
-var skySphereNode;
-var crateImgRes;
+var gSkySphereNode;
+
 function webGLStart() 
    {
    canvas = document.getElementById("WebGL-canvas");
@@ -419,8 +415,11 @@ function webGLStart()
    globalScene = new Scene();
    
    gLightManager.Init();
+
    gQuadResource.Init();
    gCubeResource.Init();
+   gSphereRsource.Init();
+
    gTextureDrawer.Init();
    gDeferredDrawer.Init();
    gSSAODrawer.Init();
@@ -442,19 +441,32 @@ function webGLStart()
 
    globalScene.AddSceneNode( globalScene.CameraNode );
    
-   skySphereRes = new MeshResource();
+   var skySphereRes = new MeshResource();
    skySphereRes.Load( "skySphere.json" );
 
-   skyMapRes = new TextureResource();
+   var skyMapRes = new TextureResource();
  //  skyMapRes.Load( "skyMap.png" );
   // skyMapRes.Load( "star2.jpg" );
    skyMapRes.Load( "moon.jpg" );
   // skyMapRes.Load( "nightSky.png" );
 
-   textureMeshShader = new TextureMeshShaderResource( );
+   var lampTexRes = new TextureResource();
+   lampTexRes.Load( "black.jpg" );
+   var lampMesh = new MeshResource();
+   lampMesh.Load( "streetlight.json" );
+   var lampMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, lampMesh, lampTexRes );
+   mat4.scale( lampMeshNode.LocalTransform.GetToWorld(), lampMeshNode.LocalTransform.GetToWorld(), vec3.fromValues( 30, 30, 30 ) );
+   lampMeshNode.LocalTransform.RotateFromWorldRad( -Math.PI / 2, g_Left3v );
+   lampMeshNode.Shininess = 20.0;
+   lampMeshNode.MaterialAmbient= vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
+   lampMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
+   lampMeshNode.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
+   globalScene.AddSceneNode( lampMeshNode, 0 );
+
+   var textureMeshShader = new TextureMeshShaderResource( );
    textureMeshShader.Load( "textureMeshShader-vs", "textureMeshShader-fs" );
 
-   crateImgRes = new TextureResource();
+   var crateImgRes = new TextureResource();
    crateImgRes.Load( "crate.png" );
    var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
    crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
@@ -465,13 +477,10 @@ function webGLStart()
    crateMeshNode.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    globalScene.AddSceneNode( crateMeshNode, 0 );
 
-   skySphereNode = new TextureMeshSceneNode( textureMeshShader, skySphereRes, skyMapRes );
-   skySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
+   gSkySphereNode = new TextureMeshSceneNode( textureMeshShader, skySphereRes, skyMapRes );
+   gSkySphereNode.LocalTransform.Scale( vec3.fromValues( 300, 300, 300 ) );
 
-   globalScene.AddSceneNode( skySphereNode, 2 );
-
-   lightCubeShader = new LightCubeShaderResource( );
-   lightCubeShader.Load( "lightCubeShader-vs", "lightCubeShader-fs" );
+   globalScene.AddSceneNode( gSkySphereNode, 2 );
    
    globalScene.CameraNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 50, 20, -130 ) );
    globalScene.CameraNode.LocalTransform.RotateToWorldRad( -Math.PI / 10, g_Up3v );
@@ -479,9 +488,11 @@ function webGLStart()
    var container = document.getElementById( 'AudioFile' ).firstElementChild;
    audioRes.Load( container.src );
 
+   InitLightShapeShader();
    InitLightControlNode( audioRes );
    InitLightBrightnessControlNode();
    InitLightScaleControlNode();
+   InitStreetLightControlNode();
    InitTeapotControlNode();
    
    CreateRenderingControlButtons();

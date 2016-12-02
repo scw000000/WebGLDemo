@@ -59,6 +59,7 @@ class MeshResource extends Resource
 
    Load( fileName )
       {
+      this.FileName = fileName;
       console.log("loading mesh " + fileName );
       var request = new  XMLHttpRequest();
       request.open( "GET", fileName );    
@@ -91,6 +92,15 @@ class MeshResource extends Resource
       this.VertexNormalBuffer.ItemSize = 3;
       this.VertexNormalBuffer.NumItems = this.MeshData.vertexNormals.length / 3;
 
+      if(this.MeshData.vertexTextureCoords == null )  
+         {
+         this.MeshData.vertexTextureCoords = [];
+         var size = this.MeshData.vertexNormals.length / 3 * 2;
+         while(size--)
+            {
+            this.MeshData.vertexTextureCoords[size] = 0.5;
+            }
+         }
       this.VertexUVBuffer.Context = gl.createBuffer();
       gl.bindBuffer( gl.ARRAY_BUFFER, this.VertexUVBuffer.Context );
       gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( this.MeshData.vertexTextureCoords ), gl.STATIC_DRAW);

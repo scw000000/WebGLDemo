@@ -313,7 +313,7 @@ class TextureMeshShaderResource extends ShaderResource
       }
    }
 
-class LightCubeShaderResource extends ShaderResource
+class LightShapeShaderResource extends ShaderResource
    {
    InitAttrbutesAndUniforms()
       {

@@ -22,6 +22,10 @@ function InitTeapotControlNode()
       {
       for( var col = 0; col < gTeapotControlNode.TeapotPerLine; ++col )
          {
+         if( row == 2 && col == 2 )
+            {
+            continue;
+            }
          var teapot = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureResArr[ row ] );
          teapot.LocalTransform.SetToWorldPosition( vec3.fromValues( offSet + row *gTeapotControlNode.TeapotDistance, 8.37, offSet + col *gTeapotControlNode.TeapotDistance ) );
          teapot.LocalTransform.RotateToWorldRad( Math.PI / 4.0, g_Up3v );

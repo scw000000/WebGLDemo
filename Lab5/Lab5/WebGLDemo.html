@@ -427,7 +427,7 @@ precision mediump float;
         }
 </script>
 
-<script id="lightCubeShader-vs" type="x-shader/x-vertex">
+<script id="lightShapeShader-vs" type="x-shader/x-vertex">
 precision mediump float;
     attribute vec3 aVertexPosition;
 
@@ -438,7 +438,7 @@ precision mediump float;
     }
 </script>
 
-<script id="lightCubeShader-fs" type="x-shader/x-fragment">
+<script id="lightShapeShader-fs" type="x-shader/x-fragment">
 #extension GL_EXT_draw_buffers : require
 precision mediump float;
     uniform vec4 uLightColor; 
@@ -589,7 +589,7 @@ precision mediump float;
 
 <script type="text/javascript" src="scripts\shaders_setup.js"></script>
 <script type="text/javascript" src="scripts\Main.js"></script>
-<script type="text/javascript" src="scripts\Resources\QuadResource.js"></script>
+<script type="text/javascript" src="scripts\Resources\GeometryResources.js"></script>
 <script type="text/javascript" src="scripts\Drawers\TextureDrawer.js"></script>
 <script type="text/javascript" src="scripts\Drawers\DeferredDrawer.js"></script>
 <script type="text/javascript" src="scripts\Drawers\SSAODrawer.js"></script>

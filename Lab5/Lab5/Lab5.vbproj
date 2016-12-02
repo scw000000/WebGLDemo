@@ -142,7 +142,7 @@
     <Content Include="scripts\Main.js" />
     <Content Include="scripts\SceneNodes\MeshSceneNodes.js" />
     <Content Include="scripts\SceneNodes\PointLightSceneNode.js" />
-    <Content Include="scripts\Resources\QuadResource.js" />
+    <Content Include="scripts\Resources\GeometryResources.js" />
     <Content Include="scripts\Resources\Resource.js" />
     <Content Include="scripts\DemoController.js" />
     <Content Include="scripts\Scene.js" />

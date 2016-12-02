@@ -1,4 +1,5 @@
 ﻿var gLightControlNode;
+var gLightShapeShader;
 
 var lerp = function( scalar, a, b )
    {
@@ -22,9 +23,9 @@ function ScaleColor( out, scalar, color )
    return out;
    }
 
-function GenerateLightNode( lightColor, ambientScalar, diffuseScalar, specularScalar )
+function GenerateLightNode( lightCLass, lightColor, ambientScalar, diffuseScalar, specularScalar )
    {
-   var lightNode = new LightCubeSceneNode( lightCubeShader, ScaleColor( vec4.create(), ambientScalar, lightColor ), ScaleColor( vec4.create(), diffuseScalar, lightColor ), ScaleColor( vec4.create(), specularScalar, lightColor ) );
+   var lightNode = new lightCLass( gLightShapeShader, ScaleColor( vec4.create(), ambientScalar, lightColor ), ScaleColor( vec4.create(), diffuseScalar, lightColor ), ScaleColor( vec4.create(), specularScalar, lightColor ) );
    lightNode.ScreenColor = vec4.clone( lightColor );
    return lightNode;
    }
@@ -56,6 +57,12 @@ function GetLerpedGrayCodeColor( scalar )
    return colorLerp( ( scalar - grayCodeRatios[ left ] + 1 / 7 ) / ( 1 / 7 ), grayCode[ left ], grayCode[ left + 1 ] );
    }
 
+function InitLightShapeShader()
+   {
+   gLightShapeShader = new LightShapeShaderResource( );
+   gLightShapeShader.Load( "lightShapeShader-vs", "lightShapeShader-fs" );
+   }
+
 function InitLightControlNode( audioRes )
    {
    gLightControlNode = new SceneNodes();
@@ -63,14 +70,13 @@ function InitLightControlNode( audioRes )
    gLightControlNode.Radius = 150;
    gLightControlNode.AudioResource = audioRes;
    gLightControlNode.LightMaxHeight = 100;
-   gLightControlNode.Smoothness = 0.3;
+   gLightControlNode.Smoothness = 0.15;
    gLightControlNode.AmbientScalar = 0.01;
    gLightControlNode.DiffuseScalar = 0.05;
    gLightControlNode.SpecularScalar = 0.1;
    gLightControlNode.Speed = 0.3;
    gLightControlNode.TargetSpeed = 0.3;
    gLightControlNode.CurrentTime = 0;
-   gLightControlNode.TimeTick = 0.01;
    gLightControlNode.NextChangeTime = 20;
 
    gLightControlNode.BrightnessThreshold = {};
@@ -90,7 +96,7 @@ function InitLightControlNode( audioRes )
       var idxRatio = i / gLightControlNode.LightNum;
       var lightColor = GetLerpedGrayCodeColor( idxRatio );
       
-      var light = GenerateLightNode( lightColor, gLightControlNode.AmbientScalar, gLightControlNode.DiffuseScalar, gLightControlNode.SpecularScalar );
+      var light = GenerateLightNode( LightSphereSceneNode, lightColor, gLightControlNode.AmbientScalar, gLightControlNode.DiffuseScalar, gLightControlNode.SpecularScalar );
       light.LocalTransform.SetToWorldPosition( lightPos );
       gLightControlNode.AddChild( light );
 
@@ -103,8 +109,8 @@ function InitLightControlNode( audioRes )
       //var freqIdx = Math.ceil( gLightControlNode.AudioResource.frequencyData.length * scalar );
       //freqIdx = Math.max( 0, Math.min( freqIdx, gLightControlNode.AudioResource.frequencyData.length - 1 ) );
       // discard other frequency which is always zero
-      var freqIdx = Math.ceil( 880 * scalar );
-      freqIdx = Math.max( 0, Math.min( freqIdx, 880 - 1 ) );
+      var freqIdx = Math.ceil( 780 * scalar );
+      freqIdx = Math.max( 0, Math.min( freqIdx, 780 - 1 ) );
       var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
       //if( maxIdx < 0 || ( normalizedFreq > 0 && freqIdx > maxIdx ) )
       //   {
@@ -192,88 +198,6 @@ function UpdateLights( deltaTime )
       }
    }
 
-//var gSecondLightControlNode;
-
-//function InitSecondLightControlNode()
-//   {
-//   gSecondLightControlNode = new SceneNodes();
-//   gSecondLightControlNode.LightNum = 40;
-//   gSecondLightControlNode.Radius = 75;
-//   gSecondLightControlNode.LightMaxHeight = 60;
-//   gSecondLightControlNode.Smoothness = 0.1;
-
-//   gSecondLightControlNode.LightsPerCycle = 17;
-//   gSecondLightControlNode.HeightPerCycle = 75;
-//   gSecondLightControlNode.SpiralScalar = Math.PI * 2 / gSecondLightControlNode.LightsPerCycle;
-//   gSecondLightControlNode.yOffset = -gSecondLightControlNode.HeightPerCycle * ( gSecondLightControlNode.LightNum / gSecondLightControlNode.LightsPerCycle ) / 2;
-//   gSecondLightControlNode.SampleShift = 0;
-//   gSecondLightControlNode.SampleShiftSpeed = 0.001;
-
-//   var scalar = gSecondLightControlNode.SpiralScalar;
-//   var yOffset = gSecondLightControlNode.yOffset;
-//   for( var i = 0; i < gSecondLightControlNode.LightNum; ++i )
-//      {
-//      var lightPos = vec3.fromValues( 
-//         gSecondLightControlNode.Radius * Math.cos( scalar * i ), 
-//         gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset, 
-//         gSecondLightControlNode.Radius * Math.sin( scalar * i )
-//         );
-//      var lightColor = GetRandomColor();;
-
-//      var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
-//      light.LocalTransform.SetToWorldPosition( lightPos );
-//      gSecondLightControlNode.AddChild( light );
-
-//      }
-
-//   globalScene.AddSceneNode( gSecondLightControlNode, 1 );
-
-//   gSecondLightControlNode.OnUpdate =  UpdateSecondLights;
-//   }
-
-//Math.fmod = function (a,b) { return Number((a - (Math.floor(a / b) * b)).toPrecision(8)); };
-
-//function UpdateSecondLights()
-//   {
-//   if( !gLightControlNode.AudioResource.IsLoaded )
-//      {
-//      return;
-//      }
-
-//   gSecondLightControlNode.LocalTransform.RotateToWorldRad( -0.01, g_Up3v );
-
-//   if( !gLightControlNode.AudioResource.audio.paused )
-//      {
-//      gSecondLightControlNode.SampleShift += gSecondLightControlNode.SampleShiftSpeed;
-//      while( gSecondLightControlNode.SampleShift >= 1.0 )
-//         {
-//         gSecondLightControlNode.SampleShift -= 1.0;
-//         }
-//      //console.log( gSecondLightControlNode.SampleShift );
-//      var scalar = gSecondLightControlNode.SpiralScalar;
-//      var yOffset = gSecondLightControlNode.yOffset;
-
-//      for( var i in gSecondLightControlNode.ChildNodes )
-//         {
-//         var sampleIdxRatio = i / gSecondLightControlNode.ChildNodes.length + gSecondLightControlNode.SampleShift;
-//         if( sampleIdxRatio >= 1 )
-//            {
-//            sampleIdxRatio -= 1;
-//            }
-//         var freqIdx = Math.min( Math.ceil( gLightControlNode.AudioResource.frequencyData.length * sampleIdxRatio ), gLightControlNode.AudioResource.frequencyData.length - 1 );
-
-//         var normalizedFreq = gLightControlNode.AudioResource.frequencyData[ freqIdx ] / 255;
-
-//         var lightPos = gSecondLightControlNode.ChildNodes[ i ].LocalTransform.GetToWorldPosition();
-//         var baseY = gSecondLightControlNode.HeightPerCycle / ( Math.PI * 2 ) * scalar * i + yOffset;
-//         var targetY = baseY + normalizedFreq * gSecondLightControlNode.LightMaxHeight;
-//         lightPos[ 1 ] += gSecondLightControlNode.Smoothness * ( targetY - lightPos[ 1 ] );
-//         gSecondLightControlNode.ChildNodes[ i ].LocalTransform.SetToWorldPosition( lightPos );
-//         }
-//      }
-      
-//   }
-
 var gLightBrightnessControlNode;
 
 function InitLightBrightnessControlNode()
@@ -319,8 +243,8 @@ function InitLightBrightnessControlNode()
       //   {
       //   lightColor = colorLerp( ( idxRatio - 0.66 ) / 0.33, blue, red );
       //   }
-      //var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
-      var light = GenerateLightNode( lightColor, gLightBrightnessControlNode.AmbientScalar, gLightBrightnessControlNode.DiffuseScalar, gLightBrightnessControlNode.SpecularScalar ); 
+      //var light = new LightCubeSceneNode( gLightShapeShader, lightColor, lightColor, lightColor );
+      var light = GenerateLightNode( LightCubeSceneNode, lightColor, gLightBrightnessControlNode.AmbientScalar, gLightBrightnessControlNode.DiffuseScalar, gLightBrightnessControlNode.SpecularScalar ); 
       light.LocalTransform.SetToWorldPosition( lightPos );
       light.Brightness = 1;
       light.OrigAmbient = vec4.clone( light.Ambient );
@@ -412,8 +336,8 @@ function InitLightScaleControlNode()
       var idxRatio = i / gLightScaleControlNode.LightNum;
       var lightColor = GetRandomColor();
 
-      //var light = new LightCubeSceneNode( lightCubeShader, lightColor, lightColor, lightColor );
-      var light = GenerateLightNode( lightColor, gLightScaleControlNode.AmbientScalar, gLightScaleControlNode.DiffuseScalar, gLightScaleControlNode.SpecularScalar );
+      //var light = new LightCubeSceneNode( gLightShapeShader, lightColor, lightColor, lightColor );
+      var light = GenerateLightNode( LightCubeSceneNode, lightColor, gLightScaleControlNode.AmbientScalar, gLightScaleControlNode.DiffuseScalar, gLightScaleControlNode.SpecularScalar );
       light.LocalTransform.SetToWorldPosition( lightPos );
       light.Scale = 1;
       gLightScaleControlNode.AddChild( light );
@@ -421,7 +345,7 @@ function InitLightScaleControlNode()
       }
    gLightScaleControlNode.LocalTransform.RotateFromWorldRad( -Math.PI / 4, g_Forward3v );
 
-   globalScene.AddSceneNode( gLightScaleControlNode, 1 );
+   globalScene.AddSceneNode( gLightScaleControlNode, 3 );
 
    gLightScaleControlNode.OnUpdate =  UpdateLightsScale;
    }
@@ -455,3 +379,59 @@ function UpdateLightsScale()
       gLightScaleControlNode.LocalTransform.RotateFromWorldRad( gLightControlNode.Speed * -deltaTime * 2, g_Up3v );
       }
    }
+
+
+var gStreetLightControlNode;
+
+function InitStreetLightControlNode()
+   {
+   var lightColor = vec4.fromValues( 1.0, 1.0, 0.25, 1 );
+   gStreetLightControlNode = GenerateLightNode( LightSphereSceneNode, lightColor, 3, 4, 5 );
+   gStreetLightControlNode.LocalTransform.Scale( vec3.fromValues( 3.3, 3.3, 3.3 ) );
+   gStreetLightControlNode.LocalTransform.SetToWorldPosition( vec3.fromValues( -0.23, 62., 0 ) );
+   gStreetLightControlNode.OrigColor = lightColor;
+   gStreetLightControlNode.OrigAmbient = vec4.clone( gStreetLightControlNode.Ambient );
+   gStreetLightControlNode.OrigDiffuse = vec4.clone( gStreetLightControlNode.Diffuse );
+   gStreetLightControlNode.OrigSpecular = vec4.clone( gStreetLightControlNode.Specular );
+   gStreetLightControlNode.ColorScalar = 0;
+   globalScene.AddSceneNode( gStreetLightControlNode, 1 );
+
+   gStreetLightControlNode.CurrentTime = 0;
+   gStreetLightControlNode.NextChangeTime = 3;
+   gStreetLightControlNode.OnUpdate =  UpdateStreetLight;
+   }
+
+function randn_bm() {
+    var u = 1 - Math.random(); 
+    var v = 1 - Math.random();
+    return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+}
+
+function UpdateStreetLight( deltaTime )
+   {
+   if( !gLightControlNode.AudioResource.IsLoaded || gLightControlNode.AudioResource.audio.paused )
+      {
+      return;
+      }
+   gStreetLightControlNode.CurrentTime += deltaTime;
+      if( gStreetLightControlNode.CurrentTime >= gStreetLightControlNode.NextChangeTime )
+         {
+         gStreetLightControlNode.NextChangeTime -= gStreetLightControlNode.CurrentTime;
+         gStreetLightControlNode.CurrentTime = 0;
+         ScaleColor( gStreetLightControlNode.Ambient, gStreetLightControlNode.ColorScalar, gStreetLightControlNode.OrigAmbient );
+         ScaleColor( gStreetLightControlNode.Diffuse, gStreetLightControlNode.ColorScalar, gStreetLightControlNode.OrigDiffuse );
+         ScaleColor( gStreetLightControlNode.Specular, gStreetLightControlNode.ColorScalar, gStreetLightControlNode.OrigSpecular );
+         ScaleColor( gStreetLightControlNode.ScreenColor, gStreetLightControlNode.ColorScalar, gStreetLightControlNode.OrigColor );
+         if( gStreetLightControlNode.ColorScalar > 0 )
+            {
+            gStreetLightControlNode.ColorScalar = 0;
+            gStreetLightControlNode.NextChangeTime += ( randn_bm() + 3.24 ) / 6.48 * 10;
+            }
+         else
+            {
+            gStreetLightControlNode.ColorScalar = 1;
+            gStreetLightControlNode.NextChangeTime += 0.1;
+            }
+         }
+      
+    }

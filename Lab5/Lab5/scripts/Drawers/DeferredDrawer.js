@@ -229,7 +229,7 @@ gDeferredDrawer.PreRender = function()
    gl.bindFramebuffer( gl.FRAMEBUFFER, null );
    }
 
-gDeferredDrawer.FinalRender = function()
+gDeferredDrawer.CalcLights = function()
    {
    if( gDrawable == false )
       {

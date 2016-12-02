@@ -42,6 +42,10 @@
          {
          this.SkySpherePassNode.AddChild( sceneNode );
          }
+      else if( pass == 3 ) // Dummy light
+         {
+         this.LightPassNode.AddChild( sceneNode );
+         }
       
       }
 
@@ -63,7 +67,7 @@
          this.DeferredPassNodes.RenderChildren();
          gSSAODrawer.DrawSSAO();
          gSSAODrawer.DrawBlur();
-         gDeferredDrawer.FinalRender();
+         gDeferredDrawer.CalcLights();
          this.LightPassNode.RenderChildren();
          this.SkySpherePassNode.RenderChildren();
          gBloomDrawer.DrawGussianBlur();
