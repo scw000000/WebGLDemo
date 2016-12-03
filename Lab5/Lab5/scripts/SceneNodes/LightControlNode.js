@@ -430,7 +430,8 @@ function UpdateStreetLight( deltaTime )
          else
             {
             gStreetLightControlNode.ColorScalar = 1;
-            gStreetLightControlNode.NextChangeTime += 0.1;
+       //     gStreetLightControlNode.NextChangeTime += 0.1;
+            gStreetLightControlNode.NextChangeTime += ( randn_bm() + 3.24 ) / 6.48 * 0.3;
             }
          }
       
