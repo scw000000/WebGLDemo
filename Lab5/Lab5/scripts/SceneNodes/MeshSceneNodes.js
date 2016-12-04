@@ -1,6 +1,6 @@
 ﻿class MeshSceneNode extends SceneNodes
    {
-   constructor( shaderResource, meshResource, meshTextureResource )
+   constructor( shaderResource, meshResource, meshTextureResource, normalTextureResource )
       {
       super();
       this.ShaderResource = shaderResource;
@@ -10,6 +10,15 @@
       this.MaterialAmbient = vec4.fromValues( 1.0, 1.0, 1.0, 1.0 );
       this.MaterialDiffuse = vec4.fromValues( 1.0, 1.0, 1.0, 1.0 );
       this.MaterialSpecular = vec4.fromValues( 1.0, 1.0, 1.0, 1.0 );
+      if( normalTextureResource != null )
+         {
+         this.UseNormalMap = true;
+         this.NormalTextureResource = normalTextureResource;
+         }
+      else
+         {
+         this.UseNormalMap = false;
+         }
       }
 
    Initbuffer() { }
@@ -39,6 +48,14 @@
       gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexNormalBuffer.Context );
       gl.vertexAttribPointer( this.ShaderResource.VertexNormalAttr.Context, this.MeshResource.VertexNormalBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
 
+      gl.enableVertexAttribArray( this.ShaderResource.VertexTangentAttr.Context );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexTangentBuffer.Context );
+      gl.vertexAttribPointer( this.ShaderResource.VertexTangentAttr.Context, this.MeshResource.VertexTangentBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
+      gl.enableVertexAttribArray( this.ShaderResource.VertexBitangentAttr.Context );
+      gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexBitangentBuffer.Context );
+      gl.vertexAttribPointer( this.ShaderResource.VertexBitangentAttr.Context, this.MeshResource.VertexBitangentBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
+
       gl.enableVertexAttribArray( this.ShaderResource.VertexUVAttr.Context );
       gl.bindBuffer( gl.ARRAY_BUFFER, this.MeshResource.VertexUVBuffer.Context );
       gl.vertexAttribPointer( this.ShaderResource.VertexUVAttr.Context, this.MeshResource.VertexUVBuffer.ItemSize, gl.FLOAT, false, 0, 0 );
@@ -57,6 +74,20 @@
       gl.activeTexture( gl.TEXTURE0 );  
 	   gl.bindTexture( gl.TEXTURE_2D, this.MeshTextureResource.Context );   
 	   gl.uniform1i( this.ShaderResource.MeshTextureUni.Context, 0 );   
+
+      if( this.UseNormalMap )
+         {
+         gl.activeTexture( gl.TEXTURE1 );  
+	      gl.bindTexture( gl.TEXTURE_2D, this.NormalTextureResource.Context );   
+         gl.uniform1i( this.ShaderResource.NormalTextureUni.Context, 1 );
+
+         gl.uniform1i( this.ShaderResource.UseNormalMapUni.Context, 1 );
+         }
+      else
+         {
+         gl.uniform1i( this.ShaderResource.UseNormalMapUni.Context, 0 );
+         }
+         
 
       gl.uniform1f( this.ShaderResource.ShininessUni.Context, this.Shininess );
 

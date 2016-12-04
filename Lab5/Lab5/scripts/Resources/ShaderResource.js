@@ -101,6 +101,14 @@ class DeferredGemotryShaderResource extends ShaderResource
       this.VertexNormalAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexNormal" );
       gl.enableVertexAttribArray( this.VertexNormalAttr.Context );
 
+      this.VertexTangentAttr = {};
+      this.VertexTangentAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexTangent" );
+      gl.enableVertexAttribArray( this.VertexTangentAttr.Context );
+
+      this.VertexBitangentAttr = {};
+      this.VertexBitangentAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexBitangent" );
+      gl.enableVertexAttribArray( this.VertexBitangentAttr.Context );
+
       this.VertexUVAttr = {};
       this.VertexUVAttr.Context = gl.getAttribLocation( this.Program.Context, "aVertexUV" );
       gl.enableVertexAttribArray( this.VertexUVAttr.Context );
@@ -116,6 +124,12 @@ class DeferredGemotryShaderResource extends ShaderResource
 
       this.MeshTextureUni = {};
       this.MeshTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uMeshTexture" );
+
+      this.NormalTextureUni = {};
+      this.NormalTextureUni.Context = gl.getUniformLocation( this.Program.Context, "uNormalTexture" );
+
+      this.UseNormalMapUni = {};
+      this.UseNormalMapUni.Context = gl.getUniformLocation( this.Program.Context, "uUseNormalMap" );
 
       this.ShininessUni = {};
       this.ShininessUni.Context = gl.getUniformLocation( this.Program.Context, "uShininess" );

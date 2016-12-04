@@ -121,20 +121,27 @@ void main(void)
     precision mediump float;
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
+    attribute vec3 aVertexTangent;
+    attribute vec3 aVertexBitangent;
     attribute vec2 aVertexUV;
-
+    
     uniform mat4 uMVPMatrix;
     uniform mat4 uMVMatrix;
     uniform mat4 uNMatrix;
 
     varying vec4 vPosition_CameraSpace;
-    varying vec4 vNormal_CameraSpace;
+    varying vec3 vNormal_CameraSpace;
+    varying vec3 vTangent_CameraSpace;
+    varying vec3 vBitangent_CameraSpace;
     varying vec2 vVertexUV;
 
     void main(void) {
         gl_Position = uMVPMatrix * vec4( aVertexPosition, 1 );
         vPosition_CameraSpace = uMVMatrix * vec4( aVertexPosition, 1 );
-        vNormal_CameraSpace = uNMatrix * vec4( aVertexNormal, 0 );
+        // Warning: do NOT normalize vec4!
+        vNormal_CameraSpace = normalize( ( uNMatrix * vec4( aVertexNormal, 0 ) ).xyz );
+        vTangent_CameraSpace = normalize( ( uNMatrix * vec4( aVertexTangent, 0 ) ).xyz );
+        vBitangent_CameraSpace = normalize( ( uNMatrix * vec4( aVertexBitangent, 0 ) ).xyz );
         vVertexUV = aVertexUV;
     }
 </script>
@@ -144,14 +151,19 @@ void main(void)
     precision mediump float;
 
     varying vec4 vPosition_CameraSpace;
-    varying vec4 vNormal_CameraSpace;
+    varying vec3 vNormal_CameraSpace;
+    varying vec3 vTangent_CameraSpace;
+    varying vec3 vBitangent_CameraSpace;
     varying vec2 vVertexUV;
 
     uniform sampler2D uMeshTexture; 
+    uniform sampler2D uNormalTexture; 
     uniform float uShininess;
     uniform vec4 uMaterialAmbient;
     uniform vec4 uMaterialDiffuse;
     uniform vec4 uMaterialSpecular;
+
+    uniform int uUseNormalMap;
     
 void main(void) 
     {
@@ -160,8 +172,19 @@ void main(void)
        gl_FragData[ 0 ] = vPosition_CameraSpace; 
      gl_FragData[ 0 ].a = uShininess;
     
-    // Warning: do NOT normalize vec4!
-    gl_FragData[ 1 ].xyz = normalize( vNormal_CameraSpace.xyz ); 
+    
+    if( uUseNormalMap == 1 )
+        {
+        mat3 tbn = mat3( vTangent_CameraSpace, vBitangent_CameraSpace, vNormal_CameraSpace );
+        vec3 normal = 2.0 * texture2D( uNormalTexture, vVertexUV ).xyz - vec3(1.0, 1.0, 1.0);
+        normal = tbn * normal;
+        gl_FragData[ 1 ].xyz = normal; 
+        }
+    else
+        {
+        gl_FragData[ 1 ].xyz = vNormal_CameraSpace; 
+        }
+    
     gl_FragData[ 1 ].a = uMaterialSpecular.x;
 
     gl_FragData[ 2 ] = textureColor * uMaterialAmbient; 
@@ -169,6 +192,7 @@ void main(void)
 
     gl_FragData[ 3 ] = textureColor * uMaterialDiffuse; 
     gl_FragData[ 3 ].a = uMaterialSpecular.z;
+
     }
 </script>
 
@@ -228,7 +252,7 @@ void main(void)
     temp = texture2D( uMaterialDiffuseTex, vVertexUV );
     vec4 materialDiffuse = vec4( temp.xyz, 1 ); 
     materialSpecular.z = temp.w;
-    
+
     gl_FragData[ 0 ] = vec4( 0.0 );
     for( int i = 0; i < MAXIMUM_LIGHT_SUPPORTED; ++i )
         {

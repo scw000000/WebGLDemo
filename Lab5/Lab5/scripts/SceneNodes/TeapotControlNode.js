@@ -12,11 +12,14 @@ function InitTeapotControlNode()
    var meshRes = new MeshResource();
    meshRes.Load( "teapot.json" );
    var textureResArr = [ new TextureResource(), new TextureResource(), new TextureResource(), new TextureResource(), new TextureResource() ];
-   textureResArr[ 0 ].Load( "gray.jpg"  );
-   textureResArr[ 1 ].Load( "red.jpg"  );
-   textureResArr[ 2 ].Load( "green.jpg"  );
-   textureResArr[ 3 ].Load( "lightblue.jpg"  );
-   textureResArr[ 4 ].Load( "blue.jpg"  );
+   textureResArr[ 0 ].Load( "meshTex/gray.jpg"  );
+   textureResArr[ 1 ].Load( "meshTex/red.jpg"  );
+   textureResArr[ 2 ].Load( "meshTex/green.jpg"  );
+   textureResArr[ 3 ].Load( "meshTex/lightblue.jpg"  );
+   textureResArr[ 4 ].Load( "meshTex/blue.jpg"  );
+
+   //var normalTex = new TextureResource();
+   //normalTex.Load( "meshTex/" + 169 + "_norm.JPG" );
    var offSet = ( gTeapotControlNode.TeapotPerLine - 1 ) * gTeapotControlNode.TeapotDistance / -2;
    for( var row = 0; row < gTeapotControlNode.TeapotPerLine; ++row )
       {
@@ -26,7 +29,20 @@ function InitTeapotControlNode()
             {
             continue;
             }
-         var teapot = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureResArr[ row ] );
+         var meshIdx = 151 + row * 5 + col;
+         var teapot;
+         if( meshIdx != 154 )
+            {
+            teapot = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, textureResArr[ row ] );
+            }
+         else
+            {
+            var meshTex = new TextureResource();
+            meshTex.Load( "meshTex/" + meshIdx + ".JPG" );
+            var normalNewTex = new TextureResource();
+            normalNewTex.Load( "meshTex/" + meshIdx + "_norm.JPG" );
+            teapot = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, meshRes, meshTex, normalNewTex );
+            }
          teapot.LocalTransform.SetToWorldPosition( vec3.fromValues( offSet + row *gTeapotControlNode.TeapotDistance, 8.37, offSet + col *gTeapotControlNode.TeapotDistance ) );
          teapot.LocalTransform.RotateToWorldRad( Math.PI / 4.0, g_Up3v );
          teapot.Shininess = 20.0;

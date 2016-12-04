@@ -81,6 +81,7 @@ gBloomDrawer.DrawGussianBlur = function()
 
    gl.disableVertexAttribArray( 2 );
    gl.disableVertexAttribArray( 3 ); 
+   gl.disableVertexAttribArray( 4 ); 
 
    gl.useProgram( gBloomDrawer.BlurShaderResource.Program.Context );
 

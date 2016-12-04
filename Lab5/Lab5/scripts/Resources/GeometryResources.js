@@ -44,6 +44,7 @@ var gCubeResource = {};
 
 gCubeResource.Init = function()
    {
+   gCubeResource.MeshData = {};
    var vertexPos = [
             // Front
             -1.0, -1.0, 1.0,
@@ -81,6 +82,7 @@ gCubeResource.Init = function()
              -1, -1, 1,
              -1, -1, -1
         ];
+   gCubeResource.MeshData.vertexPositions = vertexPos;
 
    gCubeResource.VertexPosBuffer = {};
    gCubeResource.VertexPosBuffer.Context = gl.createBuffer();
@@ -103,16 +105,16 @@ gCubeResource.Init = function()
              0.0,  0.0, -1.0,
 
              // right
-             1.0,  0.0,  0.0,
-             1.0,  0.0,  0.0,
-             1.0,  0.0,  0.0,
-             1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
 
             // left 
-            -1.0,  0.0,  0.0,
-            -1.0,  0.0,  0.0,
-            -1.0,  0.0,  0.0,
-            -1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
 
             // top
              0.0,  1.0,  0.0,
@@ -127,6 +129,7 @@ gCubeResource.Init = function()
              0.0, -1.0,  0.0
         ];
 
+   gCubeResource.MeshData.normals = normals;
    gCubeResource.VertexNormalBuffer = {};
    gCubeResource.VertexNormalBuffer.Context = gl.createBuffer();
    gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexNormalBuffer.Context );
@@ -173,10 +176,11 @@ gCubeResource.Init = function()
 
         ];
 
+   gCubeResource.MeshData.vertexTextureCoords = uvs;
    gCubeResource.VertexUVBuffer = {};
    gCubeResource.VertexUVBuffer.Context = gl.createBuffer();
    gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexUVBuffer.Context );
-   gl.bufferData( gl.ARRAY_BUFFER,new Float32Array( uvs ), gl.STATIC_DRAW );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( uvs ), gl.STATIC_DRAW );
    gCubeResource.VertexUVBuffer.ItemSize = 2;
    gCubeResource.VertexUVBuffer.NumItems = uvs.length / gCubeResource.VertexUVBuffer.ItemSize; 
 
@@ -189,6 +193,7 @@ gCubeResource.Init = function()
             20, 21, 22,   20, 22, 23  // Bottom     
         ];
 
+   gCubeResource.MeshData.indices = indices;
    gCubeResource.VertexIndexBuffer = {};
    gCubeResource.VertexIndexBuffer.Context = gl.createBuffer();
    gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, gCubeResource.VertexIndexBuffer.Context );
@@ -196,9 +201,99 @@ gCubeResource.Init = function()
    gCubeResource.VertexIndexBuffer.ItemSize = 1;
    gCubeResource.VertexIndexBuffer.NumItems = indices.length;
 
-
    gCubeResource.IsLoaded = true;
-  
+
+   var tangents = [
+            // Front
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+
+            // Back
+             0.0,  1.0, 0.0,
+             0.0,  1.0, 0.0,
+             0.0,  1.0, 0.0,
+             0.0,  1.0, 0.0,
+
+             // right
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+
+            // left 
+            0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+             0.0,  1.0,  0.0,
+
+            // top
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+
+            // bottom
+            0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+        ];
+
+   gCubeResource.MeshData.vertexTangents = tangents;
+   gCubeResource.VertexTangentBuffer = {};
+   gCubeResource.VertexTangentBuffer.Context =  gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexTangentBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( gCubeResource.MeshData.vertexTangents ), gl.STATIC_DRAW );
+   gCubeResource.VertexTangentBuffer.ItemSize = 3;
+   gCubeResource.VertexTangentBuffer.NumItems = gCubeResource.MeshData.vertexTangents.length / 3;
+   
+   var bitangents = [
+            // Front
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+
+            // Back
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+
+             // right
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+             0.0,  0.0,  1.0,
+
+            // left 
+            0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+             0.0,  0.0,  -1.0,
+
+            // top
+            -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+             -1.0,  0.0,  0.0,
+
+            // bottom
+            1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+             1.0,  0.0,  0.0,
+        ];
+
+   gCubeResource.MeshData.vertexBitangents = bitangents;
+   gCubeResource.VertexBitangentBuffer = {};
+   gCubeResource.VertexBitangentBuffer.Context =  gl.createBuffer();
+   gl.bindBuffer( gl.ARRAY_BUFFER, gCubeResource.VertexBitangentBuffer.Context );
+   gl.bufferData( gl.ARRAY_BUFFER, new Float32Array( gCubeResource.MeshData.vertexBitangents ), gl.STATIC_DRAW );
+   gCubeResource.VertexBitangentBuffer.ItemSize = 3;
+   gCubeResource.VertexBitangentBuffer.NumItems = gCubeResource.MeshData.vertexBitangents.length / 3;
    }
 
 var gSphereRsource = {};

@@ -447,11 +447,11 @@ function webGLStart()
    var skyMapRes = new TextureResource();
  //  skyMapRes.Load( "skyMap.png" );
   // skyMapRes.Load( "star2.jpg" );
-   skyMapRes.Load( "moon.jpg" );
+   skyMapRes.Load( "meshTex/moon.jpg" );
   // skyMapRes.Load( "nightSky.png" );
 
    var lampTexRes = new TextureResource();
-   lampTexRes.Load( "black.jpg" );
+   lampTexRes.Load( "meshTex/black.jpg" );
    var lampMesh = new MeshResource();
    lampMesh.Load( "streetlight.json" );
    var lampMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, lampMesh, lampTexRes );
@@ -466,15 +466,20 @@ function webGLStart()
    var textureMeshShader = new TextureMeshShaderResource( );
    textureMeshShader.Load( "textureMeshShader-vs", "textureMeshShader-fs" );
 
-   var crateImgRes = new TextureResource();
-   crateImgRes.Load( "crate.png" );
-   var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
+   //var crateImgRes = new TextureResource();
+   //crateImgRes.Load( "crate.png" );
+   var meshTex = new TextureResource();
+   meshTex.Load( "meshTex/" + 154 + ".JPG" );
+   var normalTex = new TextureResource();
+   normalTex.Load( "meshTex/" + 154 + "_norm.JPG" );
+   //var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, crateImgRes );
+   var crateMeshNode = new MeshSceneNode( gDeferredDrawer.GeometryShaderResource, gCubeResource, meshTex, normalTex );
    crateMeshNode.LocalTransform.Scale( vec3.fromValues( 55, 1, 55 ) );
    crateMeshNode.LocalTransform.SetToWorldPosition( vec3.fromValues( 0, 0, 0 ) );
    crateMeshNode.Shininess = 20.0;
    crateMeshNode.MaterialAmbient= vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
    crateMeshNode.MaterialDiffuse = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
-   crateMeshNode.MaterialSpecular = vec4.fromValues( 0.05, 0.05, 0.05, 1.0 );
+   crateMeshNode.MaterialSpecular = vec4.fromValues( 0.01, 0.01, 0.01, 1.0 );
    globalScene.AddSceneNode( crateMeshNode, 0 );
 
    gSkySphereNode = new TextureMeshSceneNode( textureMeshShader, skySphereRes, skyMapRes );

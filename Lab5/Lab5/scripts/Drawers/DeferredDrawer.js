@@ -138,7 +138,7 @@ gDeferredDrawer.Init = function()
    //   return;
    //   }
    var drawBuffers = [];
-    drawBuffers[ 0 ] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
+   drawBuffers[ 0 ] = mrtExt.COLOR_ATTACHMENT0_WEBGL;
    drawBuffers[ 1 ] = mrtExt.COLOR_ATTACHMENT1_WEBGL;
    drawBuffers[ 2 ] = mrtExt.COLOR_ATTACHMENT2_WEBGL;
    drawBuffers[ 3 ] = mrtExt.COLOR_ATTACHMENT3_WEBGL;
