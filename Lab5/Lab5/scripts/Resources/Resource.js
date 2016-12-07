@@ -178,8 +178,6 @@ class MeshResource extends Resource
             posData[ v2Idx + 1 ] - posData[ v0Idx + 2 ]
             );
 
-         var r = 1.0 / ( dUV1[ 0 ] * dUV2[ 1 ] - dUV2[ 0 ] * dUV1[ 1 ] );
-
          var tangent = vec3.sub( vec3.create(), 
             vec3.scale( vec3.create(), dV1, dUV2[ 1 ] ), 
             vec3.scale( vec3.create(), dV2, dUV1[ 1 ] ) );

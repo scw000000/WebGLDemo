@@ -70,7 +70,7 @@ function InitLightControlNode( audioRes )
    gLightControlNode.Radius = 150;
    gLightControlNode.AudioResource = audioRes;
    gLightControlNode.LightMaxHeight = 100;
-   gLightControlNode.Smoothness = 0.15;
+   gLightControlNode.Smoothness = 0.20;
    gLightControlNode.AmbientScalar = 0.01;
    gLightControlNode.DiffuseScalar = 0.05;
    gLightControlNode.SpecularScalar = 0.1;
