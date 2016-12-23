@@ -39,25 +39,25 @@
          }
 
       // Left Arrow: camera rotate global Y axis
-      if ( this.KeyPressed[ 37 ] ) 
+      if ( this.KeyPressed[ 37 ] || this.KeyPressed[ 72 ] ) 
          {
          globalScene.CameraNode.LocalTransform.RotateToWorldRad( deltaTime, g_Up3v );
          }
 
       // Right arrow: camera rotate global Y axis
-      if ( this.KeyPressed[ 39 ] ) 
+      if ( this.KeyPressed[ 39 ] || this.KeyPressed[ 75 ] ) 
          {
          globalScene.CameraNode.LocalTransform.RotateToWorldRad( -deltaTime, g_Up3v );
          }
 
       // Up arrow: camera rotate local X axis
-      if ( this.KeyPressed[ 38 ] ) 
+      if ( this.KeyPressed[ 38 ] || this.KeyPressed[ 85 ] ) 
          {
          globalScene.CameraNode.LocalTransform.RotateFromWorldRad( -deltaTime, g_Left3v );
          }
 
       // Down arrow: camera rotate local X axis
-      if ( this.KeyPressed[ 40 ] ) 
+      if ( this.KeyPressed[ 40 ] || this.KeyPressed[ 74 ] ) 
          {
          globalScene.CameraNode.LocalTransform.RotateFromWorldRad( deltaTime, g_Left3v );
          }
