@@ -1,5 +1,4 @@
 # WebGLDemo
-WebGL Demo
 
 ![alt tag](https://github.com/scw000000/WebGLDemo/blob/master/Lab5/Lab5/WebGLDemo.png)
 
