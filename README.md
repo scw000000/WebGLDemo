@@ -51,7 +51,7 @@ Control Bloom:
 --
 * http://learnopengl.com/#!Advanced-Lighting/SSAO   
 * http://john-chapman-graphics.blogspot.com/2013/01/ssao-tutorial.html  
-* http://learnopengl.com/#!Advanced-Lighting/Deferred-Shadingd  
+* http://learnopengl.com/#!Advanced-Lighting/Deferred-Shading  
 * http://learnopengl.com/#!Advanced-Lighting/Bloom  
 * https://www.patrick-wied.at/blog/how-to-create-audio-visualizations-with-javascript-html  
 * http://stackoverflow.com/questions/25582882/javascript-math-random-normal-distribution-gaussian-bell-curve  
