@@ -29,9 +29,8 @@ Control SSAO:
 Control Light:  
 * Light Radius: Control how far the light will affect the mesh objects. By adopting a distance checking when calculating lights, I can  
 conserve computing power and avoid unnecessary interference from the lights in outer light cube cycle.  
-* Gamma Power: Control the Gamma Correction power parameter when rendering the inner light cube cycle, because the color of cube will not  
-be correct to human eyes by simply scaling a color with a scalar from 0 to 1.  
-* Gamma Scalar: Control the Gamma Correction scalar parameter when rendering the inner light cube cycle  
+* Light Power: Control the light power parameter when rendering the inner light cube cycle
+* Light Scalar: Control the light scalar parameter when rendering the inner light cube cycle  
 
 Control Bloom:  
 * Gaussian Blur Iteration Num: Control how many time to blur the light texture in order to render blur texture  
